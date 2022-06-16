@@ -13,7 +13,7 @@ In recent years, a significant number of question answering (QA) systems that re
 * __Coverability:__ We defined the question complexity to use it in tuning SmartBench to cover all possible complexities in real-world deployment. 
 
 *Paper*: [ToPublish](https://)
-#### Citation 
+#### Citation (Research Paper)
 ```
 @Article{Orogat2022SmartBench,
   Title                    = {},
@@ -25,7 +25,18 @@ In recent years, a significant number of question answering (QA) systems that re
 }
 ```
 
-
+#### Citation (Demo Paper)
+```
+@Article{Orogat2022demo,
+  Title   = {{S}mart{B}ench: {D}emonstrating {A}utomatic {G}eneration of
+{C}omprehensive {B}enchmarks for {Q}uestion {A}nswering {O}ver {K}nowledge {G}raphs},
+  Author   = {Orogat, Abdelghny and El-Roby, Ahmed},
+  Journal   = {Proceedings of the VLDB Endowment (PVLDB)},
+  Year   = {2022(To Appear)},
+  volume   = {15},
+  number   = {12}
+}
+```
 
 ## Table of Content
 * Run CBench
