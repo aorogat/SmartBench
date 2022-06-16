@@ -45,7 +45,7 @@ In recent years, a significant number of question answering (QA) systems that re
 
 ### Prerequisites
 SmartBench requires the following development kits and liberaries. You can download the liberaries with the system.
-* for Java [JDK 8, Download liberaries from Lib folder]
+* for Java [JDK 8, Download liberaries as defined in the `pom` file, use Maven for this purpose.]
 * You have to run the server written in Python before running the Java code. This server is in the `main.py` file and the Prerequisites for this python file can be found in the `requirements.txt` file.
 * You need to install PostgreSQL 13 and create an empty database for your KG. Please reset the database paramaters from the `settings` package.
 
