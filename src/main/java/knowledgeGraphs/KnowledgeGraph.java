@@ -310,7 +310,7 @@ public abstract class KnowledgeGraph {
 
             return branch;
         } catch (Exception e) {
-            e.printStackTrace();
+//            e.printStackTrace();
             return null;
         }
     }

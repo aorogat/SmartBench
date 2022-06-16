@@ -130,6 +130,13 @@ public class GeneratedQuestion {
     }
 
     public void print() {
+        if (getQuestionString().contains(" null ")||
+            getQuestionStringTagged().contains("<p>null</p>")||
+            getQuestionStringTagged().contains("<p> </p>")||
+            getQuestionStringTagged().contains("<p></p>")) {
+            System.out.print("\u001B[31m");//Red Color
+            System.out.println("XXXXX It seems that this question has a problem and will not be added to the final file. XXXXX");
+        }
         
         if(answerCardinality<=0){ 
             System.out.println(query);

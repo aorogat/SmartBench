@@ -169,7 +169,11 @@ public class ShapesGenerator {
         benchmark.generatedBenchmark = new ArrayList<>();
         for (GeneratedQuestion generatedQuestion : generatedQuestions) {
             generatedQuestion.print();
-            if (generatedQuestion.getAnswerCardinality() > 0) {
+            if (generatedQuestion.getAnswerCardinality() > 0 && 
+                    !generatedQuestion.getQuestionString().contains(" null ")&&
+                    !generatedQuestion.getQuestionStringTagged().contains("<p>null</p>")&&
+                    !generatedQuestion.getQuestionStringTagged().contains("<p> </p>")&&
+                    !generatedQuestion.getQuestionStringTagged().contains("<p></p>")) {
                 benchmark.generatedBenchmark.add(generatedQuestion);
             }
         }
