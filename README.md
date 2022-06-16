@@ -32,7 +32,7 @@ In recent years, a significant number of question answering (QA) systems that re
 {C}omprehensive {B}enchmarks for {Q}uestion {A}nswering {O}ver {K}nowledge {G}raphs},
   Author   = {Orogat, Abdelghny and El-Roby, Ahmed},
   Journal   = {Proceedings of the VLDB Endowment (PVLDB)},
-  Year   = {2022(To Appear)},
+  Year   = {2022},
   volume   = {15},
   number   = {12}
 }
