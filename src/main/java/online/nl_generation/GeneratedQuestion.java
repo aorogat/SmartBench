@@ -39,6 +39,7 @@ public class GeneratedQuestion {
     private String seedType_withPrefix;
 
     private String questionString;
+    private String questionStringTagged;
     private String query;
     private String graphString;
 
@@ -59,7 +60,7 @@ public class GeneratedQuestion {
 //        this.query = query;
 //        this.graphString = graphString;
 //    }
-    public GeneratedQuestion(String seed_withPrefix, String seedType_withPrefix, String questionString, String query, String graphString, int noOfTriples, String QuestionType, String ShapeType) {
+    public GeneratedQuestion(String seed_withPrefix, String seedType_withPrefix, String questionString, String questionStringTagged, String query, String graphString, int noOfTriples, String QuestionType, String ShapeType) {
         this.seed_withPrefix = seed_withPrefix;
         this.seedType_withPrefix = seedType_withPrefix;
         this.questionString = questionString.replace("(", "").replace(")", "").replace("  ", " ").replace(" , ", ", ").replace(" ,", ", ").replace(" s ", " ");
@@ -68,6 +69,7 @@ public class GeneratedQuestion {
         this.noOfTriples = noOfTriples;
         this.QuestionType = QuestionType;
         this.ShapeType = ShapeType;
+        this.questionStringTagged = questionStringTagged;
         
         try {
             ArrayList<VariableSet> answersVar = Settings.knowledgeGraph.runQuery(query);
@@ -141,6 +143,8 @@ public class GeneratedQuestion {
         System.out.println(query);
         System.out.print("\033[1;35m");//MAGENTA Color
         System.out.println(questionString);
+        System.out.print("\033[1;35m");//MAGENTA Color
+        System.out.println(questionStringTagged);
         System.out.println("Answer Cardinality: " + answerCardinality);
         System.out.println("Answer: " + answers.toString());
         System.out.println("#Tokens: " + noOfTokens);
@@ -243,6 +247,15 @@ public class GeneratedQuestion {
     public void setQustionComplexity(double questionComplexity) {
         this.questionComplexity = questionComplexity;
     }
+
+    public String getQuestionStringTagged() {
+        return questionStringTagged;
+    }
+
+    public void setQuestionStringTagged(String questionStringTagged) {
+        this.questionStringTagged = questionStringTagged;
+    }
+    
     
     
 

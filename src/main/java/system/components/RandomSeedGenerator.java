@@ -52,9 +52,9 @@ public class RandomSeedGenerator {
                 i < branches_with_number.size(); i = (int) (i * 1.2 + 1)) { //make it 1.2
             Predicate p = branches_with_number.get(i);
 //            count += 1;
-//            if (count >= 3) {
-//                break;
-//            }
+            if (count >= 3) {
+                break;
+            }
             //Get some examples
             count += 1;
             if (count >= 20) {
@@ -73,9 +73,9 @@ public class RandomSeedGenerator {
                 continue;
             }
             count += 1;
-//            if (count >= 30) {
-//                break;
-//            }
+            if (count >= 30) {
+                break;
+            }
             addBranchs(p);
         }
 
@@ -88,9 +88,9 @@ public class RandomSeedGenerator {
                 continue;
             }
             count += 1;
-//            if (count >= 20) {
-//                break;
-//            }
+            if (count >= 20) {
+                break;
+            }
             addBranchs(p);
         }
 
@@ -101,8 +101,8 @@ public class RandomSeedGenerator {
 //            m = 100;
 //        int step = (int) (branches_with_entity.size()/m);
         for (int i = 0;//random.nextInt(8)+2; 
-                i < branches_with_entity.size(); i = i + 1) {
-//                i = (int) (i * 1.2 + 1)) {
+                i < branches_with_entity.size(); //i = i + 1) {
+                i = (int) (i * 3.2 + 1)) {
             Predicate p = branches_with_entity.get(i);
 //            m = (0.2 * i) + 1;
             addBranchs(p);

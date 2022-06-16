@@ -231,23 +231,30 @@ public class SingleEdgeQuestion {
         //Generate Question
         if (s_o_VP != null) {
             String question = "Who " + s_o_VP + " " + O + "?";
-            allPossibleQuestions.add(new GeneratedQuestion(S_withPrefix, S_type_withPrefix, question, selectQuery, singleEdgeGraph.toString(), 1, GeneratedQuestion.QT_WHO, GeneratedQuestion.SH_SINGLE_EDGE));
+            String tagged_question = "<qt>Who</qt> <p>" + s_o_VP + "</p> <o>" + O + "</o>?";
+            allPossibleQuestions.add(new GeneratedQuestion(S_withPrefix, S_type_withPrefix, question, tagged_question, selectQuery, singleEdgeGraph.toString(), 1, GeneratedQuestion.QT_WHO, GeneratedQuestion.SH_SINGLE_EDGE));
         }
         if (s_o_NP != null) {
             String question = "Who " + s_o_NP + " " + O + "?";
-            allPossibleQuestions.add(new GeneratedQuestion(S_withPrefix, S_type_withPrefix, question, selectQuery, singleEdgeGraph.toString(), 1, GeneratedQuestion.QT_WHO, GeneratedQuestion.SH_SINGLE_EDGE));
-            question = Request.getRequestPrefix() + " " + s_o_NP_without_verb + " " + O + "?";
-            allPossibleQuestions.add(new GeneratedQuestion(S_withPrefix, S_type_withPrefix, question, selectQuery, singleEdgeGraph.toString(), 1, GeneratedQuestion.QT_REQUEST, GeneratedQuestion.SH_SINGLE_EDGE));
+            String tagged_question = "<qt>Who</qt> <p>" + s_o_NP + "</p> <o>" + O + "</o>?";
+            allPossibleQuestions.add(new GeneratedQuestion(S_withPrefix, S_type_withPrefix, question, tagged_question, selectQuery, singleEdgeGraph.toString(), 1, GeneratedQuestion.QT_WHO, GeneratedQuestion.SH_SINGLE_EDGE));
+            String req = Request.getRequestPrefix();
+            question = req + " " + s_o_NP_without_verb + " " + O + "?";
+            tagged_question = "<qt>"+req+"</qt> <p>" + s_o_NP_without_verb + "</p> <o>" + O + "</o>?";
+            allPossibleQuestions.add(new GeneratedQuestion(S_withPrefix, S_type_withPrefix, question, tagged_question, selectQuery, singleEdgeGraph.toString(), 1, GeneratedQuestion.QT_REQUEST, GeneratedQuestion.SH_SINGLE_EDGE));
             question = s_o_NP_without_verb + " " + O + "?";
-            allPossibleQuestions.add(new GeneratedQuestion(S_withPrefix, S_type_withPrefix, question, selectQuery, singleEdgeGraph.toString(), 1, GeneratedQuestion.QT_TOPICAL_PRUNE, GeneratedQuestion.SH_SINGLE_EDGE));
+            tagged_question = "<p>" + s_o_NP_without_verb + "</p> <o>" + O + "</o>?";
+            allPossibleQuestions.add(new GeneratedQuestion(S_withPrefix, S_type_withPrefix, question, tagged_question, selectQuery, singleEdgeGraph.toString(), 1, GeneratedQuestion.QT_TOPICAL_PRUNE, GeneratedQuestion.SH_SINGLE_EDGE));
         }
         if (o_s_VP != null) {
             String question = "Whom " + O + " " + o_s_VP + "?";
-            allPossibleQuestions.add(new GeneratedQuestion(S_withPrefix, S_type_withPrefix, question, selectQuery, singleEdgeGraph.toString(), 1, GeneratedQuestion.QT_WHOM, GeneratedQuestion.SH_SINGLE_EDGE));
+            String tagged_question = "<qt>Whom</qt> <o>" + O + "</o> <p>" + o_s_VP + "</p>?";
+            allPossibleQuestions.add(new GeneratedQuestion(S_withPrefix, S_type_withPrefix, question, tagged_question, selectQuery, singleEdgeGraph.toString(), 1, GeneratedQuestion.QT_WHOM, GeneratedQuestion.SH_SINGLE_EDGE));
         }
         if (o_s_NP != null) {
             String question = "Whose " + O + " " + o_s_NP_only + "?";
-            allPossibleQuestions.add(new GeneratedQuestion(S_withPrefix, S_type_withPrefix, question, selectQuery, singleEdgeGraph.toString(), 1, GeneratedQuestion.QT_WHOSE, GeneratedQuestion.SH_SINGLE_EDGE));
+            String tagged_question = "<qt>Whose</qt> <o>" + O + "</o> <p>" + o_s_NP_only + "</p>?";
+            allPossibleQuestions.add(new GeneratedQuestion(S_withPrefix, S_type_withPrefix, question, tagged_question, selectQuery, singleEdgeGraph.toString(), 1, GeneratedQuestion.QT_WHOSE, GeneratedQuestion.SH_SINGLE_EDGE));
         }
     }
 
@@ -255,15 +262,21 @@ public class SingleEdgeQuestion {
         //Generate Question
         if (s_o_NP != null) {
             String question = "What " + s_o_NP + " " + O + "?";
-            allPossibleQuestions.add(new GeneratedQuestion(S_withPrefix, S_type_withPrefix, question, selectQuery, singleEdgeGraph.toString(), 1, GeneratedQuestion.QT_WHAT, GeneratedQuestion.SH_SINGLE_EDGE));
-            question = Request.getRequestPrefix() + " " + s_o_NP_without_verb + " " + O + "?";
-            allPossibleQuestions.add(new GeneratedQuestion(S_withPrefix, S_type_withPrefix, question, selectQuery, singleEdgeGraph.toString(), 1, GeneratedQuestion.QT_REQUEST, GeneratedQuestion.SH_SINGLE_EDGE));
+            String tagged_question = "<qt>What</qt> <p>" + s_o_NP + "</p> <o>" + O + "</o>?";
+            allPossibleQuestions.add(new GeneratedQuestion(S_withPrefix, S_type_withPrefix, question, tagged_question, selectQuery, singleEdgeGraph.toString(), 1, GeneratedQuestion.QT_WHAT, GeneratedQuestion.SH_SINGLE_EDGE));
+            //question = Request.getRequestPrefix() + " " + s_o_NP_without_verb + " " + O + "?";
+            String req = Request.getRequestPrefix();
+            question = req + " " + s_o_NP_without_verb + " " + O + "?";
+            tagged_question = "<qt>"+req+"</qt> <p>" + s_o_NP_without_verb + "</p> <o>" + O + "</o>?";
+            allPossibleQuestions.add(new GeneratedQuestion(S_withPrefix, S_type_withPrefix, question, tagged_question, selectQuery, singleEdgeGraph.toString(), 1, GeneratedQuestion.QT_REQUEST, GeneratedQuestion.SH_SINGLE_EDGE));
             question = s_o_NP_without_verb + " " + O + "?";
-            allPossibleQuestions.add(new GeneratedQuestion(S_withPrefix, S_type_withPrefix, question, selectQuery, singleEdgeGraph.toString(), 1, GeneratedQuestion.QT_TOPICAL_PRUNE, GeneratedQuestion.SH_SINGLE_EDGE));
+            tagged_question = "<p>" + s_o_NP_without_verb + "</p> <o>" + O + "</o>?";
+            allPossibleQuestions.add(new GeneratedQuestion(S_withPrefix, S_type_withPrefix, question, tagged_question, selectQuery, singleEdgeGraph.toString(), 1, GeneratedQuestion.QT_TOPICAL_PRUNE, GeneratedQuestion.SH_SINGLE_EDGE));
         }
         if (o_s_VP != null) {
             String question = "Where " + O + " " + o_s_VP + "?";
-            allPossibleQuestions.add(new GeneratedQuestion(S_withPrefix, S_type_withPrefix, question, selectQuery, singleEdgeGraph.toString(), 1, GeneratedQuestion.QT_WHERE, GeneratedQuestion.SH_SINGLE_EDGE));
+            String tagged_question = "<qt>Where</qt> <o>" + O + "</o> <p>" + o_s_VP + "</p>?";
+            allPossibleQuestions.add(new GeneratedQuestion(S_withPrefix, S_type_withPrefix, question, tagged_question, selectQuery, singleEdgeGraph.toString(), 1, GeneratedQuestion.QT_WHERE, GeneratedQuestion.SH_SINGLE_EDGE));
 
         }
     }
@@ -272,30 +285,42 @@ public class SingleEdgeQuestion {
         //Generate Question
         if (s_o_NP != null) {
             String question = "What " + s_o_NP + " " + O + "?";
-            allPossibleQuestions.add(new GeneratedQuestion(S_withPrefix, S_type_withPrefix, question, selectQuery, singleEdgeGraph.toString(), 1, GeneratedQuestion.QT_WHAT, GeneratedQuestion.SH_SINGLE_EDGE));
-            question = Request.getRequestPrefix() + " " + s_o_NP_without_verb + " " + O + "?";
-            allPossibleQuestions.add(new GeneratedQuestion(S_withPrefix, S_type_withPrefix, question, selectQuery, singleEdgeGraph.toString(), 1, GeneratedQuestion.QT_REQUEST, GeneratedQuestion.SH_SINGLE_EDGE));
+            String tagged_question = "<qt>What</qt> <p>" + s_o_NP + "</p> <o>" + O + "</o>?";
+            allPossibleQuestions.add(new GeneratedQuestion(S_withPrefix, S_type_withPrefix, question, tagged_question, selectQuery, singleEdgeGraph.toString(), 1, GeneratedQuestion.QT_WHAT, GeneratedQuestion.SH_SINGLE_EDGE));
+//            question = Request.getRequestPrefix() + " " + s_o_NP_without_verb + " " + O + "?";
+            String req = Request.getRequestPrefix();
+            question = req + " " + s_o_NP_without_verb + " " + O + "?";
+            tagged_question = "<qt>"+req+"</qt> <p>" + s_o_NP_without_verb + "</p> <o>" + O + "</o>?";
+            allPossibleQuestions.add(new GeneratedQuestion(S_withPrefix, S_type_withPrefix, question, tagged_question, selectQuery, singleEdgeGraph.toString(), 1, GeneratedQuestion.QT_REQUEST, GeneratedQuestion.SH_SINGLE_EDGE));
             question = s_o_NP_without_verb + " " + O + "?";
-            allPossibleQuestions.add(new GeneratedQuestion(S_withPrefix, S_type_withPrefix, question, selectQuery, singleEdgeGraph.toString(), 1, GeneratedQuestion.QT_TOPICAL_PRUNE, GeneratedQuestion.SH_SINGLE_EDGE));
+            tagged_question = "<p>" + s_o_NP_without_verb + "</p> <o>" + O + "</o>?";
+            allPossibleQuestions.add(new GeneratedQuestion(S_withPrefix, S_type_withPrefix, question, tagged_question, selectQuery, singleEdgeGraph.toString(), 1, GeneratedQuestion.QT_TOPICAL_PRUNE, GeneratedQuestion.SH_SINGLE_EDGE));
         }
         if (s_o_VP != null) {
             String question = "What " + s_o_VP + " " + O + "?";
-            allPossibleQuestions.add(new GeneratedQuestion(S_withPrefix, S_type_withPrefix, question, selectQuery, singleEdgeGraph.toString(), 1, GeneratedQuestion.QT_WHAT, GeneratedQuestion.SH_SINGLE_EDGE));
+            String tagged_question = "<qt>What</qt> <p>" + s_o_VP + "</p> <o>" + O + "</o>?";
+            allPossibleQuestions.add(new GeneratedQuestion(S_withPrefix, S_type_withPrefix, question, tagged_question, selectQuery, singleEdgeGraph.toString(), 1, GeneratedQuestion.QT_WHAT, GeneratedQuestion.SH_SINGLE_EDGE));
         }
     }
 
     private void generateQuestionSELECT_e_of_type_Number() {
         if (s_o_NP != null) {
             String question = "What " + s_o_NP + " " + O + "?";
-            allPossibleQuestions.add(new GeneratedQuestion(S_withPrefix, S_type_withPrefix, question, selectQuery, singleEdgeGraph.toString(), 1, GeneratedQuestion.QT_WHAT, GeneratedQuestion.SH_SINGLE_EDGE));
-            question = Request.getRequestPrefix() + " " + s_o_NP_without_verb + " " + O + "?";
-            allPossibleQuestions.add(new GeneratedQuestion(S_withPrefix, S_type_withPrefix, question, selectQuery, singleEdgeGraph.toString(), 1, GeneratedQuestion.QT_REQUEST, GeneratedQuestion.SH_SINGLE_EDGE));
+            String tagged_question = "<qt>What</qt> <p>" + s_o_NP + "</p> <o>" + O + "</o>?";
+            allPossibleQuestions.add(new GeneratedQuestion(S_withPrefix, S_type_withPrefix, question, tagged_question, selectQuery, singleEdgeGraph.toString(), 1, GeneratedQuestion.QT_WHAT, GeneratedQuestion.SH_SINGLE_EDGE));
+//            question = Request.getRequestPrefix() + " " + s_o_NP_without_verb + " " + O + "?";
+            String req = Request.getRequestPrefix();
+            question = req + " " + s_o_NP_without_verb + " " + O + "?";
+            tagged_question = "<qt>"+req+"</qt> <p>" + s_o_NP_without_verb + "</p> <o>" + O + "</o>?";
+            allPossibleQuestions.add(new GeneratedQuestion(S_withPrefix, S_type_withPrefix, question, tagged_question, selectQuery, singleEdgeGraph.toString(), 1, GeneratedQuestion.QT_REQUEST, GeneratedQuestion.SH_SINGLE_EDGE));
             question = s_o_NP_without_verb + " " + O + "?";
-            allPossibleQuestions.add(new GeneratedQuestion(S_withPrefix, S_type_withPrefix, question, selectQuery, singleEdgeGraph.toString(), 1, GeneratedQuestion.QT_TOPICAL_PRUNE, GeneratedQuestion.SH_SINGLE_EDGE));
+            tagged_question = "<p>" + s_o_NP_without_verb + "</p> <o>" + O + "</o>?";
+            allPossibleQuestions.add(new GeneratedQuestion(S_withPrefix, S_type_withPrefix, question, tagged_question, selectQuery, singleEdgeGraph.toString(), 1, GeneratedQuestion.QT_TOPICAL_PRUNE, GeneratedQuestion.SH_SINGLE_EDGE));
         }
         if (o_s_NP != null) {
             String question = "How " + o_s_NP + " is " + O + "?";
-            allPossibleQuestions.add(new GeneratedQuestion(S_withPrefix, S_type_withPrefix, question, selectQuery, singleEdgeGraph.toString(), 1, GeneratedQuestion.QT_HOW_ADJ, GeneratedQuestion.SH_SINGLE_EDGE));
+            String tagged_question = "<qt>How</qt> <p>" + o_s_NP + "</p> is <o>" + O + "</o>?";
+            allPossibleQuestions.add(new GeneratedQuestion(S_withPrefix, S_type_withPrefix, question, tagged_question, selectQuery, singleEdgeGraph.toString(), 1, GeneratedQuestion.QT_HOW_ADJ, GeneratedQuestion.SH_SINGLE_EDGE));
         }
     }
 
@@ -303,15 +328,21 @@ public class SingleEdgeQuestion {
         //Generate Question
         if (o_s_VP != null) {
             String question = "When did " + O + " " + o_s_VP + "?";
-            allPossibleQuestions.add(new GeneratedQuestion(S_withPrefix, S_type_withPrefix, question, selectQuery, singleEdgeGraph.toString(), 1, GeneratedQuestion.QT_WHEN, GeneratedQuestion.SH_SINGLE_EDGE));
+            String tagged_question = "<qt>When</qt> did <o>" + O + "</o> <p>" + o_s_VP + "</p>?";
+            allPossibleQuestions.add(new GeneratedQuestion(S_withPrefix, S_type_withPrefix, question, tagged_question, selectQuery, singleEdgeGraph.toString(), 1, GeneratedQuestion.QT_WHEN, GeneratedQuestion.SH_SINGLE_EDGE));
         }
         if (s_o_NP != null) {
             String question = "What " + s_o_NP + " " + O + "?";
-            allPossibleQuestions.add(new GeneratedQuestion(S_withPrefix, S_type_withPrefix, question, selectQuery, singleEdgeGraph.toString(), 1, GeneratedQuestion.QT_WHAT, GeneratedQuestion.SH_SINGLE_EDGE));
-            question = Request.getRequestPrefix() + " " + s_o_NP_without_verb + " " + O + "?";
-            allPossibleQuestions.add(new GeneratedQuestion(S_withPrefix, S_type_withPrefix, question, selectQuery, singleEdgeGraph.toString(), 1, GeneratedQuestion.QT_REQUEST, GeneratedQuestion.SH_SINGLE_EDGE));
+            String tagged_question = "<qt>What</qt> <p>" + s_o_NP + "</p> <o>" + O + "</o>?";
+            allPossibleQuestions.add(new GeneratedQuestion(S_withPrefix, S_type_withPrefix, question, tagged_question, selectQuery, singleEdgeGraph.toString(), 1, GeneratedQuestion.QT_WHAT, GeneratedQuestion.SH_SINGLE_EDGE));
+//            question = Request.getRequestPrefix() + " " + s_o_NP_without_verb + " " + O + "?";
+            String req = Request.getRequestPrefix();
+            question = req + " " + s_o_NP_without_verb + " " + O + "?";
+            tagged_question = "<qt>"+req+"</qt> <p>" + s_o_NP_without_verb + "</p> <o>" + O + "</o>?";
+            allPossibleQuestions.add(new GeneratedQuestion(S_withPrefix, S_type_withPrefix, question, tagged_question, selectQuery, singleEdgeGraph.toString(), 1, GeneratedQuestion.QT_REQUEST, GeneratedQuestion.SH_SINGLE_EDGE));
             question = s_o_NP_without_verb + " " + O + "?";
-            allPossibleQuestions.add(new GeneratedQuestion(S_withPrefix, S_type_withPrefix, question, selectQuery, singleEdgeGraph.toString(), 1, GeneratedQuestion.QT_TOPICAL_PRUNE, GeneratedQuestion.SH_SINGLE_EDGE));
+            tagged_question = "<p>" + s_o_NP_without_verb + "</p> <o>" + O + "</o>?";
+            allPossibleQuestions.add(new GeneratedQuestion(S_withPrefix, S_type_withPrefix, question, tagged_question, selectQuery, singleEdgeGraph.toString(), 1, GeneratedQuestion.QT_TOPICAL_PRUNE, GeneratedQuestion.SH_SINGLE_EDGE));
         }
     }
 
@@ -320,28 +351,34 @@ public class SingleEdgeQuestion {
         if (s_o_NP != null && s_o_NP.startsWith("is/are ")) {
             s_o_NP_without_verb = s_o_NP.replace("is/are ", "");
             String question = "Is " + S + " " + s_o_NP_without_verb + " " + O + "?";
-            allPossibleQuestions.add(new GeneratedQuestion(S_withPrefix, S_type_withPrefix, question, askQuery_correct, singleEdgeGraph.toString(), 1, GeneratedQuestion.QT_YES_NO_IS, GeneratedQuestion.SH_SINGLE_EDGE));
+            String tagged_question = "<qt>Is</qt> <s>" + S + "</s> <p>" + s_o_NP_without_verb + "</p> <o>" + O + "</o>?";
+            allPossibleQuestions.add(new GeneratedQuestion(S_withPrefix, S_type_withPrefix, question, tagged_question, askQuery_correct, singleEdgeGraph.toString(), 1, GeneratedQuestion.QT_YES_NO_IS, GeneratedQuestion.SH_SINGLE_EDGE));
         } else if (s_o_NP != null && s_o_NP.startsWith("is ")) {
             s_o_NP_without_verb = s_o_NP.replace("is ", "");
             String question = "Is " + S + " " + s_o_NP_without_verb + " " + O + "?";
-            allPossibleQuestions.add(new GeneratedQuestion(S_withPrefix, S_type_withPrefix, question, askQuery_correct, singleEdgeGraph.toString(), 1, GeneratedQuestion.QT_YES_NO_IS, GeneratedQuestion.SH_SINGLE_EDGE));
+            String tagged_question = "<qt>Is</qt> <s>" + S + "</s> <p>" + s_o_NP_without_verb + "</p> <o>" + O + "</o>?";
+            allPossibleQuestions.add(new GeneratedQuestion(S_withPrefix, S_type_withPrefix, question, tagged_question, askQuery_correct, singleEdgeGraph.toString(), 1, GeneratedQuestion.QT_YES_NO_IS, GeneratedQuestion.SH_SINGLE_EDGE));
         } else if (s_o_NP != null && s_o_NP.startsWith("are ")) {
             s_o_NP_without_verb = s_o_NP.replace("are ", "");
             String question = "Are " + S + " " + s_o_NP_without_verb + " " + O + "?";
-            allPossibleQuestions.add(new GeneratedQuestion(S_withPrefix, S_type_withPrefix, question, askQuery_correct, singleEdgeGraph.toString(), 1, GeneratedQuestion.QT_YES_NO_IS, GeneratedQuestion.SH_SINGLE_EDGE));
+            String tagged_question = "<qt>Are</qt> <s>" + S + "</s> <p>" + s_o_NP_without_verb + "</p> <o>" + O + "</o>?";
+            allPossibleQuestions.add(new GeneratedQuestion(S_withPrefix, S_type_withPrefix, question, tagged_question, askQuery_correct, singleEdgeGraph.toString(), 1, GeneratedQuestion.QT_YES_NO_IS, GeneratedQuestion.SH_SINGLE_EDGE));
         } else if (s_o_NP != null && s_o_NP.startsWith("was ")) {
             s_o_NP_without_verb = s_o_NP.replace("was ", "");
             String question = "Was " + S + " " + s_o_NP_without_verb + " " + O + "?";
-            allPossibleQuestions.add(new GeneratedQuestion(S_withPrefix, S_type_withPrefix, question, askQuery_correct, singleEdgeGraph.toString(), 1, GeneratedQuestion.QT_YES_NO_IS, GeneratedQuestion.SH_SINGLE_EDGE));
+            String tagged_question = "<qt>Was</qt> <s>" + S + "</s> <p>" + s_o_NP_without_verb + "</p> <o>" + O + "</o>?";
+            allPossibleQuestions.add(new GeneratedQuestion(S_withPrefix, S_type_withPrefix, question, tagged_question, askQuery_correct, singleEdgeGraph.toString(), 1, GeneratedQuestion.QT_YES_NO_IS, GeneratedQuestion.SH_SINGLE_EDGE));
         } else if (s_o_NP != null && s_o_NP.startsWith("were ")) {
             s_o_NP_without_verb = s_o_NP.replace("were ", "");
             String question = "Were " + S + " " + s_o_NP_without_verb + " " + O + "?";
-            allPossibleQuestions.add(new GeneratedQuestion(S_withPrefix, S_type_withPrefix, question, askQuery_correct, singleEdgeGraph.toString(), 1, GeneratedQuestion.QT_YES_NO_IS, GeneratedQuestion.SH_SINGLE_EDGE));
+            String tagged_question = "<qt>Were</qt> <s>" + S + "</s> <p>" + s_o_NP_without_verb + "</p> <o>" + O + "</o>?";
+            allPossibleQuestions.add(new GeneratedQuestion(S_withPrefix, S_type_withPrefix, question, tagged_question, askQuery_correct, singleEdgeGraph.toString(), 1, GeneratedQuestion.QT_YES_NO_IS, GeneratedQuestion.SH_SINGLE_EDGE));
         }
 
         if (s_o_VP != null) {
             String question = "Does " + S + " " + s_o_VP + " " + O + "?";
-            allPossibleQuestions.add(new GeneratedQuestion(S_withPrefix, S_type_withPrefix, question, askQuery_correct, singleEdgeGraph.toString(), 1, GeneratedQuestion.QT_YES_NO_DO, GeneratedQuestion.SH_SINGLE_EDGE));
+            String tagged_question = "<qt>Does</qt> <s>" + S + "</s> <p>" + s_o_VP + "</p> <o>" + O + "</o>?";
+            allPossibleQuestions.add(new GeneratedQuestion(S_withPrefix, S_type_withPrefix, question, tagged_question, askQuery_correct, singleEdgeGraph.toString(), 1, GeneratedQuestion.QT_YES_NO_DO, GeneratedQuestion.SH_SINGLE_EDGE));
         }
     }
 
@@ -356,27 +393,33 @@ public class SingleEdgeQuestion {
         if (s_o_NP != null && s_o_NP.startsWith("is/are ")) {
             s_o_NP_without_verb = s_o_NP.replace("is/are ", "");
             String question = "Is " + somethingElseWithoutPrefix + " " + s_o_NP_without_verb + " " + O + "?";
-            allPossibleQuestions.add(new GeneratedQuestion(S_withPrefix, S_type_withPrefix, question, askQuery_wrong, singleEdgeGraph.toString(), 1, GeneratedQuestion.QT_YES_NO_IS, GeneratedQuestion.SH_SINGLE_EDGE));
+            String tagged_question = "<qt>Is</qt> <s>" + somethingElseWithoutPrefix + "</s> <p>" + s_o_NP_without_verb + "</p> <o>" + O + "</o>?";
+            allPossibleQuestions.add(new GeneratedQuestion(S_withPrefix, S_type_withPrefix, question, tagged_question, askQuery_wrong, singleEdgeGraph.toString(), 1, GeneratedQuestion.QT_YES_NO_IS, GeneratedQuestion.SH_SINGLE_EDGE));
         } else if (s_o_NP != null && s_o_NP.startsWith("is ")) {
             s_o_NP_without_verb = s_o_NP.replace("is ", "");
             String question = "Is " + somethingElseWithoutPrefix + " " + s_o_NP_without_verb + " " + O + "?";
-            allPossibleQuestions.add(new GeneratedQuestion(S_withPrefix, S_type_withPrefix, question, askQuery_wrong, singleEdgeGraph.toString(), 1, GeneratedQuestion.QT_YES_NO_IS, GeneratedQuestion.SH_SINGLE_EDGE));
+            String tagged_question = "<qt>Is</qt> <s>" + somethingElseWithoutPrefix + "</s> <p>" + s_o_NP_without_verb + "</p> <o>" + O + "</o>?";
+            allPossibleQuestions.add(new GeneratedQuestion(S_withPrefix, S_type_withPrefix, question, tagged_question, askQuery_wrong, singleEdgeGraph.toString(), 1, GeneratedQuestion.QT_YES_NO_IS, GeneratedQuestion.SH_SINGLE_EDGE));
         } else if (s_o_NP != null && s_o_NP.startsWith("are ")) {
             s_o_NP_without_verb = s_o_NP.replace("are ", "");
             String question = "Are " + somethingElseWithoutPrefix + " " + s_o_NP_without_verb + " " + O + "?";
-            allPossibleQuestions.add(new GeneratedQuestion(S_withPrefix, S_type_withPrefix, question, askQuery_wrong, singleEdgeGraph.toString(), 1, GeneratedQuestion.QT_YES_NO_IS, GeneratedQuestion.SH_SINGLE_EDGE));
+            String tagged_question = "<qt>Are</qt> <s>" + somethingElseWithoutPrefix + "</s> <p>" + s_o_NP_without_verb + "</p> <o>" + O + "</o>?";
+            allPossibleQuestions.add(new GeneratedQuestion(S_withPrefix, S_type_withPrefix, question, tagged_question, askQuery_wrong, singleEdgeGraph.toString(), 1, GeneratedQuestion.QT_YES_NO_IS, GeneratedQuestion.SH_SINGLE_EDGE));
         } else if (s_o_NP != null && s_o_NP.startsWith("was ")) {
             s_o_NP_without_verb = s_o_NP.replace("was ", "");
             String question = "Was " + somethingElseWithoutPrefix + " " + s_o_NP_without_verb + " " + O + "?";
-            allPossibleQuestions.add(new GeneratedQuestion(S_withPrefix, S_type_withPrefix, question, askQuery_wrong, singleEdgeGraph.toString(), 1, GeneratedQuestion.QT_YES_NO_IS, GeneratedQuestion.SH_SINGLE_EDGE));
+            String tagged_question = "<qt>Was</qt> <s>" + somethingElseWithoutPrefix + "</s> <p>" + s_o_NP_without_verb + "</p> <o>" + O + "</o>?";
+            allPossibleQuestions.add(new GeneratedQuestion(S_withPrefix, S_type_withPrefix, question, tagged_question, askQuery_wrong, singleEdgeGraph.toString(), 1, GeneratedQuestion.QT_YES_NO_IS, GeneratedQuestion.SH_SINGLE_EDGE));
         } else if (s_o_NP != null && s_o_NP.startsWith("were ")) {
             s_o_NP_without_verb = s_o_NP.replace("were ", "");
             String question = "Were " + somethingElseWithoutPrefix + " " + s_o_NP_without_verb + " " + O + "?";
-            allPossibleQuestions.add(new GeneratedQuestion(S_withPrefix, S_type_withPrefix, question, askQuery_wrong, singleEdgeGraph.toString(), 1, GeneratedQuestion.QT_YES_NO_IS, GeneratedQuestion.SH_SINGLE_EDGE));
+            String tagged_question = "<qt>Were</qt> <s>" + somethingElseWithoutPrefix + "</s> <p>" + s_o_NP_without_verb + "</p> <o>" + O + "</o>?";
+            allPossibleQuestions.add(new GeneratedQuestion(S_withPrefix, S_type_withPrefix, question, tagged_question, askQuery_wrong, singleEdgeGraph.toString(), 1, GeneratedQuestion.QT_YES_NO_IS, GeneratedQuestion.SH_SINGLE_EDGE));
         }
         if (s_o_VP != null) {
             String question = "Does " + somethingElseWithoutPrefix + " " + s_o_VP + " " + O + "?";
-            allPossibleQuestions.add(new GeneratedQuestion(S_withPrefix, S_type_withPrefix, question, askQuery_wrong, singleEdgeGraph.toString(), 1, GeneratedQuestion.QT_YES_NO_DO, GeneratedQuestion.SH_SINGLE_EDGE));
+            String tagged_question = "<qt>Does</qt> <s>" + somethingElseWithoutPrefix + "</s> <p>" + s_o_VP + "</p> <o>" + O + "</o>?";
+            allPossibleQuestions.add(new GeneratedQuestion(S_withPrefix, S_type_withPrefix, question, tagged_question, askQuery_wrong, singleEdgeGraph.toString(), 1, GeneratedQuestion.QT_YES_NO_DO, GeneratedQuestion.SH_SINGLE_EDGE));
         }
     }
 
