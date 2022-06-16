@@ -13,7 +13,7 @@ In recent years, a significant number of question answering (QA) systems that re
 * __Coverability:__ We defined the question complexity to use it in tuning SmartBench to cover all possible complexities in real-world deployment. 
 
 *Paper*: [ToPublish](https://)
-#### Citation 
+#### Citation (Research Paper)
 ```
 @Article{Orogat2022SmartBench,
   Title                    = {},
@@ -25,7 +25,18 @@ In recent years, a significant number of question answering (QA) systems that re
 }
 ```
 
-
+#### Citation (Demo Paper)
+```
+@Article{Orogat2022demo,
+  Title   = {{S}mart{B}ench: {D}emonstrating {A}utomatic {G}eneration of
+{C}omprehensive {B}enchmarks for {Q}uestion {A}nswering {O}ver {K}nowledge {G}raphs},
+  Author   = {Orogat, Abdelghny and El-Roby, Ahmed},
+  Journal   = {Proceedings of the VLDB Endowment (PVLDB)},
+  Year   = {2022},
+  volume   = {15},
+  number   = {12}
+}
+```
 
 ## Table of Content
 * Run CBench
@@ -45,8 +56,9 @@ In recent years, a significant number of question answering (QA) systems that re
 
 ### Prerequisites
 SmartBench requires the following development kits and liberaries. You can download the liberaries with the system.
-* for Java [JDK 8, Download liberaries from Lib folder]
-* for Python [Python 3, nltk, inflect, Spacy]
+* for Java [JDK 8, Download liberaries as defined in the `pom` file, use Maven for this purpose.]
+* You have to run the server written in Python before running the Java code. This server is in the `main.py` file and the Prerequisites for this python file can be found in the `requirements.txt` file.
+* You need to install PostgreSQL 13 and create an empty database for your KG. Please reset the database paramaters from the `settings` package.
 
 ### Deploy CBench via jar
 * __Download CBench.jar:__ Download the *CBench.jar* file and other folders. The project structure must be as follow
