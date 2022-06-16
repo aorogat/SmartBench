@@ -61,20 +61,20 @@ public class ShapesGenerator {
             System.out.println("++++++++++++++++  Seed " + ++i + " of " + branchs.size() + " +++++++ Seed: " + branch.s);
 
 //                Single-Edge
-            try {
-                testSingleEdge(branch);
-            } catch (Exception e) {
-            }
 //            try {
-////                    oldSize = generatedQuestions.size();
-//                testChain(branch, 2);
+//                testSingleEdge(branch);
+//            } catch (Exception e) {
+//            }
+            try {
+//                    oldSize = generatedQuestions.size();
+                testChain(branch, 2);
 //                currentSize = generatedQuestions.size();
 //                if (currentSize > oldSize) {
 //                    testChain(branch, 3);
 //                }
-//            } catch (Exception e) {
+            } catch (Exception e) {
 //                e.printStackTrace();
-//            }
+            }
 //
 //            try {
 //                testCycle(branch);
