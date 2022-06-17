@@ -69,7 +69,7 @@ public class GeneratedQuestion {
         this.noOfTriples = noOfTriples;
         this.QuestionType = QuestionType;
         this.ShapeType = ShapeType;
-        this.questionStringTagged = questionStringTagged;
+        this.questionStringTagged = questionStringTagged.replace("(", "").replace(")", "").replace("  ", " ").replace(" , ", ", ").replace(" ,", ", ").replace(" s ", " ");
         
         try {
             ArrayList<VariableSet> answersVar = Settings.knowledgeGraph.runQuery(query);

@@ -65,16 +65,16 @@ public class ShapesGenerator {
 //                testSingleEdge(branch);
 //            } catch (Exception e) {
 //            }
-            try {
-//                    oldSize = generatedQuestions.size();
-                testChain(branch, 2);
-//                currentSize = generatedQuestions.size();
-//                if (currentSize > oldSize) {
-//                    testChain(branch, 3);
-//                }
-            } catch (Exception e) {
-//                e.printStackTrace();
-            }
+//            try {
+////                    oldSize = generatedQuestions.size();
+//                testChain(branch, 2);
+////                currentSize = generatedQuestions.size();
+////                if (currentSize > oldSize) {
+////                    testChain(branch, 3);
+////                }
+//            } catch (Exception e) {
+////                e.printStackTrace();
+//            }
 //
 //            try {
 //                testCycle(branch);
@@ -85,16 +85,16 @@ public class ShapesGenerator {
 //            } catch (Exception e) {
 //            }
 //
-//            try {
-//                    oldSize = generatedQuestions.size();
-//                testStar(branch, 1);
-//                currentSize = generatedQuestions.size();
-//                if (currentSize > oldSize) {
-//                    oldSize = generatedQuestions.size();
-//                    testStar(branch, 2);
-//                    testStarWithGroupBy(branch, 2);
-//                    currentSize = generatedQuestions.size();
-//                }
+            try {
+                    oldSize = generatedQuestions.size();
+                testStar(branch, 1);
+                currentSize = generatedQuestions.size();
+                if (currentSize > oldSize) {
+                    oldSize = generatedQuestions.size();
+                    testStar(branch, 2);
+                    testStarWithGroupBy(branch, 2);
+                    currentSize = generatedQuestions.size();
+                }
 //                if (currentSize > oldSize) {
 //                    oldSize = generatedQuestions.size();
 //                    testStar(branch, 3);
@@ -115,8 +115,8 @@ public class ShapesGenerator {
 //                    testStar(branch, 6);
 //                    currentSize = generatedQuestions.size();
 //                }
-//            } catch (Exception e) {
-//            }
+            } catch (Exception e) {
+            }
 //                try {
 ////                    oldSize = generatedQuestions.size();
 //                    testTree(branch, 2);

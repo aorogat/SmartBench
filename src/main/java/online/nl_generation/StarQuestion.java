@@ -23,6 +23,15 @@ public class StarQuestion {
     String FCs_AND_NOT;
     String FCs_OR_NOT;
     String FCs_NOT_NOT;
+    
+    static String FCs_tagged = "";
+    String T_tagged;
+    String FCs_AND_tagged;
+    String FCs_AND_withGroupBy_tagged;
+    String FCs_OR_tagged;
+    String FCs_AND_NOT_tagged;
+    String FCs_OR_NOT_tagged;
+    String FCs_NOT_NOT_tagged;
 
     private String somethingElse = "http://AnnyOther";
     private String somethingElseWithoutPrefix = "AnnyOther";
@@ -62,12 +71,17 @@ public class StarQuestion {
         }
 
         FCs_AND = factConstraints_toString(starGraph, CoordinatingConjunction.AND, starPredicates);
+        FCs_AND_tagged = FCs_tagged;
         if(FCs_AND==null)
             return;
         FCs_OR = factConstraints_toString(starGraph, CoordinatingConjunction.OR, starPredicates);
+        FCs_OR_tagged = FCs_tagged;
         FCs_AND_NOT = factConstraints_toString(starGraph, CoordinatingConjunction.AND_NOT, starPredicates);
+        FCs_AND_NOT_tagged = FCs_tagged;
         FCs_OR_NOT = factConstraints_toString(starGraph, CoordinatingConjunction.OR_NOT, starPredicates);
+        FCs_OR_NOT_tagged = FCs_tagged;
         FCs_NOT_NOT = factConstraints_toString(starGraph, CoordinatingConjunction.NOT_NOT, starPredicates);
+        FCs_NOT_NOT_tagged = FCs_tagged;
 
         if (starGraph.getStar().size() == 1) {
             selectQuestions(CoordinatingConjunction.AND);
@@ -134,29 +148,35 @@ public class StarQuestion {
 
     public void countQuestions(String coordinatingConjunction) {
         String FCs = "";
+        String FCs_tag = "";
         switch (coordinatingConjunction) {
             case CoordinatingConjunction.AND:
                 FCs = FCs_AND;
+                FCs_tag = FCs_AND_tagged;
                 break;
             case CoordinatingConjunction.AND_NOT:
                 FCs = FCs_AND_NOT;
+                FCs_tag = FCs_AND_NOT_tagged;
                 break;
             case CoordinatingConjunction.NOT_NOT:
                 FCs = FCs_NOT_NOT;
+                FCs_tag = FCs_NOT_NOT_tagged;
                 break;
             case CoordinatingConjunction.OR:
                 FCs = FCs_OR;
+                FCs_tag = FCs_OR_tagged;
                 break;
             case CoordinatingConjunction.OR_NOT:
                 FCs = FCs_OR_NOT;
+                FCs_tag = FCs_OR_NOT_tagged;
                 break;
             default:
         }
         if (FCs != null) {
             String countQuery = countQuery(starGraph, coordinatingConjunction);
-            String whichQuestion = selectWhichQuestions(coordinatingConjunction).replaceFirst("Which", "How many");
-            String question = whichQuestion;
-            allPossibleQuestions.add(new GeneratedQuestion(starGraph.getStar().get(0).getSubject().getValueWithPrefix(), starGraph.getStar().get(0).getS_type(), question, countQuery, starGraph.toString(), starGraph.getStar().size() + 1, GeneratedQuestion.QT_HOW_MANY, GeneratedQuestion.SH_STAR));
+            String question = selectWhichQuestions(coordinatingConjunction).replaceFirst("Which", "How many");
+            String question_tagged = selectWhichQuestions_tagged(coordinatingConjunction).replaceFirst("Which", "How many");
+            allPossibleQuestions.add(new GeneratedQuestion(starGraph.getStar().get(0).getSubject().getValueWithPrefix(), starGraph.getStar().get(0).getS_type(), question, question_tagged, countQuery, starGraph.toString(), starGraph.getStar().size() + 1, GeneratedQuestion.QT_HOW_MANY, GeneratedQuestion.SH_STAR));
         }
     }
 
@@ -182,40 +202,50 @@ public class StarQuestion {
         }
         if (FCs != null) {
             String subject = starGraph.getStar().get(0).getSubject().getValue();
-            String whichQuestion = selectWhichQuestions(coordinatingConjunction).replaceFirst("Which", "");
-            whichQuestion = "Is " + subject.toLowerCase().replace(T.toLowerCase(), "") + " " + whichQuestion.replace("whose", "its");
-            String question = whichQuestion;
+            String question = selectWhichQuestions(coordinatingConjunction).replaceFirst("Which", "");
+            String question_tagged = selectWhichQuestions_tagged(coordinatingConjunction).replaceFirst("<qt>Which</qt>", "");
+            question = "Is " + subject.toLowerCase().replace(T.toLowerCase(), "") + " " + question.replace("whose", "its");
+            question_tagged = "<qt>Is</qt> <s>" + subject.toLowerCase().replace(T.toLowerCase(), "") + "</s> " + question_tagged.replace("whose", "its");
             String askQuery = askQuery_true_answer(starGraph, coordinatingConjunction);
-            allPossibleQuestions.add(new GeneratedQuestion(starGraph.getStar().get(0).getSubject().getValueWithPrefix(), starGraph.getStar().get(0).getS_type(), question, askQuery, starGraph.toString(), starGraph.getStar().size() + 1, GeneratedQuestion.QT_YES_NO_IS, GeneratedQuestion.SH_STAR));
+            allPossibleQuestions.add(new GeneratedQuestion(starGraph.getStar().get(0).getSubject().getValueWithPrefix(), starGraph.getStar().get(0).getS_type(), question, question_tagged, askQuery, starGraph.toString(), starGraph.getStar().size() + 1, GeneratedQuestion.QT_YES_NO_IS, GeneratedQuestion.SH_STAR));
         }
     }
 
     public void askQuestions_false_answer(String coordinatingConjunction) {
         String FCs = "";
+        String FCs_tag = "";
         switch (coordinatingConjunction) {
             case CoordinatingConjunction.AND:
                 FCs = FCs_AND;
+                FCs_tag = FCs_AND_tagged;
                 break;
             case CoordinatingConjunction.AND_NOT:
                 FCs = FCs_AND_NOT;
+                FCs_tag = FCs_AND_NOT_tagged;
                 break;
             case CoordinatingConjunction.NOT_NOT:
                 FCs = FCs_NOT_NOT;
+                FCs_tag = FCs_NOT_NOT_tagged;
                 break;
             case CoordinatingConjunction.OR:
                 FCs = FCs_OR;
+                FCs_tag = FCs_OR_tagged;
                 break;
             case CoordinatingConjunction.OR_NOT:
                 FCs = FCs_OR_NOT;
+                FCs_tag = FCs_OR_NOT_tagged;
                 break;
             default:
         }
         if (FCs != null) {
             String whichQuestion = selectWhichQuestions(coordinatingConjunction).replaceFirst("Which", "Is " + somethingElseWithoutPrefix.toLowerCase().replace(T.toLowerCase(), ""))
                     .replace(FCs, FCs);
-            String question = whichQuestion.replace("whose", "its");;
+            String whichQuestion_tagged = selectWhichQuestions_tagged(coordinatingConjunction).replaceFirst("<qt>Which</qt>", "<qt>Is</qt> <s>" + somethingElseWithoutPrefix.toLowerCase().replace(T.toLowerCase(), "")+"</s>")
+                    .replace(FCs_tag, FCs_tag);
+            String question = whichQuestion.replace("whose", "its");
+            String question_tagged = whichQuestion_tagged.replace("whose", "its");
             String askQuery = askQuery_false_answer(starGraph, coordinatingConjunction);
-            allPossibleQuestions.add(new GeneratedQuestion(starGraph.getStar().get(0).getSubject().getValueWithPrefix(), starGraph.getStar().get(0).getS_type(), question, askQuery, starGraph.toString(), starGraph.getStar().size() + 1, GeneratedQuestion.QT_YES_NO_IS, GeneratedQuestion.SH_STAR));
+            allPossibleQuestions.add(new GeneratedQuestion(starGraph.getStar().get(0).getSubject().getValueWithPrefix(), starGraph.getStar().get(0).getS_type(), question, question_tagged, askQuery, starGraph.toString(), starGraph.getStar().size() + 1, GeneratedQuestion.QT_YES_NO_IS, GeneratedQuestion.SH_STAR));
 
 //            allPossibleQuestions.add(new GeneratedQuestion(question, askQuery, starGraph.toString()));
         }
@@ -243,18 +273,26 @@ public class StarQuestion {
         }
         if (FCs != null) {
             String whichQuestion = selectWhichQuestions(coordinatingConjunction);
+            String whichQuestion_tagged = selectWhichQuestions_tagged(coordinatingConjunction);
             String question = whichQuestion;
+            String question_tagged = whichQuestion_tagged;
             String selectQuery = selectQuery(starGraph, coordinatingConjunction);
-            allPossibleQuestions.add(new GeneratedQuestion(starGraph.getStar().get(0).getSubject().getValueWithPrefix(), starGraph.getStar().get(0).getS_type(), question, selectQuery, starGraph.toString(), starGraph.getStar().size() + 1, GeneratedQuestion.QT_WHICH, GeneratedQuestion.SH_STAR));
+            allPossibleQuestions.add(new GeneratedQuestion(starGraph.getStar().get(0).getSubject().getValueWithPrefix(), starGraph.getStar().get(0).getS_type(), question, question_tagged, selectQuery, starGraph.toString(), starGraph.getStar().size() + 1, GeneratedQuestion.QT_WHICH, GeneratedQuestion.SH_STAR));
 
             question = whichQuestion.replaceFirst("Which " + T.trim(), "What are the " + BasicNLP_FromPython.nounPlural(T) + " ");
-            allPossibleQuestions.add(new GeneratedQuestion(starGraph.getStar().get(0).getSubject().getValueWithPrefix(), starGraph.getStar().get(0).getS_type(), question, selectQuery, starGraph.toString(), starGraph.getStar().size() + 1, GeneratedQuestion.QT_WHAT, GeneratedQuestion.SH_STAR));
+            question = whichQuestion.replaceFirst("Which " + BasicNLP_FromPython.nounPlural(T).trim(), "What are the " + BasicNLP_FromPython.nounPlural(T) + " ");
+            question_tagged = whichQuestion_tagged.replaceFirst("<qt>Which</qt> <t>" + T.trim()+"</t>", "<qt>What</qt> are the <t>" + BasicNLP_FromPython.nounPlural(T) + "</t> ");
+            question_tagged = whichQuestion_tagged.replaceFirst("<qt>Which</qt> <t>" + BasicNLP_FromPython.nounPlural(T).trim()+"</t>", "<qt>What</qt> are the <t>" + BasicNLP_FromPython.nounPlural(T) + "</t> ");
+            allPossibleQuestions.add(new GeneratedQuestion(starGraph.getStar().get(0).getSubject().getValueWithPrefix(), starGraph.getStar().get(0).getS_type(), question, question_tagged, selectQuery, starGraph.toString(), starGraph.getStar().size() + 1, GeneratedQuestion.QT_WHAT, GeneratedQuestion.SH_STAR));
 
-            question = whichQuestion.replaceFirst("Which ", Request.getRequestPrefix().trim() + " ");
-            allPossibleQuestions.add(new GeneratedQuestion(starGraph.getStar().get(0).getSubject().getValueWithPrefix(), starGraph.getStar().get(0).getS_type(), question, selectQuery, starGraph.toString(), starGraph.getStar().size() + 1, GeneratedQuestion.QT_REQUEST, GeneratedQuestion.SH_STAR));
+            String req = Request.getRequestPrefix().trim();
+            question = whichQuestion.replaceFirst("Which ", req + " ");
+            question_tagged = whichQuestion_tagged.replaceFirst("Which", req);
+            allPossibleQuestions.add(new GeneratedQuestion(starGraph.getStar().get(0).getSubject().getValueWithPrefix(), starGraph.getStar().get(0).getS_type(), question, question_tagged, selectQuery, starGraph.toString(), starGraph.getStar().size() + 1, GeneratedQuestion.QT_REQUEST, GeneratedQuestion.SH_STAR));
 
             question = whichQuestion.replaceFirst("Which ", "");
-            allPossibleQuestions.add(new GeneratedQuestion(starGraph.getStar().get(0).getSubject().getValueWithPrefix(), starGraph.getStar().get(0).getS_type(), question, selectQuery, starGraph.toString(), starGraph.getStar().size() + 1, GeneratedQuestion.QT_TOPICAL_PRUNE, GeneratedQuestion.SH_STAR));
+            question_tagged = whichQuestion_tagged.replaceFirst("<qt>Which</qt> ", "");
+            allPossibleQuestions.add(new GeneratedQuestion(starGraph.getStar().get(0).getSubject().getValueWithPrefix(), starGraph.getStar().get(0).getS_type(), question, question_tagged, selectQuery, starGraph.toString(), starGraph.getStar().size() + 1, GeneratedQuestion.QT_TOPICAL_PRUNE, GeneratedQuestion.SH_STAR));
         }
     }
 
@@ -281,6 +319,34 @@ public class StarQuestion {
 
         if (FCs != null) {
             String whichQuestion = "Which " + BasicNLP_FromPython.nounPlural(T) + FCs + "?";
+            return whichQuestion;
+        }
+        return null;
+    }
+    
+    public String selectWhichQuestions_tagged(String coordinatingConjunction) {
+        String FCs_tag = "";
+        switch (coordinatingConjunction) {
+            case CoordinatingConjunction.AND:
+                FCs_tag = FCs_AND_tagged;
+                break;
+            case CoordinatingConjunction.AND_NOT:
+                FCs_tag = FCs_AND_NOT_tagged;
+                break;
+            case CoordinatingConjunction.NOT_NOT:
+                FCs_tag = FCs_NOT_NOT_tagged;
+                break;
+            case CoordinatingConjunction.OR:
+                FCs_tag = FCs_OR_tagged;
+                break;
+            case CoordinatingConjunction.OR_NOT:
+                FCs_tag = FCs_OR_NOT_tagged;
+                break;
+            default:
+        }
+
+        if (FCs_tag != null) {
+            String whichQuestion = "<qt>Which</qt> <t>" + BasicNLP_FromPython.nounPlural(T)+ "</t> " + FCs_tag + "?";
             return whichQuestion;
         }
         return null;
@@ -410,6 +476,7 @@ public class StarQuestion {
 
     public static String factConstraints_toString(StarGraph starGraph, String coorinatingConjunction, Map<String, HashSet<String>> starPredicates) {
         ArrayList<String> FCs_Representation = new ArrayList<>();
+        ArrayList<String> FCs_Representation_tagged = new ArrayList<>();
         ArrayList<TriplePattern> branches = starGraph.getStar();
 
         ArrayList<String> processedPredicates = new ArrayList<>();
@@ -434,18 +501,23 @@ public class StarQuestion {
                 if (predicateNL.getPredicate_s_O_NP() != null) {
                     String p_SO_NP = predicateNL.getPredicate_s_O_NP();
                     FCs_Representation.add(" " + p_SO_NP + " " + O);
+                    FCs_Representation_tagged.add(" <p>" + p_SO_NP + "</p> <o>" + O + "</o>");
                 } else if (predicateNL.getPredicate_s_O_VP() != null) {
                     String p_SO_VP = predicateNL.getPredicate_s_O_VP();
                     FCs_Representation.add(" " + p_SO_VP + " " + O);
+                    FCs_Representation_tagged.add(" <p>" + p_SO_VP + "</p> <o>" + O + "</o>");
                 } else if (predicateNL.getPredicate_o_s_VP() != null) {
                     String p_OS_VP = predicateNL.getPredicate_o_s_VP();
                     FCs_Representation.add(" " + O + " " + p_OS_VP);
+                    FCs_Representation_tagged.add(" <o>" + O + "</o> <p>" + p_OS_VP + "</p>");
                 } else if (predicateNL.getPredicate_o_s_NP() != null) {
                     String p_OS_NP = PhraseRepresentationProcessing.NP_only(predicateNL.getPredicate_o_s_NP());
                     if (Settings.knowledgeGraph.isASubtypeOf(Settings.explorer, starGraph.getSeedType(), Settings.Person)) {
                         FCs_Representation.add(" their " + p_OS_NP + " is " + O);
+                        FCs_Representation_tagged.add(" their <p>" + p_OS_NP + "</p> is <o>" + O + "</o>");
                     } else {
                         FCs_Representation.add(" whose " + p_OS_NP + " is " + O);
+                        FCs_Representation_tagged.add(" whose <p>" + p_OS_NP + "</p> is <o>" + O + "</o>");
                     }
                 } else {
                     return null;
@@ -457,19 +529,28 @@ public class StarQuestion {
             }
         }
         String FCs = "";
+        FCs_tagged = "";
         switch (FCs_Representation.size()) {
             case 0:
                 return null;
             case 1:
                 FCs = FCs_Representation.get(0);
+                FCs_tagged = FCs_Representation_tagged.get(0);
                 break;
             case 2:
                 if (coorinatingConjunction.equals(CoordinatingConjunction.AND)) {
                     FCs = FCs_Representation.get(0) + " and" + FCs_Representation.get(1);
+                    FCs_tagged = FCs_Representation_tagged.get(0) + " <cc>and</cc>" + FCs_Representation_tagged.get(1);
                 } else if (coorinatingConjunction.equals(CoordinatingConjunction.OR)) {
                     FCs = " either" + FCs_Representation.get(0) + " or" + FCs_Representation.get(1);
+                    FCs_tagged = " either" + FCs_Representation_tagged.get(0) + " <cc>or</cc>" + FCs_Representation_tagged.get(1);
                 } else if (coorinatingConjunction.equals(CoordinatingConjunction.AND_NOT)) {
                     FCs = FCs_Representation.get(0) + " but" + FCs_Representation.get(1)
+                            .replaceAll("\\bis\\b", "is not")
+                            .replaceAll("\\bare\\b", "are not")
+                            .replaceAll("\\bwas\\b", "was not")
+                            .replaceAll("\\bwere\\b", "were not");
+                    FCs_tagged = FCs_Representation_tagged.get(0) + " <cc>but</cc>" + FCs_Representation_tagged.get(1)
                             .replaceAll("\\bis\\b", "is not")
                             .replaceAll("\\bare\\b", "are not")
                             .replaceAll("\\bwas\\b", "was not")
@@ -483,24 +564,34 @@ public class StarQuestion {
                             .replaceAll("\\bare\\b", "are not")
                             .replaceAll("\\bwas\\b", "was not")
                             .replaceAll("\\bwere\\b", "were not");
+                    FCs_tagged = FCs_Representation_tagged.get(0) + " or" + FCs_Representation_tagged.get(1)
+                            .replaceAll("\\bis\\b", "is not")
+                            .replaceAll("\\bare\\b", "are not")
+                            .replaceAll("\\bwas\\b", "was not")
+                            .replaceAll("\\bwere\\b", "were not");
                     if (!FCs.contains(" not")) {
                         return null;
                     }
                 } else if (coorinatingConjunction.equals(CoordinatingConjunction.NOT_NOT)) {
                     FCs = " neither" + FCs_Representation.get(0) + " nor" + FCs_Representation.get(1);
+                    FCs_tagged = " neither" + FCs_Representation_tagged.get(0) + " <cc>nor</cc>" + FCs_Representation_tagged.get(1);
                 }
                 break;
             default:
                 if (coorinatingConjunction.equals("and")) {
                     for (int i = 0; i < FCs_Representation.size() - 1; i++) {
                         FCs += FCs_Representation.get(i) + " ,";
+                        FCs_tagged += FCs_Representation_tagged.get(i) + " ,";
                     }
                     FCs += "and" + FCs_Representation.get(FCs_Representation.size() - 1);
+                    FCs_tagged += "and" + FCs_Representation_tagged.get(FCs_Representation_tagged.size() - 1);
                 } else if (coorinatingConjunction.equals("or")) {
                     for (int i = 0; i < FCs_Representation.size() - 1; i++) {
                         FCs += FCs_Representation.get(i) + " ,";
+                        FCs_tagged += FCs_Representation_tagged.get(i) + " ,";
                     }
                     FCs += "or" + FCs_Representation.get(FCs_Representation.size() - 1);
+                    FCs_tagged += "<cc>or</cc>" + FCs_Representation_tagged.get(FCs_Representation_tagged.size() - 1);
                 }
                 break;
         }
