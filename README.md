@@ -43,11 +43,11 @@ In recent years, a significant number of question answering (QA) systems that re
   * Getting Started
   * [Lexicon Generation](https://github.com/ToDo)
   * [Benchmark Generation](https://github.com/ToDo)
-    * [DBpedia](https://github.com/ToDo)
+    * [DBpedia](https://github.com/aorogat/SmartBench/tree/main/benchmarks/DBpedia)
     * [Wikidata](https://github.com/ToDo)
-    * [GeoLinkedData](https://github.com/ToDo)
-    * [MAKG](https://github.com/ToDo)
-    * [Nobel Prize](https://github.com/ToDo)
+    * [GeoLinkedData](https://github.com/aorogat/SmartBench/tree/main/benchmarks/LinkedGeoData)
+    * [MAKG](https://github.com/aorogat/SmartBench/tree/main/benchmarks/MAKG)
+    * [Nobel Prize](https://github.com/aorogat/SmartBench/tree/main/benchmarks/Nobel%20Prize)
   * [Benchmark Fine-Grained Analysis](https://github.com/ToDo)
   * [QA Evaluatioe](https://github.com/ToDo)
 
