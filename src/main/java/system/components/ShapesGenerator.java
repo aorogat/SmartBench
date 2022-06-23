@@ -85,14 +85,14 @@ public class ShapesGenerator {
 //            } catch (Exception e) {
 //            }
 //
-            try {
+//            try {
 //                    oldSize = generatedQuestions.size();
 //                testStar(branch, 1);
 //                currentSize = generatedQuestions.size();
 //                if (currentSize > oldSize) {
 //                    oldSize = generatedQuestions.size();
 //                    testStar(branch, 2);
-                    testStarWithGroupBy(branch, 2);
+//                    testStarWithGroupBy(branch, 2);
 //                    currentSize = generatedQuestions.size();
 //                }
 //                if (currentSize > oldSize) {
@@ -115,8 +115,8 @@ public class ShapesGenerator {
 //                    testStar(branch, 6);
 //                    currentSize = generatedQuestions.size();
 //                }
-            } catch (Exception e) {
-            }
+//            } catch (Exception e) {
+//            }
 //                try {
 ////                    oldSize = generatedQuestions.size();
 //                    testTree(branch, 2);
@@ -149,10 +149,10 @@ public class ShapesGenerator {
 //                    }
 //                } catch (Exception e) {
 //                }
-//            try {
-//                testStarSet(branch, 1); //must be 1 for now
-//            } catch (Exception e) {
-//            }
+            try {
+                testStarSet(branch, 1); //must be 1 for now
+            } catch (Exception e) {
+            }
 
         }
 

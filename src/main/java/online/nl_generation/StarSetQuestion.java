@@ -28,19 +28,18 @@ public class StarSetQuestion {
         String S = starGraph.getStar().get(0).getSubject().getValue();
         String S_withPrefix = starGraph.getStar().get(0).getSubject().getValueWithPrefix();
 
-        
-
         String S_Type = starGraph.getStar().get(0).getS_type_without_prefix();
         String S_Type_withPrefix = starGraph.getStar().get(0).getS_type();
 
         String O_Type = starGraph.getStar().get(0).getO_type_without_prefix();
         String O_Type_withPrefix = starGraph.getStar().get(0).getO_type();
-        
+
         String O = null;
-        if(O_Type.equals(Settings.Number) || O_Type.equals(Settings.Date) || O_Type.equals(Settings.Literal))
+        if (O_Type.equals(Settings.Number) || O_Type.equals(Settings.Date) || O_Type.equals(Settings.Literal)) {
             O = starGraph.getStar().get(0).getObject().getValueWithPrefix();
-        else 
+        } else {
             O = starGraph.getStar().get(0).getObject().getValue();
+        }
         String O_withPrefix = starGraph.getStar().get(0).getObject().getValueWithPrefix();
 
         String compareEntityTop_withPrefix = Settings.knowledgeGraph.getTopEntity(T_withprefix, P_withPrefix, true);
@@ -58,10 +57,11 @@ public class StarSetQuestion {
         String os_NP = PhraseRepresentationProcessing.NP_only(predicateNL.getPredicate_o_s_NP());
         String os_VP = predicateNL.getPredicate_o_s_VP();
 
-        
         String lessNL = "";
         String greaterNL = "";
         String equalNL = "";
+
+        String question_tagged = "";
 
         if (O_Type_withPrefix.equals(Settings.Date)) {
             lessNL = "before";
@@ -78,12 +78,15 @@ public class StarSetQuestion {
         String query = null;
         if (so_VP != null) {
             question = "Which " + T + " " + so_VP + " " + lessNL + " " + compareEntityDown.trim() + "?";
+            question_tagged = "<qt>Which</qt> <t>" + T + "</t> <p>" + so_VP + "</p> <op>" + lessNL + "</op> <o>" + compareEntityDown.trim() + "</o>?";
         } else if (so_NP != null) {
             so_NP = so_NP.replaceAll("\\(.*\\)", "");
             question = "Which " + T + " has " + so_NP + " " + lessNL + " " + compareEntityDown + "'s " + so_NP.replaceAll("\\(.*\\)", "").trim() + "?";
+            question_tagged = "<qt>Which</qt> <t>" + T + "</t> has <p>" + so_NP + "</p> <op>" + lessNL + "</op> <o>" + compareEntityDown + "</o>'s <p>" + so_NP.replaceAll("\\(.*\\)", "").trim() + "</p>?";
         } else if (os_NP != null) {
             os_NP = os_NP.replaceAll("\\(.*\\)", "");
             question = "Which " + T + " has " + os_NP + " " + lessNL + " " + compareEntityDown + "'s " + os_NP.replaceAll("\\(.*\\)", "").trim() + "?";
+            question_tagged = "<qt>Which</qt> <t>" + T + "</t> has <p>" + os_NP + "</p> <op>" + lessNL + "</op> <o>" + compareEntityDown + "</o>'s <p>" + os_NP.replaceAll("\\(.*\\)", "").trim() + "</p>?";
         }
         query = "SELECT ?Seed WHERE \n"
                 + "{\n"
@@ -95,9 +98,16 @@ public class StarSetQuestion {
 
         if (question != null && query != null) {
             if (!question.contains("null")) {
-                allPossibleQuestions.add(new GeneratedQuestion(starGraph.getStar().get(0).getSubject().getValueWithPrefix(), starGraph.getStar().get(0).getS_type(), question, query, starGraph.toString(), 2 * (starGraph.getStar().size() + 1), GeneratedQuestion.QT_WHICH, GeneratedQuestion.SH_SET));
-                allPossibleQuestions.add(new GeneratedQuestion(starGraph.getStar().get(0).getSubject().getValueWithPrefix(), starGraph.getStar().get(0).getS_type(), question.replaceFirst("Which ", ""), query, starGraph.toString(), 2 * (starGraph.getStar().size() + 1), GeneratedQuestion.QT_TOPICAL_PRUNE, GeneratedQuestion.SH_SET));
-                allPossibleQuestions.add(new GeneratedQuestion(starGraph.getStar().get(0).getSubject().getValueWithPrefix(), starGraph.getStar().get(0).getS_type(), question.replaceFirst("Which", Request.getRequestPrefix()), query, starGraph.toString(), 2 * (starGraph.getStar().size() + 1), GeneratedQuestion.QT_REQUEST, GeneratedQuestion.SH_SET));
+                allPossibleQuestions.add(new GeneratedQuestion(starGraph.getStar().get(0).getSubject().getValueWithPrefix(), starGraph.getStar().get(0).getS_type(), question, question_tagged, query, starGraph.toString(), 2 * (starGraph.getStar().size() + 1), GeneratedQuestion.QT_WHICH, GeneratedQuestion.SH_SET));
+
+                String question_pruned = question.replaceFirst("Which ", "");
+                String question_tagged_ = question_tagged.replaceFirst("<qt>Which</qt> ", "");
+                allPossibleQuestions.add(new GeneratedQuestion(starGraph.getStar().get(0).getSubject().getValueWithPrefix(), starGraph.getStar().get(0).getS_type(), question_pruned, question_tagged_, query, starGraph.toString(), 2 * (starGraph.getStar().size() + 1), GeneratedQuestion.QT_TOPICAL_PRUNE, GeneratedQuestion.SH_SET));
+
+                String req = Request.getRequestPrefix();
+                String quetion_request = question.replaceFirst("Which", req);
+                String question_tagged_req = question_tagged.replaceFirst("<qt>Which</qt>", "<qt>" + req + "</qt>");
+                allPossibleQuestions.add(new GeneratedQuestion(starGraph.getStar().get(0).getSubject().getValueWithPrefix(), starGraph.getStar().get(0).getS_type(), quetion_request, question_tagged_req, query, starGraph.toString(), 2 * (starGraph.getStar().size() + 1), GeneratedQuestion.QT_REQUEST, GeneratedQuestion.SH_SET));
             }
         }
 
@@ -106,36 +116,49 @@ public class StarSetQuestion {
         query = null;
         if (so_VP != null) {
             question = "Which " + T + " " + so_VP + " " + lessNL + " " + O_withPrefix + "?";
+            question_tagged = "<qt>Which</qt> <t>" + T + "</t> <p>" + so_VP + "</p> <op>" + lessNL + "</op> <o>" + O_withPrefix + "</o>?";
         } else if (so_NP != null) {
             so_NP = so_NP.replaceAll("\\(.*\\)", "");
             question = "Which " + T + " has " + so_NP + " " + lessNL + " " + O_withPrefix + "?";
+            question_tagged = "<qt>Which</qt> <t>" + T + "</t> has <p>" + so_NP + "</p> <op>" + lessNL + "</op> <o>" + O_withPrefix + "</o>?";
         } else if (os_NP != null) {
             os_NP = os_NP.replaceAll("\\(\\?\\)", "");
             question = "Which " + T + " has " + os_NP + " " + lessNL + " " + O_withPrefix + "?";
+            question_tagged = "<qt>Which</qt> <t>" + T + "</t> has <p>" + os_NP + "</p> <op>" + lessNL + "</op> <o>" + O_withPrefix + "</o>?";
         }
         query = "SELECT ?Seed WHERE \n"
                 + "{\n"
                 + "     ?Seed rdf:type <" + T_withprefix + ">. \n"
-                + "     ?Seed <" + P_withPrefix + "> ?n. FILTER (?n<"+O_withPrefix+")"
+                + "     ?Seed <" + P_withPrefix + "> ?n. FILTER (?n<" + O_withPrefix + ")"
                 + "\n}";
 
         if (question != null && query != null) {
             if (!question.contains("null")) {
-                allPossibleQuestions.add(new GeneratedQuestion(starGraph.getStar().get(0).getSubject().getValueWithPrefix(), starGraph.getStar().get(0).getS_type(), question, query, starGraph.toString(), 2 * (starGraph.getStar().size() + 1), GeneratedQuestion.QT_WHICH, GeneratedQuestion.SH_STAR_MODIFIED));
-                allPossibleQuestions.add(new GeneratedQuestion(starGraph.getStar().get(0).getSubject().getValueWithPrefix(), starGraph.getStar().get(0).getS_type(), question.replaceFirst("Which ", ""), query, starGraph.toString(), 2 * (starGraph.getStar().size() + 1), GeneratedQuestion.QT_TOPICAL_PRUNE, GeneratedQuestion.SH_STAR_MODIFIED));
-                allPossibleQuestions.add(new GeneratedQuestion(starGraph.getStar().get(0).getSubject().getValueWithPrefix(), starGraph.getStar().get(0).getS_type(), question.replaceFirst("Which", Request.getRequestPrefix()), query, starGraph.toString(), 2 * (starGraph.getStar().size() + 1), GeneratedQuestion.QT_REQUEST, GeneratedQuestion.SH_STAR_MODIFIED));
+                allPossibleQuestions.add(new GeneratedQuestion(starGraph.getStar().get(0).getSubject().getValueWithPrefix(), starGraph.getStar().get(0).getS_type(), question, question_tagged, query, starGraph.toString(), 2 * (starGraph.getStar().size() + 1), GeneratedQuestion.QT_WHICH, GeneratedQuestion.SH_STAR_MODIFIED));
+
+                String question_pruned = question.replaceFirst("Which ", "");
+                String question_tagged_ = question_tagged.replaceFirst("<qt>Which</qt> ", "");
+                allPossibleQuestions.add(new GeneratedQuestion(starGraph.getStar().get(0).getSubject().getValueWithPrefix(), starGraph.getStar().get(0).getS_type(), question_pruned, question_tagged_, query, starGraph.toString(), 2 * (starGraph.getStar().size() + 1), GeneratedQuestion.QT_TOPICAL_PRUNE, GeneratedQuestion.SH_STAR_MODIFIED));
+
+                String req = Request.getRequestPrefix();
+                String quetion_request = question.replaceFirst("Which", req);
+                String question_tagged_req = question_tagged.replaceFirst("<qt>Which</qt>", "<qt>" + req + "</qt>");
+                allPossibleQuestions.add(new GeneratedQuestion(starGraph.getStar().get(0).getSubject().getValueWithPrefix(), starGraph.getStar().get(0).getS_type(), quetion_request, question_tagged_req, query, starGraph.toString(), 2 * (starGraph.getStar().size() + 1), GeneratedQuestion.QT_REQUEST, GeneratedQuestion.SH_STAR_MODIFIED));
             }
         }
-        
+
         // > date
         question = null;
         query = null;
         if (so_VP != null) {
             question = "Which " + T + " " + so_VP + " " + greaterNL + " " + compareEntityTop.trim() + "?";
+            question_tagged = "<qt>Which</qt> <t>" + T + "</t> <p>" + so_VP + "</p> <op>" + greaterNL + "</op> <o>" + compareEntityTop.trim() + "</o>?";
         } else if (so_NP != null) {
             question = "Which " + T + " has " + so_NP + " " + greaterNL + " " + compareEntityTop + "'s " + so_NP.replaceAll("\\(.*\\)", "").trim() + "?";
+            question_tagged = "<qt>Which</qt> <t>" + T + "</t> has <p>" + so_NP + "</p> <op>" + greaterNL + "</op> <o>" + compareEntityTop + "</o>'s <p>" + so_NP.replaceAll("\\(.*\\)", "").trim() + "</p>?";
         } else if (os_NP != null) {
             question = "Which " + T + " has " + os_NP + " " + greaterNL + " " + compareEntityTop + "'s " + os_NP.replaceAll("\\(.*\\)", "").trim() + "?";
+            question_tagged = "<qt>Which</qt> <t>" + T + "</t> has <p>" + os_NP + "</p> <op>" + greaterNL + "</op> <o>" + compareEntityTop + "</o>'s <p>" + os_NP.replaceAll("\\(.*\\)", "").trim() + "</p>?";
         }
         query = "SELECT ?Seed WHERE \n"
                 + "{\n"
@@ -147,9 +170,16 @@ public class StarSetQuestion {
 
         if (question != null && query != null) {
             if (!question.contains("null")) {
-                allPossibleQuestions.add(new GeneratedQuestion(starGraph.getStar().get(0).getSubject().getValueWithPrefix(), starGraph.getStar().get(0).getS_type(), question, query, starGraph.toString(), 2 * (starGraph.getStar().size() + 1), GeneratedQuestion.QT_WHICH, GeneratedQuestion.SH_SET));
-                allPossibleQuestions.add(new GeneratedQuestion(starGraph.getStar().get(0).getSubject().getValueWithPrefix(), starGraph.getStar().get(0).getS_type(), question.replaceFirst("Which ", ""), query, starGraph.toString(), 2 * (starGraph.getStar().size() + 1), GeneratedQuestion.QT_TOPICAL_PRUNE, GeneratedQuestion.SH_SET));
-                allPossibleQuestions.add(new GeneratedQuestion(starGraph.getStar().get(0).getSubject().getValueWithPrefix(), starGraph.getStar().get(0).getS_type(), question.replaceFirst("Which", Request.getRequestPrefix()), query, starGraph.toString(), 2 * (starGraph.getStar().size() + 1), GeneratedQuestion.QT_REQUEST, GeneratedQuestion.SH_SET));
+                allPossibleQuestions.add(new GeneratedQuestion(starGraph.getStar().get(0).getSubject().getValueWithPrefix(), starGraph.getStar().get(0).getS_type(), question, question_tagged, query, starGraph.toString(), 2 * (starGraph.getStar().size() + 1), GeneratedQuestion.QT_WHICH, GeneratedQuestion.SH_SET));
+
+                String question_pruned = question.replaceFirst("Which ", "");
+                String question_tagged_ = question_tagged.replaceFirst("<qt>Which</qt> ", "");
+                allPossibleQuestions.add(new GeneratedQuestion(starGraph.getStar().get(0).getSubject().getValueWithPrefix(), starGraph.getStar().get(0).getS_type(), question_pruned, question_tagged_, query, starGraph.toString(), 2 * (starGraph.getStar().size() + 1), GeneratedQuestion.QT_TOPICAL_PRUNE, GeneratedQuestion.SH_SET));
+
+                String req = Request.getRequestPrefix();
+                String quetion_request = question.replaceFirst("Which", req);
+                String question_tagged_req = question_tagged.replaceFirst("<qt>Which</qt>", "<qt>" + req + "</qt>");
+                allPossibleQuestions.add(new GeneratedQuestion(starGraph.getStar().get(0).getSubject().getValueWithPrefix(), starGraph.getStar().get(0).getS_type(), quetion_request, question_tagged_req, query, starGraph.toString(), 2 * (starGraph.getStar().size() + 1), GeneratedQuestion.QT_REQUEST, GeneratedQuestion.SH_SET));
             }
         }
 
@@ -160,9 +190,11 @@ public class StarSetQuestion {
             if (so_NP != null) {
                 so_NP = so_NP.replaceAll("\\(.*\\)", "");
                 question = "Which " + T + " after " + compareEntityTop + " has the most " + so_NP.trim() + "?";
+                question_tagged = "<qt>Which</qt> <t>" + T + "</t> <op>after</op> <o>" + compareEntityTop + "<o> <off>has the most</off> <p>" + so_NP.trim() + "</p>?"; //off for offest
             } else if (os_NP != null) {
                 os_NP = os_NP.replaceAll("\\(\\?\\)", "");
                 question = "Which " + T + " after " + compareEntityTop + " has the most " + os_NP.trim() + "?";
+                question_tagged = "<qt>Which</qt> <t>" + T + "</t> <op>after</op> <o>" + compareEntityTop + "</o> <off>has the most</off> <p>" + os_NP.trim() + "</p>?";
             }
             query = "SELECT ?Seed WHERE \n"
                     + "{\n"
@@ -175,13 +207,20 @@ public class StarSetQuestion {
                     + "OFFSET 0";
             if (question != null && query != null) {
                 if (!question.contains("null")) {
-                    allPossibleQuestions.add(new GeneratedQuestion(starGraph.getStar().get(0).getSubject().getValueWithPrefix(), starGraph.getStar().get(0).getS_type(), question, query, starGraph.toString(), 2 * (starGraph.getStar().size() + 1), GeneratedQuestion.QT_WHICH, GeneratedQuestion.SH_SET_MODIFIED));
-                    allPossibleQuestions.add(new GeneratedQuestion(starGraph.getStar().get(0).getSubject().getValueWithPrefix(), starGraph.getStar().get(0).getS_type(), question.replaceFirst("Which ", ""), query, starGraph.toString(), 2 * (starGraph.getStar().size() + 1), GeneratedQuestion.QT_TOPICAL_PRUNE, GeneratedQuestion.SH_SET_MODIFIED));
-                    allPossibleQuestions.add(new GeneratedQuestion(starGraph.getStar().get(0).getSubject().getValueWithPrefix(), starGraph.getStar().get(0).getS_type(), question.replaceFirst("Which", Request.getRequestPrefix()), query, starGraph.toString(), 2 * (starGraph.getStar().size() + 1), GeneratedQuestion.QT_REQUEST, GeneratedQuestion.SH_SET_MODIFIED));
+                    allPossibleQuestions.add(new GeneratedQuestion(starGraph.getStar().get(0).getSubject().getValueWithPrefix(), starGraph.getStar().get(0).getS_type(), question, question_tagged, query, starGraph.toString(), 2 * (starGraph.getStar().size() + 1), GeneratedQuestion.QT_WHICH, GeneratedQuestion.SH_SET_MODIFIED));
+
+                    String question_pruned = question.replaceFirst("Which ", "");
+                    String question_tagged_ = question_tagged.replaceFirst("<qt>Which</qt> ", "");
+                    allPossibleQuestions.add(new GeneratedQuestion(starGraph.getStar().get(0).getSubject().getValueWithPrefix(), starGraph.getStar().get(0).getS_type(), question_pruned, question_tagged_, query, starGraph.toString(), 2 * (starGraph.getStar().size() + 1), GeneratedQuestion.QT_TOPICAL_PRUNE, GeneratedQuestion.SH_SET_MODIFIED));
+
+                    String req = Request.getRequestPrefix();
+                    String quetion_request = question.replaceFirst("Which", req);
+                    String question_tagged_req = question_tagged.replaceFirst("<qt>Which</qt>", "<qt>" + req + "</qt>");
+                    allPossibleQuestions.add(new GeneratedQuestion(starGraph.getStar().get(0).getSubject().getValueWithPrefix(), starGraph.getStar().get(0).getS_type(), quetion_request, question_tagged_req, query, starGraph.toString(), 2 * (starGraph.getStar().size() + 1), GeneratedQuestion.QT_REQUEST, GeneratedQuestion.SH_SET_MODIFIED));
                 }
             }
         }
-        
+
         //Modefied Question - second after
         query = null;
         question = null;
@@ -189,9 +228,11 @@ public class StarSetQuestion {
             if (so_NP != null) {
                 so_NP = so_NP.replaceAll("\\(.*\\)", "");
                 question = "Which " + T + " after " + compareEntityTop + " has the second most " + so_NP.trim() + "?";
+                question_tagged = "<qt>Which</qt> <t>" + T + "</t> <op>after</op> <o>" + compareEntityTop + "</o> <off>has the second most</off> <p>" + so_NP.trim() + "</p>?";
             } else if (os_NP != null) {
                 os_NP = os_NP.replaceAll("\\(\\?\\)", "");
                 question = "Which " + T + " after " + compareEntityTop + " has the second most " + os_NP.trim() + "?";
+                question_tagged = "<qt>Which</qt> <t>" + T + "</t> <op>after</op> <o>" + compareEntityTop + "</o> <off>has the second most</off> <p>" + os_NP.trim() + "</p>?";
             }
             query = "SELECT ?Seed WHERE \n"
                     + "{\n"
@@ -204,13 +245,19 @@ public class StarSetQuestion {
                     + "OFFSET 1";
             if (question != null && query != null) {
                 if (!question.contains("null")) {
-                    allPossibleQuestions.add(new GeneratedQuestion(starGraph.getStar().get(0).getSubject().getValueWithPrefix(), starGraph.getStar().get(0).getS_type(), question, query, starGraph.toString(), 2 * (starGraph.getStar().size() + 1), GeneratedQuestion.QT_WHICH, GeneratedQuestion.SH_SET_MODIFIED));
-                    allPossibleQuestions.add(new GeneratedQuestion(starGraph.getStar().get(0).getSubject().getValueWithPrefix(), starGraph.getStar().get(0).getS_type(), question.replaceFirst("Which ", ""), query, starGraph.toString(), 2 * (starGraph.getStar().size() + 1), GeneratedQuestion.QT_TOPICAL_PRUNE, GeneratedQuestion.SH_SET_MODIFIED));
-                    allPossibleQuestions.add(new GeneratedQuestion(starGraph.getStar().get(0).getSubject().getValueWithPrefix(), starGraph.getStar().get(0).getS_type(), question.replaceFirst("Which", Request.getRequestPrefix()), query, starGraph.toString(), 2 * (starGraph.getStar().size() + 1), GeneratedQuestion.QT_REQUEST, GeneratedQuestion.SH_SET_MODIFIED));
+                    allPossibleQuestions.add(new GeneratedQuestion(starGraph.getStar().get(0).getSubject().getValueWithPrefix(), starGraph.getStar().get(0).getS_type(), question, question_tagged, query, starGraph.toString(), 2 * (starGraph.getStar().size() + 1), GeneratedQuestion.QT_WHICH, GeneratedQuestion.SH_SET_MODIFIED));
+
+                    String question_pruned = question.replaceFirst("Which ", "");
+                    String question_tagged_ = question_tagged.replaceFirst("<qt>Which</qt> ", "");
+                    allPossibleQuestions.add(new GeneratedQuestion(starGraph.getStar().get(0).getSubject().getValueWithPrefix(), starGraph.getStar().get(0).getS_type(), question_pruned, question_tagged_, query, starGraph.toString(), 2 * (starGraph.getStar().size() + 1), GeneratedQuestion.QT_TOPICAL_PRUNE, GeneratedQuestion.SH_SET_MODIFIED));
+
+                    String req = Request.getRequestPrefix();
+                    String quetion_request = question.replaceFirst("Which", req);
+                    String question_tagged_req = question_tagged.replaceFirst("<qt>Which</qt>", "<qt>" + req + "</qt>");
+                    allPossibleQuestions.add(new GeneratedQuestion(starGraph.getStar().get(0).getSubject().getValueWithPrefix(), starGraph.getStar().get(0).getS_type(), quetion_request, question_tagged_req, query, starGraph.toString(), 2 * (starGraph.getStar().size() + 1), GeneratedQuestion.QT_REQUEST, GeneratedQuestion.SH_SET_MODIFIED));
                 }
             }
         }
-
 
         // = date
 //        question = null;
