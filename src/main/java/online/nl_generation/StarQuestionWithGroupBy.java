@@ -46,17 +46,22 @@ public class StarQuestionWithGroupBy {
         }
         if (starPredicates.size() == 1 && starPredicates.get(p).size() >= 2) {
             T = Settings.explorer.removePrefix(starGraph.getSeedType()).toLowerCase();
+            String question_tagged = "";
             String question = "Which " + T + " has at least 2 " + BasicNLP_FromPython.nounPlural(p.toLowerCase()) + "?";
+            question_tagged = "<qt>Which</qt> <t>" + T + "</t> has <op>at least</op> <o>2</o> <p>" + BasicNLP_FromPython.nounPlural(p.toLowerCase()) + "</p>?";
             String query = selectQuery(starGraph, 2, true);
-            allPossibleQuestions.add(new GeneratedQuestion(starGraph.getStar().get(0).getSubject().getValueWithPrefix(), starGraph.getStar().get(0).getS_type(), question, query, starGraph.toString(), 2, GeneratedQuestion.QT_HOW_MANY, GeneratedQuestion.SH_STAR));
+            allPossibleQuestions.add(new GeneratedQuestion(starGraph.getStar().get(0).getSubject().getValueWithPrefix(), starGraph.getStar().get(0).getS_type(), question, question_tagged, query, starGraph.toString(), 2, GeneratedQuestion.QT_HOW_MANY, GeneratedQuestion.SH_STAR));
             question = "Which " + T + " has at least 6 " + BasicNLP_FromPython.nounPlural(p.toLowerCase()) + "?";
+            question_tagged = "<qt>Which</qt> <t>" + T + "</t> has <op>at least</op> <o>6</o> <p>" + BasicNLP_FromPython.nounPlural(p.toLowerCase()) + "</p>?";
             query = selectQuery(starGraph, 6, true);
-            allPossibleQuestions.add(new GeneratedQuestion(starGraph.getStar().get(0).getSubject().getValueWithPrefix(), starGraph.getStar().get(0).getS_type(), question, query, starGraph.toString(), 2, GeneratedQuestion.QT_HOW_MANY, GeneratedQuestion.SH_STAR));
+            allPossibleQuestions.add(new GeneratedQuestion(starGraph.getStar().get(0).getSubject().getValueWithPrefix(), starGraph.getStar().get(0).getS_type(), question, question_tagged, query, starGraph.toString(), 2, GeneratedQuestion.QT_HOW_MANY, GeneratedQuestion.SH_STAR));
             question = "Which " + T + " has at most 6 " + BasicNLP_FromPython.nounPlural(p.toLowerCase()) + "?";
+            question_tagged = "<qt>Which</qt> <t>" + T + "</t> has <op>at most</op> <o>6</o> <p>" + BasicNLP_FromPython.nounPlural(p.toLowerCase()) + "</p>?";
             query = selectQuery(starGraph, 6, false);
-            allPossibleQuestions.add(new GeneratedQuestion(starGraph.getStar().get(0).getSubject().getValueWithPrefix(), starGraph.getStar().get(0).getS_type(), question, query, starGraph.toString(), 2, GeneratedQuestion.QT_HOW_MANY, GeneratedQuestion.SH_STAR));
+            allPossibleQuestions.add(new GeneratedQuestion(starGraph.getStar().get(0).getSubject().getValueWithPrefix(), starGraph.getStar().get(0).getS_type(), question, question_tagged, query, starGraph.toString(), 2, GeneratedQuestion.QT_HOW_MANY, GeneratedQuestion.SH_STAR));
             question = T + " has at most 6 " + BasicNLP_FromPython.nounPlural(p.toLowerCase()) + "?";
-            allPossibleQuestions.add(new GeneratedQuestion(starGraph.getStar().get(0).getSubject().getValueWithPrefix(), starGraph.getStar().get(0).getS_type(), question, query, starGraph.toString(), 2, GeneratedQuestion.QT_TOPICAL_PRUNE, GeneratedQuestion.SH_STAR));
+            question_tagged = "<t>" + T + "</t> has <op>at most</op> <o>6</o> <p>" + BasicNLP_FromPython.nounPlural(p.toLowerCase()) + "</p>?";
+            allPossibleQuestions.add(new GeneratedQuestion(starGraph.getStar().get(0).getSubject().getValueWithPrefix(), starGraph.getStar().get(0).getS_type(), question, question_tagged, query, starGraph.toString(), 2, GeneratedQuestion.QT_TOPICAL_PRUNE, GeneratedQuestion.SH_STAR));
         }
     }
 
