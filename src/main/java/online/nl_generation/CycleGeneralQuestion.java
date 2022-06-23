@@ -18,6 +18,8 @@ public class CycleGeneralQuestion {
     ArrayList<GeneratedQuestion> allPossibleQuestions = new ArrayList<>();
     String FCs_AND;
     String FCs_OR;
+    private static String question_tagged;
+    private static String fcs_tagged = null;
 
     private String somethingElse = "http://AnnyOther";
     private String somethingElseWithoutPrefix = "AnnyOther";
@@ -134,13 +136,13 @@ public class CycleGeneralQuestion {
         
         
         if (whQuestion != null && !whQuestion.contains("null")) {
-            allPossibleQuestions.add(new GeneratedQuestion(cycleGraph.getPath_1().getSubject().getValueWithPrefix(), cycleGraph.getPath_1().getS_type(), whQuestion, selectQuery, cycleGraph.toString(), 3, QT, GeneratedQuestion.SH_CYCLE_GENERAL));
+            allPossibleQuestions.add(new GeneratedQuestion(cycleGraph.getPath_1().getSubject().getValueWithPrefix(), cycleGraph.getPath_1().getS_type(), whQuestion, question_tagged, selectQuery, cycleGraph.toString(), 3, QT, GeneratedQuestion.SH_CYCLE_GENERAL));
 //            allPossibleQuestions.add(new GeneratedQuestion(whQuestion, selectQuery, cycleGraph.toString()));
         }
 
         whQuestion = selectWh_Questions(coordinatingConjunction, "VP");
         if (whQuestion != null && !whQuestion.contains("null")) {
-            allPossibleQuestions.add(new GeneratedQuestion(cycleGraph.getPath_1().getSubject().getValueWithPrefix(), cycleGraph.getPath_1().getS_type(), whQuestion, selectQuery, cycleGraph.toString(), 3, QT, GeneratedQuestion.SH_CYCLE_GENERAL));
+            allPossibleQuestions.add(new GeneratedQuestion(cycleGraph.getPath_1().getSubject().getValueWithPrefix(), cycleGraph.getPath_1().getS_type(), whQuestion, question_tagged, selectQuery, cycleGraph.toString(), 3, QT, GeneratedQuestion.SH_CYCLE_GENERAL));
 //            allPossibleQuestions.add(new GeneratedQuestion(whQuestion, selectQuery, cycleGraph.toString()));
         }
 
@@ -155,6 +157,7 @@ public class CycleGeneralQuestion {
                     if (FCs == null || FCs.contains("null")) {
                         return null;
                     }
+                    question_tagged = "<qt>Who</qt> " + fcs_tagged + "?";
                     return "Who " + FCs + "?";
                 }
             } else if (KGOntology.isSubtypeOf(seed_type_withPrefix, Settings.Place)) {
@@ -163,6 +166,7 @@ public class CycleGeneralQuestion {
                     if (FCs == null || FCs.contains("null")) {
                         return null;
                     }
+                    question_tagged = "<qt>What</qt> " + fcs_tagged + "?";
                     return "What " + FCs + "?";
                 } else if (phrase.equals("VP")) {
                     FCs = factConstraints_toString_VP_forward(cycleGraph, coordinatingConjunction);
@@ -170,6 +174,7 @@ public class CycleGeneralQuestion {
                     if (FCs == null || FCs.contains("null")) {
                         return null;
                     }
+                    question_tagged = "<qt>Where</qt> " + fcs_tagged + "?";
                     return "Where " + FCs + "?";
                 }
             } else if (KGOntology.isSubtypeOf(seed_type_withPrefix, Settings.Date)) {
@@ -179,6 +184,7 @@ public class CycleGeneralQuestion {
                     if (FCs == null || FCs.contains("null")) {
                         return null;
                     }
+                    question_tagged = "<qt>What</qt> " + fcs_tagged + "?";
                     return "What " + FCs + "?";
                 } else if (phrase.equals("VP")) {
                     FCs = factConstraints_toString_NP_forward(cycleGraph, coordinatingConjunction);
@@ -186,6 +192,7 @@ public class CycleGeneralQuestion {
                     if (FCs == null || FCs.contains("null")) {
                         return null;
                     }
+                    question_tagged = "<qt>When</qt> " + fcs_tagged + "?";
                     return "When " + FCs + "?";
                 }
             } else if (KGOntology.isSubtypeOf(seed_type_withPrefix, Settings.Number)) {
@@ -195,6 +202,7 @@ public class CycleGeneralQuestion {
                     if (FCs == null || FCs.contains("null")) {
                         return null;
                     }
+                    question_tagged = "<qt>What</qt> " + fcs_tagged + "?";
                     return "What " + FCs + "?";
                 }
             } else {
@@ -203,6 +211,7 @@ public class CycleGeneralQuestion {
                     if (FCs == null || FCs.contains("null")) {
                         return null;
                     }
+                    question_tagged = "<qt>What</qt> " + fcs_tagged + "?";
                     return "What " + FCs + "?";
                 } else if (phrase.equals("VP")) {
                     FCs = factConstraints_toString_VP_forward(cycleGraph, coordinatingConjunction);
@@ -210,6 +219,7 @@ public class CycleGeneralQuestion {
                     if (FCs == null || FCs.contains("null")) {
                         return null;
                     }
+                    question_tagged = "<qt>What</qt> " + fcs_tagged + "?";
                     return "What " + FCs + "?";
                 }
             }
@@ -224,6 +234,7 @@ public class CycleGeneralQuestion {
                     if (FCs == null || FCs.contains("null")) {
                         return null;
                     }
+                    question_tagged = "<qt>Who</qt> " + fcs_tagged + "?";
                     return "Who " + FCs + "?";
                 }
             } else if (KGOntology.isSubtypeOf(O_type, Settings.Place)) {
@@ -234,6 +245,7 @@ public class CycleGeneralQuestion {
                     if (FCs == null || FCs.contains("null")) {
                         return null;
                     }
+                    question_tagged = "<qt>What</qt> " + fcs_tagged + "?";
                     return "What " + FCs + "?";
                 } else if (phrase.equals("VP")) {
 
@@ -242,6 +254,7 @@ public class CycleGeneralQuestion {
                     if (FCs == null || FCs.contains("null")) {
                         return null;
                     }
+                    question_tagged = "<qt>Where</qt> " + fcs_tagged + "?";
                     return "Where " + FCs + "?";
                 }
             } else if (KGOntology.isSubtypeOf(O_type, Settings.Date)) {
@@ -252,6 +265,7 @@ public class CycleGeneralQuestion {
                     if (FCs == null || FCs.contains("null")) {
                         return null;
                     }
+                    question_tagged = "<qt>What</qt> " + fcs_tagged + "?";
                     return "What " + FCs + "?";
                 } else if (phrase.equals("VP")) {
 
@@ -260,6 +274,7 @@ public class CycleGeneralQuestion {
                     if (FCs == null || FCs.contains("null")) {
                         return null;
                     }
+                    question_tagged = "<qt>When</qt> " + fcs_tagged + "?";
                     return "When " + FCs + "?";
                 }
             } else if (KGOntology.isSubtypeOf(O_type, Settings.Number)) {
@@ -270,6 +285,7 @@ public class CycleGeneralQuestion {
                     if (FCs == null || FCs.contains("null")) {
                         return null;
                     }
+                    question_tagged = "<qt>What</qt> " + fcs_tagged + "?";
                     return "What " + FCs + "?";
                 }
             } else {
@@ -280,6 +296,7 @@ public class CycleGeneralQuestion {
                     if (FCs == null || FCs.contains("null")) {
                         return null;
                     }
+                    question_tagged = "<qt>What</qt> " + fcs_tagged + "?";
                     return "What " + FCs + "?";
                 } else if (phrase.equals("VP")) {
 
@@ -288,6 +305,7 @@ public class CycleGeneralQuestion {
                     if (FCs == null || FCs.contains("null")) {
                         return null;
                     }
+                    question_tagged = "<qt>What</qt> " + fcs_tagged + "?";
                     return "What " + FCs + "?";
                 }
             }
@@ -306,7 +324,8 @@ public class CycleGeneralQuestion {
     }
 
     public static String factConstraints_toString_VP_forward(CycleGraph cycleGraph, String coorinatingConjunction) {
-
+        String fcs_ = null;
+        fcs_tagged = null;
         PredicateNLRepresentation predicateNL_Path1 = PredicatesLexicon.getPredicateNL(cycleGraph.getPath_1().getPredicate().getValueWithPrefix(),
                 cycleGraph.getPath_1().getS_type(),
                 cycleGraph.getPath_1().getO_type());
@@ -328,18 +347,21 @@ public class CycleGeneralQuestion {
             
             
             if (p1_SO_VP != null && p2_SO_VP != null) {
-                return p1_SO_VP + " " + coorinatingConjunction + " " + p2_SO_VP + " the same " + cycleGraph.getPath_1().getO_type_without_prefix();
+                fcs_ = p1_SO_VP + " " + coorinatingConjunction + " " + p2_SO_VP + " the same " + cycleGraph.getPath_1().getO_type_without_prefix();
+                fcs_tagged = "<p>" +  p1_SO_VP + "</p> <cc>" + coorinatingConjunction + "</cc> <p>" + p2_SO_VP + "</p> <op>the same</op> <t>" + cycleGraph.getPath_1().getO_type_without_prefix() + "</t>";
             }
             else if (p1_SO_VP != null && p2_OS_VP != null) {
-                return p1_SO_VP + " a " + cycleGraph.getPath_1().getO_type_without_prefix() + p2_OS_VP + " by "  + reflexive;
+                fcs_ = p1_SO_VP + " a " + cycleGraph.getPath_1().getO_type_without_prefix() + p2_OS_VP + " by "  + reflexive;
+                fcs_tagged = "<p>" + p1_SO_VP + "</p> a <t>" + cycleGraph.getPath_1().getO_type_without_prefix() + "</t> <p>" + p2_OS_VP + "</p> by <ref>"  + reflexive + "</ref>";
             }
 
         }
-        return null;
+        return fcs_;
     }
 
     public static String factConstraints_toString_VP_reverse(CycleGraph cycleGraph, String coorinatingConjunction) {
-
+        String fcs_ = null;
+        fcs_tagged = null;
         PredicateNLRepresentation predicateNL_Path1 = PredicatesLexicon.getPredicateNL(cycleGraph.getPath_1().getPredicate().getValueWithPrefix(),
                 cycleGraph.getPath_1().getS_type(),
                 cycleGraph.getPath_1().getO_type());
@@ -363,18 +385,21 @@ public class CycleGeneralQuestion {
           
             
             if (p1_OS_VP != null && p2_OS_VP != null) {
-                return p1_OS_VP + " " + coorinatingConjunction + " " + p2_OS_VP + " the same " + cycleGraph.getPath_1().getS_type_without_prefix();
+                fcs_ =  p1_OS_VP + " " + coorinatingConjunction + " " + p2_OS_VP + " the same " + cycleGraph.getPath_1().getS_type_without_prefix();
+                fcs_tagged = "<p>" + p1_OS_VP + "</p> <cc>" + coorinatingConjunction + "</cc> <p>" + p2_OS_VP + "</p> <op>the same</op> <t>" + cycleGraph.getPath_1().getS_type_without_prefix()+"</t>";
             }
             else if (p1_OS_VP != null && p2_SO_VP != null) {
-                return p1_OS_VP + " a " + cycleGraph.getPath_1().getO_type_without_prefix() + p2_SO_VP + " by "  + reflexive;
+                fcs_ =  p1_OS_VP + " a " + cycleGraph.getPath_1().getO_type_without_prefix() + p2_SO_VP + " by "  + reflexive;
+                fcs_tagged = "<p>" + p1_OS_VP + "</p> a <t>" + cycleGraph.getPath_1().getO_type_without_prefix() + "</t> <p>" + p2_SO_VP + "</p> by <ref>"  + reflexive + "</ref>";
             }
 
         }
-        return null;
+        return fcs_;
     }
 
     public static String factConstraints_toString_NP_forward(CycleGraph cycleGraph, String coorinatingConjunction) {
-
+        String fcs_ = null;
+        fcs_tagged = null;
         PredicateNLRepresentation predicateNL_Path1 = PredicatesLexicon.getPredicateNL(cycleGraph.getPath_1().getPredicate().getValueWithPrefix(),
                 cycleGraph.getPath_1().getS_type(),
                 cycleGraph.getPath_1().getO_type());
@@ -388,15 +413,17 @@ public class CycleGeneralQuestion {
             String p2_SO_NP = predicateNL_Path2.getPredicate_s_O_NP();
 
             if (p1_SO_NP != null && p2_SO_NP != null) {
-                return PhraseRepresentationProcessing.NP_without_Preposition(p1_SO_NP) + " " + coorinatingConjunction + " " + PhraseRepresentationProcessing.NP_without_verb___first(p2_SO_NP) + " the same " + cycleGraph.getPath_1().getO_type_without_prefix();
+                fcs_ = PhraseRepresentationProcessing.NP_without_Preposition(p1_SO_NP) + " " + coorinatingConjunction + " " + PhraseRepresentationProcessing.NP_without_verb___first(p2_SO_NP) + " the same " + cycleGraph.getPath_1().getO_type_without_prefix();
+                fcs_tagged = "<p>" + PhraseRepresentationProcessing.NP_without_Preposition(p1_SO_NP) + "</p> <cc>" + coorinatingConjunction + "</cc> <p>" + PhraseRepresentationProcessing.NP_without_verb___first(p2_SO_NP) + "</p> <op>the same</op> <t>" + cycleGraph.getPath_1().getO_type_without_prefix() + "</t>";
             }
 
         }
-        return null;
+        return fcs_;
     }
 
     public static String factConstraints_toString_NP_revers(CycleGraph cycleGraph, String coorinatingConjunction) {
-
+        String fcs_ = null;
+        fcs_tagged = null;
         PredicateNLRepresentation predicateNL_Path1 = PredicatesLexicon.getPredicateNL(cycleGraph.getPath_1().getPredicate().getValueWithPrefix(),
                 cycleGraph.getPath_1().getS_type(),
                 cycleGraph.getPath_1().getO_type());
@@ -411,10 +438,11 @@ public class CycleGeneralQuestion {
             String p2_OS_NP = predicateNL_Path2.getPredicate_o_s_NP();
 
             if (p1_OS_NP != null && p2_OS_NP != null) {
-                return PhraseRepresentationProcessing.NP_without_Preposition(p1_OS_NP) + " " + coorinatingConjunction + " " + PhraseRepresentationProcessing.NP_without_verb___first(p2_OS_NP) + " the same " + cycleGraph.getPath_1().getS_type_without_prefix();
+                fcs_ =  PhraseRepresentationProcessing.NP_without_Preposition(p1_OS_NP) + " " + coorinatingConjunction + " " + PhraseRepresentationProcessing.NP_without_verb___first(p2_OS_NP) + " the same " + cycleGraph.getPath_1().getS_type_without_prefix();
+                fcs_tagged = "<p>" + PhraseRepresentationProcessing.NP_without_Preposition(p1_OS_NP) + "</p> <cc>" + coorinatingConjunction + "</cc> <p>" + PhraseRepresentationProcessing.NP_without_verb___first(p2_OS_NP) + "</p> <op>the same</op> <t>" + cycleGraph.getPath_1().getS_type_without_prefix() + "</t>";
             }
         }
-        return null;
+        return fcs_;
     }
 
     

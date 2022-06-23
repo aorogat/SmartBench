@@ -76,14 +76,14 @@ public class ShapesGenerator {
 ////                e.printStackTrace();
 //            }
 //
-            try {
-                testCycle(branch);
-            } catch (Exception e) {
-            }
 //            try {
-//                testCycleGeneral(branch);
+//                testCycle(branch);
 //            } catch (Exception e) {
 //            }
+            try {
+                testCycleGeneral(branch);
+            } catch (Exception e) {
+            }
 //
 //            try {
 //                    oldSize = generatedQuestions.size();
