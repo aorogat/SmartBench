@@ -17,26 +17,42 @@ public class FlowerQuestion {
 
     public FlowerQuestion(FlowerGraph flowerGraph) {
         this.flowerGraph = flowerGraph;
-        starQuestion = new StarQuestion(flowerGraph.getStar());
+        starQuestion = new StarQuestion(flowerGraph.getStar(), true);
         cycleQuestion = new CycleQuestion(flowerGraph.getCycle());
         
         String question = "";
+        String question_tagged = "";
+        
         String starQuestionString = starQuestion.selectWhichQuestions(CoordinatingConjunction.AND);
+        String starQuestionString_tagged = starQuestion.selectWhichQuestions_tagged(CoordinatingConjunction.AND);
+        
         starQuestionString = starQuestionString.substring(0, starQuestionString.length()-1) + " ";
+        starQuestionString_tagged = starQuestionString_tagged.substring(0, starQuestionString_tagged.length()-1) + " ";
         
         if(starQuestionString==null || starQuestionString.contains("null"))
             return;
         
         question = starQuestionString;
+        question_tagged = starQuestionString_tagged;
+        
         cycleQuestion.direction = CycleQuestion.FORWARD;
         String cycleQuestionString = cycleQuestion.selectWh_Questions(CoordinatingConjunction.AND,  "NP");
+        String cycleQuestionString_tagged = cycleQuestion.getQuestion_tagged();
+        
         if(cycleQuestionString==null || cycleQuestionString.contains("null"))
         {
             cycleQuestionString = cycleQuestion.selectWh_Questions(CoordinatingConjunction.AND,  "VP");
+            cycleQuestionString_tagged = cycleQuestion.getQuestion_tagged();
             if(cycleQuestionString==null || cycleQuestionString.contains("null"))
                 return;
         }
         question += cycleQuestionString.replaceAll("\\b(What|Where)\\b", ", as well ").replaceAll("\\b(Who|Whose|Whom)\\b", ", as well he/she").replace(" ,", "");
+        question_tagged += cycleQuestionString_tagged.replace("<qt>What</qt>", ", as well ")
+                .replace("<qt>Where</qt>", ", as well ")
+                .replace("<qt>Who</qt>", ", as well he/she")
+                .replace("<qt>Whose</qt>", ", as well he/she")
+                .replace("<qt>Whom</qt>", ", as well he/she")
+                .replace(" ,", "");
 
         String queryString = starQuestion.selectQuery(flowerGraph.getStar(), CoordinatingConjunction.AND);
         queryString = queryString.substring(0,queryString.length()-1);
@@ -58,7 +74,7 @@ public class FlowerQuestion {
         else
             QT = GeneratedQuestion.QT_REQUEST;
         
-        allPossibleQuestions.add(new GeneratedQuestion(flowerGraph.getStar().getStar().get(0).getSubject().getValueWithPrefix(), flowerGraph.getStar().getStar().get(0).getS_type(), question, queryString, flowerGraph.toString(), flowerGraph.getStar().getStar().size()+1+2, QT, GeneratedQuestion.SH_FLOWER));
+        allPossibleQuestions.add(new GeneratedQuestion(flowerGraph.getStar().getStar().get(0).getSubject().getValueWithPrefix(), flowerGraph.getStar().getStar().get(0).getS_type(), question, question_tagged, queryString, flowerGraph.toString(), flowerGraph.getStar().getStar().size()+1+2, QT, GeneratedQuestion.SH_FLOWER));
 //        GeneratedQuestion generatedQuestion = new GeneratedQuestion(question, queryString, graphString);
 //        allPossibleQuestions.add(generatedQuestion);
     }

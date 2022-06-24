@@ -461,4 +461,14 @@ public class CycleQuestion {
         return fcs_;
     }
 
+    public static String getQuestion_tagged() {
+        return question_tagged;
+    }
+
+    public static void setQuestion_tagged(String question_tagged) {
+        CycleQuestion.question_tagged = question_tagged;
+    }
+
+    
+    
 }

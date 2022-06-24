@@ -117,13 +117,13 @@ public class ShapesGenerator {
 //                }
 //            } catch (Exception e) {
 //            }
-                try {
+//                try {
 ////                    oldSize = generatedQuestions.size();
-                    testTree(branch, 2);
+//                    testTree(branch, 2);
 //                    currentSize = generatedQuestions.size();
 //                    if (currentSize > oldSize) {
 //                        oldSize = generatedQuestions.size();
-                        testTree(branch, 3);
+//                        testTree(branch, 3);
 //                        currentSize = generatedQuestions.size();
 //                    }
 //                    if (currentSize > oldSize) {
@@ -131,15 +131,15 @@ public class ShapesGenerator {
 //                        testTree(branch, 4);
 //                        currentSize = generatedQuestions.size();
 //                    }
-                } catch (Exception e) {
-                }
-//                try {
+//                } catch (Exception e) {
+//                }
+                try {
 ////                    oldSize = generatedQuestions.size();
-//                    testFlower(branch, 2);
+                    testFlower(branch, 2);
 //                    currentSize = generatedQuestions.size();
 //                    if (currentSize > oldSize) {
 //                        oldSize = generatedQuestions.size();
-//                        testFlower(branch, 3);
+                        testFlower(branch, 3);
 //                        currentSize = generatedQuestions.size();
 //                    }
 //                    if (currentSize > oldSize) {
@@ -147,8 +147,8 @@ public class ShapesGenerator {
 //                        testFlower(branch, 4);
 //                        currentSize = generatedQuestions.size();
 //                    }
-//                } catch (Exception e) {
-//                }
+                } catch (Exception e) {
+                }
 //            try {
 //                testStarSet(branch, 1); //must be 1 for now
 //            } catch (Exception e) {
