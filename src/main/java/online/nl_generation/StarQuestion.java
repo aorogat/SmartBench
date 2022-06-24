@@ -130,6 +130,99 @@ public class StarQuestion {
         }
     }
 
+    
+    public StarQuestion(StarGraph starGraph, boolean isTree) {
+        this.starGraph = starGraph;
+
+        somethingElse = Settings.knowledgeGraph.getSimilarEntity(Settings.explorer, starGraph.getStar().get(0).getSubject().getValueWithPrefix(), starGraph.getStar().get(0).getS_type());
+        somethingElseWithoutPrefix = Settings.explorer.removePrefix(somethingElse);
+
+        T = Settings.explorer.removePrefix(starGraph.getSeedType()).toLowerCase();
+
+        Map<String, HashSet<String>> starPredicates = new HashMap<>();
+
+        //Fill starPredicates map to make star as (p1, O1.1, O1.2,...), ..... (P2, O2.1,O2.2,...)
+        for (TriplePattern triple : starGraph.getStar()) {
+            String p = triple.getPredicate().getValue();
+            String s = triple.getSubject().getValue();
+            String o = null;
+            if (triple.getO_type().equals(Settings.Number)
+                    || triple.getO_type().equals(Settings.Date)
+                    || triple.getO_type().equals(Settings.Literal)) {
+                o = triple.getObject().getValueWithPrefix();
+            } else {
+                o = triple.getObject().getValue();
+            }
+
+            if (!starPredicates.containsKey(p)) {
+                HashSet<String> objects = new HashSet<>();
+                objects.add(o);
+                starPredicates.put(p, objects);
+            } else {
+                starPredicates.get(p).add(o);
+            }
+        }
+
+        FCs_AND = factConstraints_toString(starGraph, CoordinatingConjunction.AND, starPredicates);
+        FCs_AND_tagged = FCs_tagged;
+        if(FCs_AND==null)
+            return;
+        FCs_OR = factConstraints_toString(starGraph, CoordinatingConjunction.OR, starPredicates);
+        FCs_OR_tagged = FCs_tagged;
+        FCs_AND_NOT = factConstraints_toString(starGraph, CoordinatingConjunction.AND_NOT, starPredicates);
+        FCs_AND_NOT_tagged = FCs_tagged;
+        FCs_OR_NOT = factConstraints_toString(starGraph, CoordinatingConjunction.OR_NOT, starPredicates);
+        FCs_OR_NOT_tagged = FCs_tagged;
+        FCs_NOT_NOT = factConstraints_toString(starGraph, CoordinatingConjunction.NOT_NOT, starPredicates);
+        FCs_NOT_NOT_tagged = FCs_tagged;
+
+//        if (starGraph.getStar().size() == 1) {
+//            selectQuestions(CoordinatingConjunction.AND);
+//            countQuestions(CoordinatingConjunction.AND);
+//            askQuestions_true_answer(CoordinatingConjunction.AND);
+//            askQuestions_false_answer(CoordinatingConjunction.AND);
+//
+//        } else if (starGraph.getStar().size() == 2 && starGraph.getStar().size() == starPredicates.size()) { //no repeated predicates
+//            selectQuestions(CoordinatingConjunction.AND);
+//            selectQuestions(CoordinatingConjunction.OR);
+//            selectQuestions(CoordinatingConjunction.AND_NOT);
+//            selectQuestions(CoordinatingConjunction.OR_NOT);
+//            selectQuestions(CoordinatingConjunction.NOT_NOT);
+//
+//            countQuestions(CoordinatingConjunction.AND);
+//            countQuestions(CoordinatingConjunction.OR);
+//            countQuestions(CoordinatingConjunction.AND_NOT);
+//            countQuestions(CoordinatingConjunction.OR_NOT);
+//            countQuestions(CoordinatingConjunction.NOT_NOT);
+//
+//            askQuestions_true_answer(CoordinatingConjunction.AND);
+//
+//            askQuestions_false_answer(CoordinatingConjunction.AND);
+//
+//        } else if (starGraph.getStar().size() == 2 && starGraph.getStar().size() != starPredicates.size()) { //repeated predicates
+//            selectQuestions(CoordinatingConjunction.AND);
+//            countQuestions(CoordinatingConjunction.AND);
+//            askQuestions_true_answer(CoordinatingConjunction.AND);
+//            askQuestions_false_answer(CoordinatingConjunction.AND);
+//
+//        } else if (starGraph.getStar().size() > 2 && starGraph.getStar().size() == starPredicates.size()) { //no repeated predicates
+//            selectQuestions(CoordinatingConjunction.AND);
+//            selectQuestions(CoordinatingConjunction.OR);
+//
+//            countQuestions(CoordinatingConjunction.AND);
+//            countQuestions(CoordinatingConjunction.OR);
+//
+//            askQuestions_true_answer(CoordinatingConjunction.AND);
+//
+//            askQuestions_false_answer(CoordinatingConjunction.AND);
+//        } else if (starGraph.getStar().size() > 2 && starGraph.getStar().size() != starPredicates.size()) { //repeated predicates
+//            selectQuestions(CoordinatingConjunction.AND);
+//            countQuestions(CoordinatingConjunction.AND);
+//            askQuestions_true_answer(CoordinatingConjunction.AND);
+//            askQuestions_false_answer(CoordinatingConjunction.AND);
+//        }
+    }
+    
     public String askQuery_true_answer(StarGraph starGraph, String coordinatingConjunction) {
         return selectQuery(starGraph, coordinatingConjunction)
                 .replace("SELECT DISTINCT ?Seed WHERE{", "ASK WHERE{")
@@ -600,6 +693,10 @@ public class StarQuestion {
 
     public String getFCs_with_T_COO_is_AND() {
         return T + FCs_AND;
+    }
+    
+    public String getFCs_with_T_COO_is_AND_taggString() {
+        return "<t>" + T + "</t>"  +FCs_AND_tagged;
     }
 
     public String getFCs_with_T_COO_is_OR() {

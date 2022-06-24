@@ -18,12 +18,15 @@ public class TreeQuestion {
         if (treeGraph.getTreeGraph().size() == 2) {
             this.treeGraph = treeGraph;
             StarGraph starGraph_0_0 = treeGraph.getTreeGraph().get(0); //the first star is the root star
-            StarQuestion starQuestion_0_0 = new StarQuestion(starGraph_0_0);
+            StarQuestion starQuestion_0_0 = new StarQuestion(starGraph_0_0, true);
 
             StarGraph starGraph_1_0 = treeGraph.getTreeGraph().get(1);
-            StarQuestion starQuestion_1_0 = new StarQuestion(starGraph_1_0);
+            StarQuestion starQuestion_1_0 = new StarQuestion(starGraph_1_0, true);
 
             String rootWhichQuestion = starQuestion_0_0.selectWhichQuestions(CoordinatingConjunction.AND);
+            String rootWhichQuestion_tagged = starQuestion_0_0.selectWhichQuestions_tagged(CoordinatingConjunction.AND);
+            
+            //Query
             String rootWhichQuery = starQuestion_0_0.selectQuery(starGraph_0_0, CoordinatingConjunction.AND);
 
             String triple_1_Subject = starGraph_0_0.getStar().get(0).getSubject().getValueWithPrefix();
@@ -51,6 +54,8 @@ public class TreeQuestion {
             rootWhichQuery = rootWhichQuery.substring(0, rootWhichQuery.length() - 1) + triples + "\n}";
 
             String star_1_0_NL = starQuestion_1_0.getFCs_with_T_COO_is_AND();
+            String star_1_0_NL_tagged = starQuestion_1_0.getFCs_with_T_COO_is_AND_taggString();
+            
             if (star_1_0_NL == null || star_1_0_NL.contains("null")) {
                 return;
             }
@@ -65,10 +70,13 @@ public class TreeQuestion {
             } else {
                 star_1_0_NL = "a " + star_1_0_NL;
             }
-            rootWhichQuestion = rootWhichQuestion.replace(seed_1_0, star_1_0_NL);
+            
+            
+            String treeWhichQuestion = rootWhichQuestion.replace(seed_1_0, star_1_0_NL);
+            String treeWhichQuestion_tagged = rootWhichQuestion_tagged.replace(seed_1_0, star_1_0_NL_tagged);
 
-            String question = rootWhichQuestion;
-            allPossibleQuestions.add(new GeneratedQuestion(this.treeGraph.getSeed(), this.treeGraph.getSeedType(), question, rootWhichQuery, this.treeGraph.toString(), treeGraph.getSize(), GeneratedQuestion.QT_WHICH, GeneratedQuestion.SH_TREE));
+            //String question = rootWhichQuestion;
+            allPossibleQuestions.add(new GeneratedQuestion(this.treeGraph.getSeed(), this.treeGraph.getSeedType(), treeWhichQuestion, treeWhichQuestion_tagged, rootWhichQuery, this.treeGraph.toString(), treeGraph.getSize(), GeneratedQuestion.QT_WHICH, GeneratedQuestion.SH_TREE));
 
 //            GeneratedQuestion generatedQuestion = new GeneratedQuestion(question, rootWhichQuery, treeGraph.toString());
 //            allPossibleQuestions.add(generatedQuestion);
