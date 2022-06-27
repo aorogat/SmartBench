@@ -23,7 +23,7 @@ public class StarQuestion {
     String FCs_AND_NOT;
     String FCs_OR_NOT;
     String FCs_NOT_NOT;
-    
+
     static String FCs_tagged = "";
     String T_tagged;
     String FCs_AND_tagged;
@@ -72,8 +72,9 @@ public class StarQuestion {
 
         FCs_AND = factConstraints_toString(starGraph, CoordinatingConjunction.AND, starPredicates);
         FCs_AND_tagged = FCs_tagged;
-        if(FCs_AND==null)
+        if (FCs_AND == null) {
             return;
+        }
         FCs_OR = factConstraints_toString(starGraph, CoordinatingConjunction.OR, starPredicates);
         FCs_OR_tagged = FCs_tagged;
         FCs_AND_NOT = factConstraints_toString(starGraph, CoordinatingConjunction.AND_NOT, starPredicates);
@@ -130,7 +131,6 @@ public class StarQuestion {
         }
     }
 
-    
     public StarQuestion(StarGraph starGraph, boolean isTree) {
         this.starGraph = starGraph;
 
@@ -165,8 +165,9 @@ public class StarQuestion {
 
         FCs_AND = factConstraints_toString(starGraph, CoordinatingConjunction.AND, starPredicates);
         FCs_AND_tagged = FCs_tagged;
-        if(FCs_AND==null)
+        if (FCs_AND == null) {
             return;
+        }
         FCs_OR = factConstraints_toString(starGraph, CoordinatingConjunction.OR, starPredicates);
         FCs_OR_tagged = FCs_tagged;
         FCs_AND_NOT = factConstraints_toString(starGraph, CoordinatingConjunction.AND_NOT, starPredicates);
@@ -222,7 +223,7 @@ public class StarQuestion {
 //            askQuestions_false_answer(CoordinatingConjunction.AND);
 //        }
     }
-    
+
     public String askQuery_true_answer(StarGraph starGraph, String coordinatingConjunction) {
         return selectQuery(starGraph, coordinatingConjunction)
                 .replace("SELECT DISTINCT ?Seed WHERE{", "ASK WHERE{")
@@ -333,7 +334,7 @@ public class StarQuestion {
         if (FCs != null) {
             String whichQuestion = selectWhichQuestions(coordinatingConjunction).replaceFirst("Which", "Is " + somethingElseWithoutPrefix.toLowerCase().replace(T.toLowerCase(), ""))
                     .replace(FCs, FCs);
-            String whichQuestion_tagged = selectWhichQuestions_tagged(coordinatingConjunction).replaceFirst("<qt>Which</qt>", "<qt>Is</qt> <s>" + somethingElseWithoutPrefix.toLowerCase().replace(T.toLowerCase(), "")+"</s>")
+            String whichQuestion_tagged = selectWhichQuestions_tagged(coordinatingConjunction).replaceFirst("<qt>Which</qt>", "<qt>Is</qt> <s>" + somethingElseWithoutPrefix.toLowerCase().replace(T.toLowerCase(), "") + "</s>")
                     .replace(FCs_tag, FCs_tag);
             String question = whichQuestion.replace("whose", "its");
             String question_tagged = whichQuestion_tagged.replace("whose", "its");
@@ -374,8 +375,8 @@ public class StarQuestion {
 
             question = whichQuestion.replaceFirst("Which " + T.trim(), "What are the " + BasicNLP_FromPython.nounPlural(T) + " ");
             question = whichQuestion.replaceFirst("Which " + BasicNLP_FromPython.nounPlural(T).trim(), "What are the " + BasicNLP_FromPython.nounPlural(T) + " ");
-            question_tagged = whichQuestion_tagged.replaceFirst("<qt>Which</qt> <t>" + T.trim()+"</t>", "<qt>What</qt> are the <t>" + BasicNLP_FromPython.nounPlural(T) + "</t> ");
-            question_tagged = whichQuestion_tagged.replaceFirst("<qt>Which</qt> <t>" + BasicNLP_FromPython.nounPlural(T).trim()+"</t>", "<qt>What</qt> are the <t>" + BasicNLP_FromPython.nounPlural(T) + "</t> ");
+            question_tagged = whichQuestion_tagged.replaceFirst("<qt>Which</qt> <t>" + T.trim() + "</t>", "<qt>What</qt> are the <t>" + BasicNLP_FromPython.nounPlural(T) + "</t> ");
+            question_tagged = whichQuestion_tagged.replaceFirst("<qt>Which</qt> <t>" + BasicNLP_FromPython.nounPlural(T).trim() + "</t>", "<qt>What</qt> are the <t>" + BasicNLP_FromPython.nounPlural(T) + "</t> ");
             allPossibleQuestions.add(new GeneratedQuestion(starGraph.getStar().get(0).getSubject().getValueWithPrefix(), starGraph.getStar().get(0).getS_type(), question, question_tagged, selectQuery, starGraph.toString(), starGraph.getStar().size() + 1, GeneratedQuestion.QT_WHAT, GeneratedQuestion.SH_STAR));
 
             String req = Request.getRequestPrefix().trim();
@@ -416,7 +417,7 @@ public class StarQuestion {
         }
         return null;
     }
-    
+
     public String selectWhichQuestions_tagged(String coordinatingConjunction) {
         String FCs_tag = "";
         switch (coordinatingConjunction) {
@@ -439,7 +440,7 @@ public class StarQuestion {
         }
 
         if (FCs_tag != null) {
-            String whichQuestion = "<qt>Which</qt> <t>" + BasicNLP_FromPython.nounPlural(T)+ "</t> " + FCs_tag + "?";
+            String whichQuestion = "<qt>Which</qt> <t>" + BasicNLP_FromPython.nounPlural(T) + "</t> " + FCs_tag + "?";
             return whichQuestion;
         }
         return null;
@@ -474,7 +475,7 @@ public class StarQuestion {
                             .replace("\"" + triple.getSubject().getValueWithPrefix() + "\"^^xsd:dateTime ", "?Seed")
                             .replace("\"" + triple.getSubject().getValueWithPrefix() + "\"", "?Seed")
                             .replace(" " + triple.getSubject().getValueWithPrefix() + " ", "?Seed")
-                             + ".} UNION ";
+                            + ".} UNION ";
                 } else {
                     triples += "\n\t{" + triple.toQueryTriplePattern().replace("<" + triple.getSubject().getValueWithPrefix() + ">", "?Seed") + ".} UNION ";
                 }
@@ -489,7 +490,7 @@ public class StarQuestion {
                             .replace("\"" + triple.getSubject().getValueWithPrefix() + "\"^^xsd:dateTime ", "?Seed")
                             .replace("\"" + triple.getSubject().getValueWithPrefix() + "\"", "?Seed")
                             .replace(" " + triple.getSubject().getValueWithPrefix() + " ", "?Seed")
-                             + ".} MINUS ";
+                            + ".} MINUS ";
                 } else {
                     triples += "\n\t{" + triple.toQueryTriplePattern().replace("<" + triple.getSubject().getValueWithPrefix() + ">", "?Seed") + ".} MINUS ";
                 }
@@ -505,7 +506,7 @@ public class StarQuestion {
                             .replace("\"" + triple.getSubject().getValueWithPrefix() + "\"^^xsd:dateTime ", "?Seed")
                             .replace("\"" + triple.getSubject().getValueWithPrefix() + "\"", "?Seed")
                             .replace(" " + triple.getSubject().getValueWithPrefix() + " ", "?Seed")
-                             + ".} UNION ";
+                            + ".} UNION ";
                 } else {
                     triples += "\n\t\t{" + triple.toQueryTriplePattern().replace("<" + triple.getSubject().getValueWithPrefix() + ">", "?Seed") + ".} UNION ";
                 }
@@ -540,23 +541,41 @@ public class StarQuestion {
         return query;
     }
 
-    public static String objectListToString(ArrayList<String> objects) {
+    public static String objectListToString(ArrayList<String> objects, boolean tagged) {
         String objectsList = "";
-        if (objects.size() == 1) {
-            objectsList = objects.get(0);
-        } else if (objects.size() == 2) {
-            String o1 = objects.get(0);
-            String o2 = objects.get(1);
-            objectsList = "both " + o1 + " and " + o2;
-        } else if (objects.size() > 2) {
-            //represent objectsList
-            objectsList += objects.get(0);
-            for (int i = 1; i < objects.size() - 1; i++) {
-                objectsList += ", " + objects.get(i);
+        if (tagged) {
+            if (objects.size() == 1) {
+                objectsList = "<o>" + objects.get(0) + "</o>";
+            } else if (objects.size() == 2) {
+                String o1 = "<o>" + objects.get(0) + "</o>";
+                String o2 = "<o>" + objects.get(1) + "</o>";
+                objectsList = "both " + o1 + " and " + o2;
+            } else if (objects.size() > 2) {
+                //represent objectsList
+                objectsList += "<o>" + objects.get(0) + "</o>";
+                for (int i = 1; i < objects.size() - 1; i++) {
+                    objectsList += ", " + "<o>" + objects.get(i) + "</o>";
+                }
+                objectsList += " and " + "<o>" + objects.get(objects.size() - 1) + "</o>";
             }
-            objectsList += " and " + objects.get(objects.size() - 1);
+            return objectsList;
+        } else {
+            if (objects.size() == 1) {
+                objectsList = objects.get(0);
+            } else if (objects.size() == 2) {
+                String o1 = objects.get(0);
+                String o2 = objects.get(1);
+                objectsList = "both " + o1 + " and " + o2;
+            } else if (objects.size() > 2) {
+                //represent objectsList
+                objectsList += objects.get(0);
+                for (int i = 1; i < objects.size() - 1; i++) {
+                    objectsList += ", " + objects.get(i);
+                }
+                objectsList += " and " + objects.get(objects.size() - 1);
+            }
+            return objectsList;
         }
-        return objectsList;
     }
 
     public ArrayList<GeneratedQuestion> getAllPossibleQuestions() {
@@ -582,35 +601,36 @@ public class StarQuestion {
             String s_type = branch.getS_type();
             String o_type = branch.getO_type();
             ArrayList<String> objects = new ArrayList<>(starPredicates.get(p));
-            String O = objectListToString(objects);
+            String O = objectListToString(objects, false);
+            String O_tagged = objectListToString(objects, true);
             processedPredicates.add(p);
 
             PredicateNLRepresentation predicateNL = PredicatesLexicon.getPredicateNL(p_with_Prefix, s_type, o_type);
-            
+
             if (predicateNL != null) {
                 System.out.println("Predicate Representation for " + p_with_Prefix + " (" + s_type + " ," + o_type + ") is");
                 predicateNL.print();
-                
+
                 if (predicateNL.getPredicate_s_O_NP() != null) {
                     String p_SO_NP = predicateNL.getPredicate_s_O_NP();
                     FCs_Representation.add(" " + p_SO_NP + " " + O);
-                    FCs_Representation_tagged.add(" <p>" + p_SO_NP + "</p> <o>" + O + "</o>");
+                    FCs_Representation_tagged.add(" <p>" + p_SO_NP + "</p> " + O_tagged);
                 } else if (predicateNL.getPredicate_s_O_VP() != null) {
                     String p_SO_VP = predicateNL.getPredicate_s_O_VP();
                     FCs_Representation.add(" " + p_SO_VP + " " + O);
-                    FCs_Representation_tagged.add(" <p>" + p_SO_VP + "</p> <o>" + O + "</o>");
+                    FCs_Representation_tagged.add(" <p>" + p_SO_VP + "</p> " + O_tagged);
                 } else if (predicateNL.getPredicate_o_s_VP() != null) {
                     String p_OS_VP = predicateNL.getPredicate_o_s_VP();
                     FCs_Representation.add(" " + O + " " + p_OS_VP);
-                    FCs_Representation_tagged.add(" <o>" + O + "</o> <p>" + p_OS_VP + "</p>");
+                    FCs_Representation_tagged.add(" " + O_tagged + " <p>" + p_OS_VP + "</p>");
                 } else if (predicateNL.getPredicate_o_s_NP() != null) {
                     String p_OS_NP = PhraseRepresentationProcessing.NP_only(predicateNL.getPredicate_o_s_NP());
                     if (Settings.knowledgeGraph.isASubtypeOf(Settings.explorer, starGraph.getSeedType(), Settings.Person)) {
                         FCs_Representation.add(" their " + p_OS_NP + " is " + O);
-                        FCs_Representation_tagged.add(" their <p>" + p_OS_NP + "</p> is <o>" + O + "</o>");
+                        FCs_Representation_tagged.add(" their <p>" + p_OS_NP + "</p> is " + O_tagged);
                     } else {
                         FCs_Representation.add(" whose " + p_OS_NP + " is " + O);
-                        FCs_Representation_tagged.add(" whose <p>" + p_OS_NP + "</p> is <o>" + O + "</o>");
+                        FCs_Representation_tagged.add(" whose <p>" + p_OS_NP + "</p> is " + O_tagged);
                     }
                 } else {
                     return null;
@@ -694,9 +714,9 @@ public class StarQuestion {
     public String getFCs_with_T_COO_is_AND() {
         return T + FCs_AND;
     }
-    
+
     public String getFCs_with_T_COO_is_AND_taggString() {
-        return "<t>" + T + "</t>"  +FCs_AND_tagged;
+        return "<t>" + T + "</t>" + FCs_AND_tagged;
     }
 
     public String getFCs_with_T_COO_is_OR() {
