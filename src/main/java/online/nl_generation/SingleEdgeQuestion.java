@@ -1,11 +1,14 @@
 package online.nl_generation;
 
+import edu.stanford.nlp.process.Tokenizer;
 import java.util.ArrayList;
+import java.util.StringTokenizer;
 import offLine.kg_explorer.explorer.SPARQL;
 import offLine.kg_explorer.ontology.KGOntology;
 import online.kg_extractor.model.subgraph.SingleEdgeGraph;
 import offLine.scrapping.model.PredicateNLRepresentation;
 import offLine.scrapping.model.PredicatesLexicon;
+import online.nl_generation.chunking.BasicNLP_FromPython;
 import settings.Settings;
 
 public class SingleEdgeQuestion {
@@ -46,6 +49,7 @@ public class SingleEdgeQuestion {
 
         intialize_Seed_is_S(singleEdgeGraph, S_type_withPrefix, O_type_withPrefix);
         intialize_Seed_is_O(singleEdgeGraph, S_type_withPrefix, O_type_withPrefix);
+
     }
 
     void intialize_Seed_is_S(SingleEdgeGraph singleEdgeGraph, String S_type_withPrefix, String O_type_withPrefix) {
@@ -63,13 +67,11 @@ public class SingleEdgeQuestion {
                 || singleEdgeGraph.getTriplePattern().getO_type().equals(Settings.Date)
                 || singleEdgeGraph.getTriplePattern().getO_type().equals(Settings.Literal)) {
             O = singleEdgeGraph.getTriplePattern().getObject().getValueWithPrefix();
-            somethingElse = Settings.knowledgeGraph.getSimilarEntity(Settings.explorer, S_withPrefix, this.S_type_withPrefix);
-            somethingElseWithoutPrefix = Settings.explorer.removePrefix(somethingElse);
         } else {
             O = singleEdgeGraph.getTriplePattern().getObject().getValue();
-            somethingElse = Settings.knowledgeGraph.getSimilarEntity(Settings.explorer, S_withPrefix, this.S_type_withPrefix);
-            somethingElseWithoutPrefix = Settings.explorer.removePrefix(somethingElse);
         }
+        somethingElse = Settings.knowledgeGraph.getSimilarEntity(Settings.explorer, S_withPrefix, this.S_type_withPrefix);
+        somethingElseWithoutPrefix = Settings.explorer.removePrefix(somethingElse);
 
         PredicateNLRepresentation predicateNL = PredicatesLexicon.getPredicateNL(P_withPrefix, S_type_withPrefix, O_type_withPrefix);
         s_o_VP = predicateNL.getPredicate_s_O_VP();
@@ -91,6 +93,10 @@ public class SingleEdgeQuestion {
         countQuery = generateCountQuery();
         askQuery_correct = generateAskQuery_Correct();
         askQuery_wrong = generateAskQuery_Wrong();
+
+        S = EntityProcessing.decide_quotes(S, this.S_type_withPrefix);
+        O = EntityProcessing.decide_quotes(O, this.O_type_withPrefix);
+        somethingElseWithoutPrefix = EntityProcessing.decide_quotes(somethingElseWithoutPrefix, this.S_type_withPrefix);
 
         generateAllPossibleSingleEdgeQuestions();
     }
@@ -152,6 +158,10 @@ public class SingleEdgeQuestion {
         askQuery_correct = generateAskQuery_Correct();
         askQuery_wrong = generateAskQuery_Wrong();
 
+        S = EntityProcessing.decide_quotes(S, this.S_type_withPrefix);
+        O = EntityProcessing.decide_quotes(O, this.O_type_withPrefix);
+        somethingElseWithoutPrefix = EntityProcessing.decide_quotes(somethingElseWithoutPrefix, this.S_type_withPrefix);
+
         generateAllPossibleSingleEdgeQuestions();
     }
 
@@ -179,7 +189,7 @@ public class SingleEdgeQuestion {
             triple = singleEdgeGraph.getTriplePattern().toQueryTriplePattern()
                     .replace("\"" + S_withPrefix + "\"^^xsd:dateTime ", "?Seed")
                     .replace("\"" + S_withPrefix + "\"", "?Seed")
-                    .replace(" " + S_withPrefix + " ", "?Seed") 
+                    .replace(" " + S_withPrefix + " ", "?Seed")
                     + " .";
         } else {
             triple = singleEdgeGraph.getTriplePattern().toQueryTriplePattern().replace("<" + S_withPrefix + ">", "?Seed") + " .";
@@ -193,7 +203,7 @@ public class SingleEdgeQuestion {
             triple = singleEdgeGraph.getTriplePattern().toQueryTriplePattern()
                     .replace("\"" + S_withPrefix + "\"^^xsd:dateTime ", "?Seed")
                     .replace("\"" + S_withPrefix + "\"", "?Seed")
-                    .replace(" " + S_withPrefix + " ", "?Seed") 
+                    .replace(" " + S_withPrefix + " ", "?Seed")
                     + " .";
         } else {
             triple = singleEdgeGraph.getTriplePattern().toQueryTriplePattern().replace("<" + S_withPrefix + ">", "?Seed") + " .";
@@ -214,10 +224,10 @@ public class SingleEdgeQuestion {
         if (triple != null) {
             if (S_type_withPrefix.equals(Settings.Number) || S_type_withPrefix.equals(Settings.Date) || S_type_withPrefix.equals(Settings.Literal)) {
                 triple = triple
-                    .replace("\"" + S_withPrefix + "\"^^xsd:dateTime ", somethingElse)
-                    .replace("\"" + S_withPrefix + "\"", somethingElse)
-                    .replace(" " + S_withPrefix + " ", somethingElse) 
-                    + " .";
+                        .replace("\"" + S_withPrefix + "\"^^xsd:dateTime ", somethingElse)
+                        .replace("\"" + S_withPrefix + "\"", somethingElse)
+                        .replace(" " + S_withPrefix + " ", somethingElse)
+                        + " .";
             } else {
                 triple = triple.replace(S_withPrefix, somethingElse) + " .";
             }
@@ -240,20 +250,34 @@ public class SingleEdgeQuestion {
             allPossibleQuestions.add(new GeneratedQuestion(S_withPrefix, S_type_withPrefix, question, tagged_question, selectQuery, singleEdgeGraph.toString(), 1, GeneratedQuestion.QT_WHO, GeneratedQuestion.SH_SINGLE_EDGE));
             String req = Request.getRequestPrefix();
             question = req + " " + s_o_NP_without_verb + " " + O + "?";
-            tagged_question = "<qt>"+req+"</qt> <p>" + s_o_NP_without_verb + "</p> <o>" + O + "</o>?";
+            tagged_question = "<qt>" + req + "</qt> <p>" + s_o_NP_without_verb + "</p> <o>" + O + "</o>?";
             allPossibleQuestions.add(new GeneratedQuestion(S_withPrefix, S_type_withPrefix, question, tagged_question, selectQuery, singleEdgeGraph.toString(), 1, GeneratedQuestion.QT_REQUEST, GeneratedQuestion.SH_SINGLE_EDGE));
             question = s_o_NP_without_verb + " " + O + "?";
             tagged_question = "<p>" + s_o_NP_without_verb + "</p> <o>" + O + "</o>?";
             allPossibleQuestions.add(new GeneratedQuestion(S_withPrefix, S_type_withPrefix, question, tagged_question, selectQuery, singleEdgeGraph.toString(), 1, GeneratedQuestion.QT_TOPICAL_PRUNE, GeneratedQuestion.SH_SINGLE_EDGE));
         }
         if (o_s_VP != null) {
-            String question = "Whom " + O + " " + o_s_VP + "?";
-            String tagged_question = "<qt>Whom</qt> <o>" + O + "</o> <p>" + o_s_VP + "</p>?";
+            String questionType = "Whom";
+            String o_s_VP_Pronoun = o_s_VP;
+            String proposition = "";
+            if (o_s_VP_Pronoun.endsWith(" by")) {
+                proposition = "By";
+            } else if (o_s_VP_Pronoun.endsWith(" for")) {
+                proposition = "For";
+            } else if (o_s_VP_Pronoun.endsWith(" with")) {
+                proposition = "With";
+            }
+            if (!proposition.equals("")) {
+                questionType = proposition + " whom";
+                o_s_VP_Pronoun = o_s_VP_Pronoun.replace(" " + proposition.toLowerCase(), "");
+            }
+            String question = questionType + " was " + O + " " + o_s_VP_Pronoun + "?";
+            String tagged_question = "<qt>" + questionType + "</qt> was <o>" + O + "</o> <p>" + o_s_VP_Pronoun + "</p>?";
             allPossibleQuestions.add(new GeneratedQuestion(S_withPrefix, S_type_withPrefix, question, tagged_question, selectQuery, singleEdgeGraph.toString(), 1, GeneratedQuestion.QT_WHOM, GeneratedQuestion.SH_SINGLE_EDGE));
         }
         if (o_s_NP != null) {
-            String question = "Whose " + O + " " + o_s_NP_only + "?";
-            String tagged_question = "<qt>Whose</qt> <o>" + O + "</o> <p>" + o_s_NP_only + "</p>?";
+            String question = "Whose is " + O + " " + o_s_NP_only + "?";
+            String tagged_question = "<qt>Whose</qt> is <o>" + O + "</o> <p>" + o_s_NP_only + "</p>?";
             allPossibleQuestions.add(new GeneratedQuestion(S_withPrefix, S_type_withPrefix, question, tagged_question, selectQuery, singleEdgeGraph.toString(), 1, GeneratedQuestion.QT_WHOSE, GeneratedQuestion.SH_SINGLE_EDGE));
         }
     }
@@ -267,7 +291,7 @@ public class SingleEdgeQuestion {
             //question = Request.getRequestPrefix() + " " + s_o_NP_without_verb + " " + O + "?";
             String req = Request.getRequestPrefix();
             question = req + " " + s_o_NP_without_verb + " " + O + "?";
-            tagged_question = "<qt>"+req+"</qt> <p>" + s_o_NP_without_verb + "</p> <o>" + O + "</o>?";
+            tagged_question = "<qt>" + req + "</qt> <p>" + s_o_NP_without_verb + "</p> <o>" + O + "</o>?";
             allPossibleQuestions.add(new GeneratedQuestion(S_withPrefix, S_type_withPrefix, question, tagged_question, selectQuery, singleEdgeGraph.toString(), 1, GeneratedQuestion.QT_REQUEST, GeneratedQuestion.SH_SINGLE_EDGE));
             question = s_o_NP_without_verb + " " + O + "?";
             tagged_question = "<p>" + s_o_NP_without_verb + "</p> <o>" + O + "</o>?";
@@ -290,7 +314,7 @@ public class SingleEdgeQuestion {
 //            question = Request.getRequestPrefix() + " " + s_o_NP_without_verb + " " + O + "?";
             String req = Request.getRequestPrefix();
             question = req + " " + s_o_NP_without_verb + " " + O + "?";
-            tagged_question = "<qt>"+req+"</qt> <p>" + s_o_NP_without_verb + "</p> <o>" + O + "</o>?";
+            tagged_question = "<qt>" + req + "</qt> <p>" + s_o_NP_without_verb + "</p> <o>" + O + "</o>?";
             allPossibleQuestions.add(new GeneratedQuestion(S_withPrefix, S_type_withPrefix, question, tagged_question, selectQuery, singleEdgeGraph.toString(), 1, GeneratedQuestion.QT_REQUEST, GeneratedQuestion.SH_SINGLE_EDGE));
             question = s_o_NP_without_verb + " " + O + "?";
             tagged_question = "<p>" + s_o_NP_without_verb + "</p> <o>" + O + "</o>?";
@@ -311,7 +335,7 @@ public class SingleEdgeQuestion {
 //            question = Request.getRequestPrefix() + " " + s_o_NP_without_verb + " " + O + "?";
             String req = Request.getRequestPrefix();
             question = req + " " + s_o_NP_without_verb + " " + O + "?";
-            tagged_question = "<qt>"+req+"</qt> <p>" + s_o_NP_without_verb + "</p> <o>" + O + "</o>?";
+            tagged_question = "<qt>" + req + "</qt> <p>" + s_o_NP_without_verb + "</p> <o>" + O + "</o>?";
             allPossibleQuestions.add(new GeneratedQuestion(S_withPrefix, S_type_withPrefix, question, tagged_question, selectQuery, singleEdgeGraph.toString(), 1, GeneratedQuestion.QT_REQUEST, GeneratedQuestion.SH_SINGLE_EDGE));
             question = s_o_NP_without_verb + " " + O + "?";
             tagged_question = "<p>" + s_o_NP_without_verb + "</p> <o>" + O + "</o>?";
@@ -327,8 +351,8 @@ public class SingleEdgeQuestion {
     private void generateQuestionSELECT_e_of_type_Date() {
         //Generate Question
         if (o_s_VP != null) {
-            String question = "When did " + O + " " + o_s_VP + "?";
-            String tagged_question = "<qt>When</qt> did <o>" + O + "</o> <p>" + o_s_VP + "</p>?";
+            String question = "When was " + O + " " + o_s_VP + "?";
+            String tagged_question = "<qt>When</qt> was <o>" + O + "</o> <p>" + o_s_VP + "</p>?";
             allPossibleQuestions.add(new GeneratedQuestion(S_withPrefix, S_type_withPrefix, question, tagged_question, selectQuery, singleEdgeGraph.toString(), 1, GeneratedQuestion.QT_WHEN, GeneratedQuestion.SH_SINGLE_EDGE));
         }
         if (s_o_NP != null) {
@@ -338,7 +362,7 @@ public class SingleEdgeQuestion {
 //            question = Request.getRequestPrefix() + " " + s_o_NP_without_verb + " " + O + "?";
             String req = Request.getRequestPrefix();
             question = req + " " + s_o_NP_without_verb + " " + O + "?";
-            tagged_question = "<qt>"+req+"</qt> <p>" + s_o_NP_without_verb + "</p> <o>" + O + "</o>?";
+            tagged_question = "<qt>" + req + "</qt> <p>" + s_o_NP_without_verb + "</p> <o>" + O + "</o>?";
             allPossibleQuestions.add(new GeneratedQuestion(S_withPrefix, S_type_withPrefix, question, tagged_question, selectQuery, singleEdgeGraph.toString(), 1, GeneratedQuestion.QT_REQUEST, GeneratedQuestion.SH_SINGLE_EDGE));
             question = s_o_NP_without_verb + " " + O + "?";
             tagged_question = "<p>" + s_o_NP_without_verb + "</p> <o>" + O + "</o>?";
@@ -376,8 +400,20 @@ public class SingleEdgeQuestion {
         }
 
         if (s_o_VP != null) {
-            String question = "Does " + S + " " + s_o_VP + " " + O + "?";
-            String tagged_question = "<qt>Does</qt> <s>" + S + "</s> <p>" + s_o_VP + "</p> <o>" + O + "</o>?";
+            String question = "";
+            String tagged_question = "";
+            String s_o_VP_baseForm = s_o_VP;
+            try {
+                s_o_VP_baseForm = BasicNLP_FromPython.baseVerb(s_o_VP);
+            } catch (Exception e) {
+            }
+            if (O_type_withPrefix.equals(Settings.Date)) {
+                question = "Did " + S + " " + s_o_VP_baseForm + " on " + O + "?";
+                tagged_question = "<qt>Did</qt> <s>" + S + "</s> <p>" + s_o_VP_baseForm + " on</p> <o>" + O + "</o>?";
+            } else {
+                question = "Does " + S + " " + s_o_VP + " " + O + "?";
+                tagged_question = "<qt>Does</qt> <s>" + S + "</s> <p>" + s_o_VP + "</p> <o>" + O + "</o>?";
+            }
             allPossibleQuestions.add(new GeneratedQuestion(S_withPrefix, S_type_withPrefix, question, tagged_question, askQuery_correct, singleEdgeGraph.toString(), 1, GeneratedQuestion.QT_YES_NO_DO, GeneratedQuestion.SH_SINGLE_EDGE));
         }
     }
@@ -417,8 +453,21 @@ public class SingleEdgeQuestion {
             allPossibleQuestions.add(new GeneratedQuestion(S_withPrefix, S_type_withPrefix, question, tagged_question, askQuery_wrong, singleEdgeGraph.toString(), 1, GeneratedQuestion.QT_YES_NO_IS, GeneratedQuestion.SH_SINGLE_EDGE));
         }
         if (s_o_VP != null) {
-            String question = "Does " + somethingElseWithoutPrefix + " " + s_o_VP + " " + O + "?";
-            String tagged_question = "<qt>Does</qt> <s>" + somethingElseWithoutPrefix + "</s> <p>" + s_o_VP + "</p> <o>" + O + "</o>?";
+            String question = "";
+            String tagged_question = "";
+            String s_o_VP_baseForm = s_o_VP;
+            try {
+                s_o_VP_baseForm = BasicNLP_FromPython.baseVerb(s_o_VP);
+            } catch (Exception e) {
+            }
+
+            if (O_type_withPrefix.equals(Settings.Date)) {
+                question = "Did " + somethingElseWithoutPrefix + " " + s_o_VP_baseForm + " on " + O + "?";
+                tagged_question = "<qt>Did</qt> <s>" + somethingElseWithoutPrefix + "</s> <p>" + s_o_VP_baseForm + " on</p> <o>" + O + "</o>?";
+            } else {
+                question = "Does " + somethingElseWithoutPrefix + " " + s_o_VP + " " + O + "?";
+                tagged_question = "<qt>Does</qt> <s>" + somethingElseWithoutPrefix + "</s> <p>" + s_o_VP + "</p> <o>" + O + "</o>?";
+            }
             allPossibleQuestions.add(new GeneratedQuestion(S_withPrefix, S_type_withPrefix, question, tagged_question, askQuery_wrong, singleEdgeGraph.toString(), 1, GeneratedQuestion.QT_YES_NO_DO, GeneratedQuestion.SH_SINGLE_EDGE));
         }
     }

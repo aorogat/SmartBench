@@ -64,6 +64,8 @@ public class GeneratedQuestion {
         this.seed_withPrefix = seed_withPrefix;
         this.seedType_withPrefix = seedType_withPrefix;
         this.questionString = questionString.replace("(", "").replace(")", "").replace("  ", " ").replace(" , ", ", ").replace(" ,", ", ").replace(" s ", " ");
+        //capitalize the first letter
+        this.questionString = this.questionString.substring(0, 1).toUpperCase() + this.questionString.substring(1);
         this.query = query.replace("\"?Seed\"", "?Seed").replace("\"<?Seed>\"", "?Seed").replace(". .", ". ");
         this.graphString = graphString;
         this.noOfTriples = noOfTriples;
@@ -130,10 +132,12 @@ public class GeneratedQuestion {
     }
 
     public void print() {
-        if (getQuestionString().contains(" null ")||
+        if (getQuestionString().contains(" null ")
+                ||
             getQuestionStringTagged().contains("<p>null</p>")||
             getQuestionStringTagged().contains("<p> </p>")||
-            getQuestionStringTagged().contains("<p></p>")) {
+            getQuestionStringTagged().contains("<p></p>")
+                ) {
             System.out.print("\u001B[31m");//Red Color
             System.out.println("XXXXX It seems that this question has a problem and will not be added to the final file. XXXXX");
         }

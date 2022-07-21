@@ -617,8 +617,8 @@ public class StarQuestion {
                     FCs_Representation_tagged.add(" <p>" + p_SO_NP + "</p> " + O_tagged);
                 } else if (predicateNL.getPredicate_s_O_VP() != null) {
                     String p_SO_VP = predicateNL.getPredicate_s_O_VP();
-                    FCs_Representation.add(" " + p_SO_VP + " " + O);
-                    FCs_Representation_tagged.add(" <p>" + p_SO_VP + "</p> " + O_tagged);
+                    FCs_Representation.add(" were " + p_SO_VP + " " + O);
+                    FCs_Representation_tagged.add(" were <p>" + p_SO_VP + "</p> " + O_tagged);
                 } else if (predicateNL.getPredicate_o_s_VP() != null) {
                     String p_OS_VP = predicateNL.getPredicate_o_s_VP();
                     FCs_Representation.add(" " + O + " " + p_OS_VP);
@@ -712,11 +712,11 @@ public class StarQuestion {
     }
 
     public String getFCs_with_T_COO_is_AND() {
-        return T + FCs_AND;
+        return T + " " + FCs_AND;
     }
 
     public String getFCs_with_T_COO_is_AND_taggString() {
-        return "<t>" + T + "</t>" + FCs_AND_tagged;
+        return "<t>" + T + "</t> " + FCs_AND_tagged;
     }
 
     public String getFCs_with_T_COO_is_OR() {

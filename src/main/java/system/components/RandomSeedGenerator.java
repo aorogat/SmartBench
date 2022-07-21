@@ -66,7 +66,9 @@ public class RandomSeedGenerator {
         //dates
         count = 0;
         for (int i = 0;//random.nextInt(3)+2; 
-                i < branches_with_date.size(); i++// = (int) (i * 1.2 + 1)
+                i < branches_with_date.size(); 
+                //i++
+                i = (int) (i * 1.2 + 1)
                 ) {
             Predicate p = branches_with_date.get(i);
             if (p.getPredicateURI().contains("populationAsOf")) {
@@ -81,7 +83,9 @@ public class RandomSeedGenerator {
 
         //literals
         count = 0;
-        for (int i = 0; i < branches_with_Literal.size(); i = i + 1//(int) (i * 1.2 + 1)
+        for (int i = 0; i < branches_with_Literal.size(); 
+                //i = i + 1
+                i = (int) (i * 1.2 + 1)
                 ) {
             Predicate p = branches_with_Literal.get(i);
             if (p.getPredicateURI().contains("populationAsOf")) {
@@ -102,7 +106,7 @@ public class RandomSeedGenerator {
 //        int step = (int) (branches_with_entity.size()/m);
         for (int i = 0;//random.nextInt(8)+2; 
                 i < branches_with_entity.size(); //i = i + 1) {
-                i = (int) (i * 3.2 + 1)) {
+                i = (int) (i * 1.2 + 1)) {
             Predicate p = branches_with_entity.get(i);
 //            m = (0.2 * i) + 1;
             addBranchs(p);

@@ -214,7 +214,7 @@ public class Chuncker {
                         if(sc.toLowerCase().contains("_verb"))
                             lastVerb = sc;
                     }
-                    verbPhraseFirst.baseVerbForm = BasicNLP_FromPython.vaseVerb(lastVerb.toLowerCase().replace("_verb", ""));
+                    verbPhraseFirst.baseVerbForm = BasicNLP_FromPython.baseVerb(lastVerb.toLowerCase().replace("_verb", ""));
 
                     if (s_o_direction) {
                         currentVP = "vp_s_o:" + currentVP;

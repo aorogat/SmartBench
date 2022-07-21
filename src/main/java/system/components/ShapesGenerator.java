@@ -61,10 +61,10 @@ public class ShapesGenerator {
             System.out.println("++++++++++++++++  Seed " + ++i + " of " + branchs.size() + " +++++++ Seed: " + branch.s);
 
 //                Single-Edge
-//            try {
-//                testSingleEdge(branch);
-//            } catch (Exception e) {
-//            }
+            try {
+                testSingleEdge(branch);
+            } catch (Exception e) {
+            }
 //            try {
 ////                    oldSize = generatedQuestions.size();
 //                testChain(branch, 2);
@@ -75,7 +75,7 @@ public class ShapesGenerator {
 //            } catch (Exception e) {
 ////                e.printStackTrace();
 //            }
-//
+
 //            try {
 //                testCycle(branch);
 //            } catch (Exception e) {
@@ -105,50 +105,50 @@ public class ShapesGenerator {
 //                    testStar(branch, 4);
 //                    currentSize = generatedQuestions.size();
 //                }
-//                if (currentSize > oldSize) {
-//                    oldSize = generatedQuestions.size();
-//                    testStar(branch, 5);
-//                    currentSize = generatedQuestions.size();
-//                }
-//                if (currentSize > oldSize) {
-//                    oldSize = generatedQuestions.size();
-//                    testStar(branch, 6);
-//                    currentSize = generatedQuestions.size();
-//                }
+////                if (currentSize > oldSize) {
+////                    oldSize = generatedQuestions.size();
+////                    testStar(branch, 5);
+////                    currentSize = generatedQuestions.size();
+////                }
+////                if (currentSize > oldSize) {
+////                    oldSize = generatedQuestions.size();
+////                    testStar(branch, 6);
+////                    currentSize = generatedQuestions.size();
+////                }
 //            } catch (Exception e) {
 //            }
 //                try {
 ////                    oldSize = generatedQuestions.size();
 //                    testTree(branch, 2);
 //                    currentSize = generatedQuestions.size();
-//                    if (currentSize > oldSize) {
-//                        oldSize = generatedQuestions.size();
-//                        testTree(branch, 3);
-//                        currentSize = generatedQuestions.size();
-//                    }
-//                    if (currentSize > oldSize) {
-//                        oldSize = generatedQuestions.size();
-//                        testTree(branch, 4);
-//                        currentSize = generatedQuestions.size();
-//                    }
+////                    if (currentSize > oldSize) {
+////                        oldSize = generatedQuestions.size();
+////                        testTree(branch, 3);
+////                        currentSize = generatedQuestions.size();
+////                    }
+////                    if (currentSize > oldSize) {
+////                        oldSize = generatedQuestions.size();
+////                        testTree(branch, 4);
+////                        currentSize = generatedQuestions.size();
+////                    }
 //                } catch (Exception e) {
 //                }
-                try {
+//                try {
 ////                    oldSize = generatedQuestions.size();
-                    testFlower(branch, 2);
+//                    testFlower(branch, 2);
 //                    currentSize = generatedQuestions.size();
 //                    if (currentSize > oldSize) {
 //                        oldSize = generatedQuestions.size();
-                        testFlower(branch, 3);
+//                        testFlower(branch, 3);
 //                        currentSize = generatedQuestions.size();
 //                    }
-//                    if (currentSize > oldSize) {
-//                        oldSize = generatedQuestions.size();
-//                        testFlower(branch, 4);
-//                        currentSize = generatedQuestions.size();
-//                    }
-                } catch (Exception e) {
-                }
+////                    if (currentSize > oldSize) {
+////                        oldSize = generatedQuestions.size();
+////                        testFlower(branch, 4);
+////                        currentSize = generatedQuestions.size();
+////                    }
+//                } catch (Exception e) {
+//                }
 //            try {
 //                testStarSet(branch, 1); //must be 1 for now
 //            } catch (Exception e) {
@@ -304,9 +304,14 @@ public class ShapesGenerator {
                         return;
                     }
                 }
-//                for (GeneratedQuestion generatedQuestion : generatedQuestions) {
-//                    generatedQuestion.print();
-//                }
+                for (GeneratedQuestion generatedQuestion : generatedQuestions) {
+                    generatedQuestion.print();
+                }
+                
+                System.out.println(" ========================== Final Questions ==========================");
+                for (GeneratedQuestion generatedQuestion : generatedQuestions) {
+                    System.out.println(generatedQuestion.getQuestionString());
+                }
             }
         }
 

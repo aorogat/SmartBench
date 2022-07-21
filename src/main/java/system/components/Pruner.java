@@ -31,7 +31,7 @@ public class Pruner {
     static List<GeneratedQuestion> prunedQuestions_9 = new ArrayList<>();
     static List<GeneratedQuestion> prunedQuestions_10 = new ArrayList<>();
 
-    static int size_benchmark = 2000;
+    static int size_benchmark = 400;
     static int size_1;
     static int size_2;
     static int size_3;
@@ -86,22 +86,38 @@ public class Pruner {
     static int MODIFIED_CURRENT;
 
     public static void main(String[] args) {
-        prune("Smart_6.json");
+        prune("Smart_3_pruned.json");
+        for (GeneratedQuestion question : prunedQuestions) {
+            System.out.println(question.getQuestionString());
+        }
     }
 
     public static void prune(String benchmarkName) {
+        
+        //by shape
+        size_1 = (int) (0.57 * (double) size_benchmark);
+        size_2 = (int) (0.33 * (double) size_benchmark);
+        size_3 = (int) (0.09 * (double) size_benchmark);
+        size_4 = (int) (0.06 * (double) size_benchmark);
+        size_5 = (int) (0.01 * (double) size_benchmark);
+        size_6 = (int) (0.01 * (double) size_benchmark);
+        size_7 = (int) (0.005 * (double) size_benchmark);
+        size_8 = (int) (0.005 * (double) size_benchmark);
+        size_9 = (int) (0.005 * (double) size_benchmark);
+        size_10 = (int) (0.0 * (double) size_benchmark);
 
-        size_1 = (int) (0.34 * (double) size_benchmark);
-        size_2 = (int) (0.22 * (double) size_benchmark);
-        size_3 = (int) (0.15 * (double) size_benchmark);
-        size_4 = (int) (0.10 * (double) size_benchmark);
-        size_5 = (int) (0.07 * (double) size_benchmark);
-        size_6 = (int) (0.05 * (double) size_benchmark);
-        size_7 = (int) (0.03 * (double) size_benchmark);
-        size_8 = (int) (0.02 * (double) size_benchmark);
-        size_9 = (int) (0.01 * (double) size_benchmark);
-        size_10 = (int) (0.01 * (double) size_benchmark);
-
+        //by complexity
+//        size_1 = (int) (0.34 * (double) size_benchmark);
+//        size_2 = (int) (0.22 * (double) size_benchmark);
+//        size_3 = (int) (0.15 * (double) size_benchmark);
+//        size_4 = (int) (0.10 * (double) size_benchmark);
+//        size_5 = (int) (0.07 * (double) size_benchmark);
+//        size_6 = (int) (0.05 * (double) size_benchmark);
+//        size_7 = (int) (0.03 * (double) size_benchmark);
+//        size_8 = (int) (0.02 * (double) size_benchmark);
+//        size_9 = (int) (0.01 * (double) size_benchmark);
+//        size_10 = (int) (0.01 * (double) size_benchmark);
+//
         ASK_REQUIRED = (int) (0.10 * (double) size_benchmark);
         LIMIT_REQUIRED = (int) (0.05 * (double) size_benchmark);
         UNION_REQUIRED = (int) (0.05 * (double) size_benchmark);
@@ -202,48 +218,91 @@ public class Pruner {
                                 continue;
                             }
                         }
-
-                        if (gq1.getQustionComplexity() > 0 && gq1.getQustionComplexity() <= 0.1) {
+                        
+                        //based on shape
+                        if (gq1.getShapeType().equals(GeneratedQuestion.SH_SINGLE_EDGE)) {
                             if (prunedQuestions_1.size() < size_1) {
                                 prunedQuestions_1.add(gq1);
                             }
-                        } else if (gq1.getQustionComplexity() > 0.1 && gq1.getQustionComplexity() <= 0.2) {
+                        } else if (gq1.getShapeType().equals(GeneratedQuestion.SH_CHAIN)) {
                             if (prunedQuestions_2.size() < size_2) {
                                 prunedQuestions_2.add(gq1);
                             }
-                        } else if (gq1.getQustionComplexity() > 0.2 && gq1.getQustionComplexity() <= 0.3) {
+                        } else if (gq1.getShapeType().equals(GeneratedQuestion.SH_STAR)) {
                             if (prunedQuestions_3.size() < size_3) {
                                 prunedQuestions_3.add(gq1);
                             }
-                        } else if (gq1.getQustionComplexity() > 0.3 && gq1.getQustionComplexity() <= 0.4) {
+                        } else if (gq1.getShapeType().equals(GeneratedQuestion.SH_TREE)) {
                             if (prunedQuestions_4.size() < size_4) {
                                 prunedQuestions_4.add(gq1);
                             }
-                        } else if (gq1.getQustionComplexity() > 0.4 && gq1.getQustionComplexity() <= 0.5) {
+                        } else if (gq1.getShapeType().equals(GeneratedQuestion.SH_FLOWER)) {
                             if (prunedQuestions_5.size() < size_5) {
                                 prunedQuestions_5.add(gq1);
                             }
-                        } else if (gq1.getQustionComplexity() > 0.5 && gq1.getQustionComplexity() <= 0.6) {
+                        } else if (gq1.getShapeType().equals(GeneratedQuestion.SH_SET)) {
                             if (prunedQuestions_6.size() < size_6) {
                                 prunedQuestions_6.add(gq1);
                             }
-                        } else if (gq1.getQustionComplexity() > 0.6 && gq1.getQustionComplexity() <= 0.7) {
+                        } else if (gq1.getShapeType().equals(GeneratedQuestion.SH_SET_MODIFIED)) {
                             if (prunedQuestions_7.size() < size_7) {
                                 prunedQuestions_7.add(gq1);
                             }
-                        } else if (gq1.getQustionComplexity() > 0.7 && gq1.getQustionComplexity() <= 0.8) {
+                        } else if (gq1.getShapeType().equals(GeneratedQuestion.SH_CYCLE_GENERAL)) {
                             if (prunedQuestions_8.size() < size_8) {
                                 prunedQuestions_8.add(gq1);
                             }
-                        } else if (gq1.getQustionComplexity() > 0.8 && gq1.getQustionComplexity() <= 0.9) {
+                        } else if (gq1.getShapeType().equals(GeneratedQuestion.SH_CYCLE)) {
                             if (prunedQuestions_9.size() < size_9) {
                                 prunedQuestions_9.add(gq1);
                             }
-                        } else if (gq1.getQustionComplexity() > 0.9 && gq1.getQustionComplexity() <= 1) {
-                            if (prunedQuestions_10.size() < size_10) {
-                                prunedQuestions_10.add(gq1);
-                            }
-                        }
+                        } 
+
+                        
+                        //based on complexity
+//                        if (gq1.getQustionComplexity() > 0 && gq1.getQustionComplexity() <= 0.1) {
+//                            if (prunedQuestions_1.size() < size_1) {
+//                                prunedQuestions_1.add(gq1);
+//                            }
+//                        } else if (gq1.getQustionComplexity() > 0.1 && gq1.getQustionComplexity() <= 0.2) {
+//                            if (prunedQuestions_2.size() < size_2) {
+//                                prunedQuestions_2.add(gq1);
+//                            }
+//                        } else if (gq1.getQustionComplexity() > 0.2 && gq1.getQustionComplexity() <= 0.3) {
+//                            if (prunedQuestions_3.size() < size_3) {
+//                                prunedQuestions_3.add(gq1);
+//                            }
+//                        } else if (gq1.getQustionComplexity() > 0.3 && gq1.getQustionComplexity() <= 0.4) {
+//                            if (prunedQuestions_4.size() < size_4) {
+//                                prunedQuestions_4.add(gq1);
+//                            }
+//                        } else if (gq1.getQustionComplexity() > 0.4 && gq1.getQustionComplexity() <= 0.5) {
+//                            if (prunedQuestions_5.size() < size_5) {
+//                                prunedQuestions_5.add(gq1);
+//                            }
+//                        } else if (gq1.getQustionComplexity() > 0.5 && gq1.getQustionComplexity() <= 0.6) {
+//                            if (prunedQuestions_6.size() < size_6) {
+//                                prunedQuestions_6.add(gq1);
+//                            }
+//                        } else if (gq1.getQustionComplexity() > 0.6 && gq1.getQustionComplexity() <= 0.7) {
+//                            if (prunedQuestions_7.size() < size_7) {
+//                                prunedQuestions_7.add(gq1);
+//                            }
+//                        } else if (gq1.getQustionComplexity() > 0.7 && gq1.getQustionComplexity() <= 0.8) {
+//                            if (prunedQuestions_8.size() < size_8) {
+//                                prunedQuestions_8.add(gq1);
+//                            }
+//                        } else if (gq1.getQustionComplexity() > 0.8 && gq1.getQustionComplexity() <= 0.9) {
+//                            if (prunedQuestions_9.size() < size_9) {
+//                                prunedQuestions_9.add(gq1);
+//                            }
+//                        } else if (gq1.getQustionComplexity() > 0.9 && gq1.getQustionComplexity() <= 1) {
+//                            if (prunedQuestions_10.size() < size_10) {
+//                                prunedQuestions_10.add(gq1);
+//                            }
+//                        }
+
+
                         if (gq1.getQuestionType().toLowerCase().contains("yes")) {
                             ASK_CURRENT++;
                             if (ASK_CURRENT > ASK_REQUIRED) {

@@ -10,8 +10,8 @@ import offLine.kg_explorer.explorer.DBpediaExplorer;
 public class DBpedia_Settings extends Settings {
 
     public static void intializeSetttings() {
-        Query_SLICING_SIZE = 100;
-        benchmarkName = "Smart_100_single";
+        Query_SLICING_SIZE = 450;
+        benchmarkName = "Smart_450_COMPARE";
 
         //Database
         databaseName = "dbpedia";
