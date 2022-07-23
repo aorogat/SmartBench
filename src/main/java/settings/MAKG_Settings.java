@@ -79,5 +79,6 @@ public class MAKG_Settings extends Settings {
 
         popularityFilter = "";  //used in SPARQL Class
         popularityORDER = "";  //used in SPARQL Class
+        mu = 1.2;
     }
 }

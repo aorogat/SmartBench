@@ -408,8 +408,8 @@ public class SingleEdgeQuestion {
             } catch (Exception e) {
             }
             if (O_type_withPrefix.equals(Settings.Date)) {
-                question = "Did " + S + " " + s_o_VP_baseForm + " on " + O + "?";
-                tagged_question = "<qt>Did</qt> <s>" + S + "</s> <p>" + s_o_VP_baseForm + " on</p> <o>" + O + "</o>?";
+                question = "Was " + S + " " + s_o_VP + " on " + O + "?";
+                tagged_question = "<qt>Was</qt> <s>" + S + "</s> <p>" + s_o_VP + " on</p> <o>" + O + "</o>?";
             } else {
                 question = "Does " + S + " " + s_o_VP + " " + O + "?";
                 tagged_question = "<qt>Does</qt> <s>" + S + "</s> <p>" + s_o_VP + "</p> <o>" + O + "</o>?";
@@ -462,8 +462,8 @@ public class SingleEdgeQuestion {
             }
 
             if (O_type_withPrefix.equals(Settings.Date)) {
-                question = "Did " + somethingElseWithoutPrefix + " " + s_o_VP_baseForm + " on " + O + "?";
-                tagged_question = "<qt>Did</qt> <s>" + somethingElseWithoutPrefix + "</s> <p>" + s_o_VP_baseForm + " on</p> <o>" + O + "</o>?";
+                question = "Was " + somethingElseWithoutPrefix + " " + s_o_VP + " on " + O + "?";
+                tagged_question = "<qt>Was</qt> <s>" + somethingElseWithoutPrefix + "</s> <p>" + s_o_VP + " on</p> <o>" + O + "</o>?";
             } else {
                 question = "Does " + somethingElseWithoutPrefix + " " + s_o_VP + " " + O + "?";
                 tagged_question = "<qt>Does</qt> <s>" + somethingElseWithoutPrefix + "</s> <p>" + s_o_VP + "</p> <o>" + O + "</o>?";

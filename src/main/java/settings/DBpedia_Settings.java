@@ -42,5 +42,6 @@ public class DBpedia_Settings extends Settings {
 
         popularityFilter = " ?s dbo:wikiPageLength ?len. ";  //used in SPARQL Class
         popularityORDER = " ORDER BY DESC(?len)\n ";  //used in SPARQL Class
+        mu = 1.2;
     }
 }

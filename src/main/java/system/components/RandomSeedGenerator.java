@@ -49,12 +49,12 @@ public class RandomSeedGenerator {
         int count = 0;
 
         for (int i = 0;//random.nextInt(8)+2; 
-                i < branches_with_number.size(); i = (int) (i * 1.2 + 1)) { //make it 1.2
+                i < branches_with_number.size(); i = (int) (i * Settings.mu + 1)) { //make it 1.2
             Predicate p = branches_with_number.get(i);
 //            count += 1;
-            if (count >= 3) {
-                break;
-            }
+//            if (count >= 3) {
+//                break;
+//            }
             //Get some examples
             count += 1;
             if (count >= 20) {
@@ -68,7 +68,7 @@ public class RandomSeedGenerator {
         for (int i = 0;//random.nextInt(3)+2; 
                 i < branches_with_date.size(); 
                 //i++
-                i = (int) (i * 1.2 + 1)
+                i = (int) (i * Settings.mu + 1)
                 ) {
             Predicate p = branches_with_date.get(i);
             if (p.getPredicateURI().contains("populationAsOf")) {
@@ -85,7 +85,7 @@ public class RandomSeedGenerator {
         count = 0;
         for (int i = 0; i < branches_with_Literal.size(); 
                 //i = i + 1
-                i = (int) (i * 1.2 + 1)
+                i = (int) (i * Settings.mu + 1)
                 ) {
             Predicate p = branches_with_Literal.get(i);
             if (p.getPredicateURI().contains("populationAsOf")) {
@@ -106,7 +106,7 @@ public class RandomSeedGenerator {
 //        int step = (int) (branches_with_entity.size()/m);
         for (int i = 0;//random.nextInt(8)+2; 
                 i < branches_with_entity.size(); //i = i + 1) {
-                i = (int) (i * 1.2 + 1)) {
+                i = (int) (i * Settings.mu + 1)) {
             Predicate p = branches_with_entity.get(i);
 //            m = (0.2 * i) + 1;
             addBranchs(p);
@@ -132,7 +132,7 @@ public class RandomSeedGenerator {
 
         if (p.getPredicateContext().getObjectType().equals(Settings.Date)) {
             for (int j = 0;
-                    j <= 20; j++) {
+                    j <= 10; j++) {
                 Branch branch = Settings.knowledgeGraph.getBranchOfType_SType_connectTo_OType(Settings.explorer, p.getPredicateContext().getSubjectType(),
                         p.getPredicateContext().getObjectType(), p.getPredicateURI(), j);
                 if (branch == null) {

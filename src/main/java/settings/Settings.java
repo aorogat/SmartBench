@@ -71,6 +71,8 @@ public class Settings {
     public static String popularityFilter = "";  //used in SPARQL Class
     public static String popularityORDER = "";  //used in SPARQL Class
     
+    public static double mu = 1.2;
+    
     
     //Wikidata
 //    public static int Query_SLICING_SIZE = 100;
