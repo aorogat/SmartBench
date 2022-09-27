@@ -39,7 +39,7 @@ In recent years, a significant number of question answering (QA) systems that re
 ```
 
 ## Table of Content
-* Run CBench
+* Run Maestro
   * Getting Started
   * [Lexicon Generation](https://github.com/ToDo)
   * [Benchmark Generation](https://github.com/ToDo)
@@ -60,8 +60,8 @@ SmartBench requires the following development kits and liberaries. You can downl
 * You have to run the server written in Python before running the Java code. This server is in the `main.py` file and the Prerequisites for this python file can be found in the `requirements.txt` file.
 * You need to install PostgreSQL 13 and create an empty database for your KG. Please reset the database paramaters from the `settings` package.
 
-### Deploy CBench via jar
-* __Download CBench.jar:__ Download the *CBench.jar* file and other folders. The project structure must be as follow
+### Deploy Maestro via jar
+* __Download Maestro.jar:__ Download the *Maestro.jar* file and other folders. The project structure must be as follow
 ```
 projectFolder
 │   
