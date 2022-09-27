@@ -20,10 +20,7 @@ import offLine.scrapping.model.PredicateNLRepresentation;
 import online.nl_generation.chunking.Phrase;
 import settings.Settings;
 
-/**
- *
- * @author aorogat
- */
+
 public class Database {
 
     static Statement st = null;
