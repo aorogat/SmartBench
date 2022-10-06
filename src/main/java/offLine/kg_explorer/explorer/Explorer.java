@@ -364,10 +364,13 @@ public abstract class Explorer {
                     s += string + " ";
                 }
                 s = s.trim().toLowerCase();
-                return s;
+                return s.replaceAll("\\(.*?\\)","").replace("_", " ").replaceAll(" +", " ");
             }
+            else return node.replaceAll("\\(.*?\\)","").replace("_", " ").replaceAll(" +", " ");
         }
-        return s;
+        if(s!=null)
+            return s.replaceAll("\\(.*?\\)","").replace("_", " ").replaceAll(" +", " ");
+        return s.replace("_", " ").replaceAll(" +", " ");
     }
 
     public Explorer() {

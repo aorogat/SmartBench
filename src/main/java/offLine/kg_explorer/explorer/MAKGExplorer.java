@@ -7,6 +7,9 @@ package offLine.kg_explorer.explorer;
 
 import database.Database;
 import knowledgeGraphs.MAKG;
+import static offLine.kg_explorer.explorer.Explorer.endpoint;
+import static offLine.kg_explorer.explorer.Explorer.instance;
+import static offLine.kg_explorer.explorer.Explorer.kg;
 import settings.Settings;
 
 /**
@@ -61,6 +64,7 @@ public class MAKGExplorer extends Explorer {
                 s = s.trim().toLowerCase();
                 return s;
             }
+            else return node;
         }
         return s;
     }

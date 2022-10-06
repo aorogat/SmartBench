@@ -14,7 +14,7 @@ public class TreeQuestion {
     TreeGraph treeGraph;
     ArrayList<GeneratedQuestion> allPossibleQuestions = new ArrayList<>();
 
-    public TreeQuestion(TreeGraph treeGraph) {
+    public TreeQuestion(TreeGraph treeGraph) throws Exception {
         if (treeGraph.getTreeGraph().size() == 2) {
             this.treeGraph = treeGraph;
             StarGraph starGraph_0_0 = treeGraph.getTreeGraph().get(0); //the first star is the root star
@@ -60,6 +60,8 @@ public class TreeQuestion {
                 return;
             }
             String seed_1_0 = starGraph_1_0.getStar().get(0).getSubject().getValue();
+            String seed_1_0_type = starGraph_1_0.getStar().get(0).getS_type_without_prefix();
+            String seed_1_0_preprocessed = EntityProcessing.decide_quotes_without_type(seed_1_0, seed_1_0_type);
 
             if (star_1_0_NL.startsWith("a")
                     || star_1_0_NL.startsWith("e")
@@ -72,8 +74,8 @@ public class TreeQuestion {
             }
             
             
-            String treeWhichQuestion = rootWhichQuestion.replace(seed_1_0, star_1_0_NL);
-            String treeWhichQuestion_tagged = rootWhichQuestion_tagged.replace(seed_1_0, star_1_0_NL_tagged);
+            String treeWhichQuestion = rootWhichQuestion.replace(seed_1_0_preprocessed, star_1_0_NL);
+            String treeWhichQuestion_tagged = rootWhichQuestion_tagged.replace(seed_1_0_preprocessed, star_1_0_NL_tagged);
 
             //String question = rootWhichQuestion;
             allPossibleQuestions.add(new GeneratedQuestion(this.treeGraph.getSeed(), this.treeGraph.getSeedType(), treeWhichQuestion, treeWhichQuestion_tagged, rootWhichQuery, this.treeGraph.toString(), treeGraph.getSize(), GeneratedQuestion.QT_WHICH, GeneratedQuestion.SH_TREE));

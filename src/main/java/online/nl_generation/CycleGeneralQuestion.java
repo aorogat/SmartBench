@@ -48,7 +48,7 @@ public class CycleGeneralQuestion {
     }
     
     
-    public void generateQuestions() {
+    public void generateQuestions() throws Exception {
         direction = FORWARD;
         selectQuestions(CoordinatingConjunction.AND);
 
@@ -115,7 +115,7 @@ public class CycleGeneralQuestion {
         return selectQuery(cycleGraph, coordinatingConjunction).replace("SELECT DISTINCT ?Seed WHERE{", "SELECT (COUNT (?Seed) AS ?count) WHERE{");
     }
 
-    public void selectQuestions(String coordinatingConjunction) {
+    public void selectQuestions(String coordinatingConjunction) throws Exception {
         String selectQuery = selectQuery(cycleGraph, coordinatingConjunction);
         String whQuestion = selectWh_Questions(coordinatingConjunction, "NP");
         if (whQuestion==null) {

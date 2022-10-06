@@ -49,7 +49,7 @@ public class CycleQuestion {
         somethingElseWithoutPrefix = EntityProcessing.decide_quotes(somethingElseWithoutPrefix,  seed_type_withPrefix);
     }
 
-    public void generateQuestions() {
+    public void generateQuestions() throws Exception {
         //Forward generate nonacceptable-grammatical-questions
 //        direction = FORWARD;
 //        selectQuestions(CoordinatingConjunction.AND);
@@ -107,7 +107,7 @@ public class CycleQuestion {
         return selectQuery(cycleGraph, coordinatingConjunction).replace("SELECT DISTINCT ?Seed WHERE{", "SELECT (COUNT (?Seed) AS ?count) WHERE{");
     }
 
-    public void selectQuestions(String coordinatingConjunction) {
+    public void selectQuestions(String coordinatingConjunction) throws Exception {
 
         ArrayList<String> questions = new ArrayList<>();
         question_tagged = "";

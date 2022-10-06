@@ -60,21 +60,28 @@ public class GeneratedQuestion {
 //        this.query = query;
 //        this.graphString = graphString;
 //    }
-    public GeneratedQuestion(String seed_withPrefix, String seedType_withPrefix, String questionString, String questionStringTagged, String query, String graphString, int noOfTriples, String QuestionType, String ShapeType) {
+    public GeneratedQuestion(String seed_withPrefix, String seedType_withPrefix, String questionString, String questionStringTagged, String query, String graphString, int noOfTriples, String QuestionType, String ShapeType) throws Exception {
+        if(questionString.contains("second collaboration between"))
+            return;
+        if(questionString.contains(" recorded in  ") ||  
+           questionString.contains("also went to"))
+            return;
         this.seed_withPrefix = seed_withPrefix;
         this.seedType_withPrefix = seedType_withPrefix;
         this.questionString = questionString.trim();
-        this.questionString = questionString.replace("(", "").replace(")", "").replace("  ", " ").replace(" , ", ", ").replace(" ,", ", ").replace(" s ", " ");
+        this.questionString = questionString.replace("(", "").replace(")", "").replace("  ", " ").replace(" , ", ", ").replace(" ,", ", ")
+                .replace(" s ", " ").replace(" by on ", " by ").replace(" \"?", "\"?").replace(" plays for on ", " plays for ");
         //capitalize the first letter
         this.questionString = this.questionString.substring(0, 1).toUpperCase() + this.questionString.substring(1);
-        this.questionString = this.questionString.replace(" the a ", " the ").replace(" the an ", " the ");
+        this.questionString = this.questionString.replace(" the a ", " the ").replace(" the an ", " the ").replace("released as on", "released in")
+                .replace("released as", "released in").replace(" ?", "?");
         this.query = query.replace("\"?Seed\"", "?Seed").replace("\"<?Seed>\"", "?Seed").replace(". .", ". ");
         this.graphString = graphString;
         this.noOfTriples = noOfTriples;
         this.QuestionType = QuestionType;
         this.ShapeType = ShapeType;
         this.questionStringTagged = questionStringTagged.replace("(", "").replace(")", "").replace("  ", " ").replace(" , ", ", ").replace(" ,", ", ").replace(" s ", " ");
-        
+
         try {
             ArrayList<VariableSet> answersVar = Settings.knowledgeGraph.runQuery(query);
             if (answersVar.size() > Settings.maxAnswerCardinalityAllowed) {
@@ -90,8 +97,8 @@ public class GeneratedQuestion {
                 answers.add(a);
             }
             answerCardinality = answers.size();
-            
-            if(this.QuestionType.equals(QT_HOW_MANY)&&answers.get(0).equals("0")){
+
+            if (this.QuestionType.equals(QT_HOW_MANY) && answers.get(0).equals("0")) {
                 questionString = null;
                 return;
             }
@@ -101,19 +108,14 @@ public class GeneratedQuestion {
 
             keywords = get_K_length();
             questionComplexity = round((noOfTokens * noOfTriples * keywords) / (double) (20 * 5 * 3), 3);
-            
-            
-            
-            
-            
+
             if (questionComplexity > 1) {
                 questionComplexity = 1;
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        
-        
+
         print();
     }
 
@@ -133,31 +135,36 @@ public class GeneratedQuestion {
         this.query = query;
     }
 
-    public void print() {
+    public void print() throws Exception {
+        
+        
         if (getQuestionString().contains(" null ")
-                ||
-            getQuestionStringTagged().contains("<p>null</p>")||
-            getQuestionStringTagged().contains("<p> </p>")||
-            getQuestionStringTagged().contains("<p></p>")
-                ) {
+                || getQuestionStringTagged().contains("<p>null</p>")
+                || getQuestionStringTagged().contains("<p> </p>")
+                || getQuestionStringTagged().contains("<p></p>")) {
             System.out.print("\u001B[31m");//Red Color
             System.out.println("XXXXX It seems that this question has a problem and will not be added to the final file. XXXXX");
         }
-        
-        if(answerCardinality<=0){ 
+
+        if (answerCardinality <= 0) {
             System.out.println(query);
             System.out.println("NO ANSWER");
             return;
         }
 //        System.out.println("=================================== Question Start ==========================================");
+        
         System.out.println("Seed with prefix: " + seed_withPrefix);
         System.out.println("Seed type with prefix: " + seedType_withPrefix);
         System.out.println(graphString);
-        System.out.println(query);
+        
         System.out.print("\033[1;35m");//MAGENTA Color
         System.out.println(questionString);
+        
+        System.out.println(query);
+        
         System.out.print("\033[1;35m");//MAGENTA Color
         System.out.println(questionStringTagged);
+//        MainBean.output += "\n" + questionStringTagged;
         System.out.println("Answer Cardinality: " + answerCardinality);
         System.out.println("Answer: " + answers.toString());
         System.out.println("#Tokens: " + noOfTokens);
@@ -243,8 +250,6 @@ public class GeneratedQuestion {
         this.noOfTokens = noOfTokens;
     }
 
-    
-    
     public int getKeywords() {
         return keywords;
     }
@@ -268,9 +273,6 @@ public class GeneratedQuestion {
     public void setQuestionStringTagged(String questionStringTagged) {
         this.questionStringTagged = questionStringTagged;
     }
-    
-    
-    
 
     private int get_K_length() {
         int k = 0;
@@ -341,41 +343,39 @@ public class GeneratedQuestion {
         return k;
     }
 
-    
     public static double round(double value, int places) {
-    if (places < 0) throw new IllegalArgumentException();
+        if (places < 0) {
+            throw new IllegalArgumentException();
+        }
 
-    long factor = (long) Math.pow(10, places);
-    value = value * factor;
-    long tmp = Math.round(value);
-    return (double) tmp / factor;
-}
-    
-    
-    
-    
+        long factor = (long) Math.pow(10, places);
+        value = value * factor;
+        long tmp = Math.round(value);
+        return (double) tmp / factor;
+    }
+
     @Override
     public boolean equals(Object obj) {
-        if(obj instanceof GeneratedQuestion)
-        {
+        if (obj instanceof GeneratedQuestion) {
             GeneratedQuestion temp = (GeneratedQuestion) obj;
-            if(this.questionString.equals(temp.questionString))
+            if (this.questionString.equals(temp.questionString)) {
                 return true;
+            }
         }
         return false;
     }
 
     @Override
     public int hashCode() {
-        return (this.questionString.hashCode());        
+        return (this.questionString.hashCode());
     }
-    
-    public boolean equals(GeneratedQuestion generatedQuestion)
-    {
+
+    public boolean equals(GeneratedQuestion generatedQuestion) {
         String q1 = this.questionString;
         String q2 = generatedQuestion.questionString;
-        if(q1.equals(q2))
+        if (q1.equals(q2)) {
             return true;
+        }
         return false;
     }
 }

@@ -38,7 +38,7 @@ public class StarQuestion {
 
     String GPs_ASK; //for Graph Patterns
 
-    public StarQuestion(StarGraph starGraph) {
+    public StarQuestion(StarGraph starGraph) throws Exception {
         this.starGraph = starGraph;
         String S_type = starGraph.getStar().get(0).getS_type();
 
@@ -61,10 +61,10 @@ public class StarQuestion {
             } else {
                 o = triple.getObject().getValue();
             }
-            
-            s = EntityProcessing.decide_quotes(s, S_type);
-            o = EntityProcessing.decide_quotes(o, triple.getO_type());
-            somethingElseWithoutPrefix = EntityProcessing.decide_quotes(somethingElseWithoutPrefix, S_type);
+
+            s = EntityProcessing.decide_quotes_without_type(s, S_type);
+            o = EntityProcessing.decide_quotes_without_type(o, triple.getO_type());
+            somethingElseWithoutPrefix = EntityProcessing.decide_quotes_without_type(somethingElseWithoutPrefix, S_type);
 
             if (!starPredicates.containsKey(p)) {
                 HashSet<String> objects = new HashSet<>();
@@ -92,11 +92,10 @@ public class StarQuestion {
         if (starGraph.getStar().size() == 1) {
             selectQuestions(CoordinatingConjunction.AND);
             countQuestions(CoordinatingConjunction.AND);
-            askQuestions_true_answer(CoordinatingConjunction.AND);
-            askQuestions_false_answer(CoordinatingConjunction.AND);
 
         } else if (starGraph.getStar().size() == 2 && starGraph.getStar().size() == starPredicates.size()) { //no repeated predicates
             selectQuestions(CoordinatingConjunction.AND);
+            
             selectQuestions(CoordinatingConjunction.OR);
             selectQuestions(CoordinatingConjunction.AND_NOT);
             selectQuestions(CoordinatingConjunction.OR_NOT);
@@ -108,31 +107,23 @@ public class StarQuestion {
             countQuestions(CoordinatingConjunction.OR_NOT);
             countQuestions(CoordinatingConjunction.NOT_NOT);
 
-            askQuestions_true_answer(CoordinatingConjunction.AND);
-
-            askQuestions_false_answer(CoordinatingConjunction.AND);
 
         } else if (starGraph.getStar().size() == 2 && starGraph.getStar().size() != starPredicates.size()) { //repeated predicates
             selectQuestions(CoordinatingConjunction.AND);
             countQuestions(CoordinatingConjunction.AND);
-            askQuestions_true_answer(CoordinatingConjunction.AND);
-            askQuestions_false_answer(CoordinatingConjunction.AND);
 
         } else if (starGraph.getStar().size() > 2 && starGraph.getStar().size() == starPredicates.size()) { //no repeated predicates
             selectQuestions(CoordinatingConjunction.AND);
+            
             selectQuestions(CoordinatingConjunction.OR);
 
             countQuestions(CoordinatingConjunction.AND);
+            
             countQuestions(CoordinatingConjunction.OR);
 
-            askQuestions_true_answer(CoordinatingConjunction.AND);
-
-            askQuestions_false_answer(CoordinatingConjunction.AND);
         } else if (starGraph.getStar().size() > 2 && starGraph.getStar().size() != starPredicates.size()) { //repeated predicates
             selectQuestions(CoordinatingConjunction.AND);
             countQuestions(CoordinatingConjunction.AND);
-            askQuestions_true_answer(CoordinatingConjunction.AND);
-            askQuestions_false_answer(CoordinatingConjunction.AND);
         }
     }
 
@@ -159,10 +150,8 @@ public class StarQuestion {
             } else {
                 o = triple.getObject().getValue();
             }
-            
-            s = EntityProcessing.decide_quotes(s, S_type);
-            o = EntityProcessing.decide_quotes(o, triple.getO_type());
-            somethingElseWithoutPrefix = EntityProcessing.decide_quotes(somethingElseWithoutPrefix, S_type);
+
+            o = EntityProcessing.decide_quotes_without_type(o, triple.getO_type());
 
             if (!starPredicates.containsKey(p)) {
                 HashSet<String> objects = new HashSet<>();
@@ -172,6 +161,8 @@ public class StarQuestion {
                 starPredicates.get(p).add(o);
             }
         }
+
+        somethingElseWithoutPrefix = EntityProcessing.decide_quotes_without_type(somethingElseWithoutPrefix, S_type);
 
         FCs_AND = factConstraints_toString(starGraph, CoordinatingConjunction.AND, starPredicates);
         FCs_AND_tagged = FCs_tagged;
@@ -187,51 +178,6 @@ public class StarQuestion {
         FCs_NOT_NOT = factConstraints_toString(starGraph, CoordinatingConjunction.NOT_NOT, starPredicates);
         FCs_NOT_NOT_tagged = FCs_tagged;
 
-//        if (starGraph.getStar().size() == 1) {
-//            selectQuestions(CoordinatingConjunction.AND);
-//            countQuestions(CoordinatingConjunction.AND);
-//            askQuestions_true_answer(CoordinatingConjunction.AND);
-//            askQuestions_false_answer(CoordinatingConjunction.AND);
-//
-//        } else if (starGraph.getStar().size() == 2 && starGraph.getStar().size() == starPredicates.size()) { //no repeated predicates
-//            selectQuestions(CoordinatingConjunction.AND);
-//            selectQuestions(CoordinatingConjunction.OR);
-//            selectQuestions(CoordinatingConjunction.AND_NOT);
-//            selectQuestions(CoordinatingConjunction.OR_NOT);
-//            selectQuestions(CoordinatingConjunction.NOT_NOT);
-//
-//            countQuestions(CoordinatingConjunction.AND);
-//            countQuestions(CoordinatingConjunction.OR);
-//            countQuestions(CoordinatingConjunction.AND_NOT);
-//            countQuestions(CoordinatingConjunction.OR_NOT);
-//            countQuestions(CoordinatingConjunction.NOT_NOT);
-//
-//            askQuestions_true_answer(CoordinatingConjunction.AND);
-//
-//            askQuestions_false_answer(CoordinatingConjunction.AND);
-//
-//        } else if (starGraph.getStar().size() == 2 && starGraph.getStar().size() != starPredicates.size()) { //repeated predicates
-//            selectQuestions(CoordinatingConjunction.AND);
-//            countQuestions(CoordinatingConjunction.AND);
-//            askQuestions_true_answer(CoordinatingConjunction.AND);
-//            askQuestions_false_answer(CoordinatingConjunction.AND);
-//
-//        } else if (starGraph.getStar().size() > 2 && starGraph.getStar().size() == starPredicates.size()) { //no repeated predicates
-//            selectQuestions(CoordinatingConjunction.AND);
-//            selectQuestions(CoordinatingConjunction.OR);
-//
-//            countQuestions(CoordinatingConjunction.AND);
-//            countQuestions(CoordinatingConjunction.OR);
-//
-//            askQuestions_true_answer(CoordinatingConjunction.AND);
-//
-//            askQuestions_false_answer(CoordinatingConjunction.AND);
-//        } else if (starGraph.getStar().size() > 2 && starGraph.getStar().size() != starPredicates.size()) { //repeated predicates
-//            selectQuestions(CoordinatingConjunction.AND);
-//            countQuestions(CoordinatingConjunction.AND);
-//            askQuestions_true_answer(CoordinatingConjunction.AND);
-//            askQuestions_false_answer(CoordinatingConjunction.AND);
-//        }
     }
 
     public String askQuery_true_answer(StarGraph starGraph, String coordinatingConjunction) {
@@ -250,7 +196,7 @@ public class StarQuestion {
         return selectQuery(starGraph, coordinatingConjunction).replace("SELECT DISTINCT ?Seed WHERE{", "SELECT (COUNT (?Seed) AS ?count) WHERE{");
     }
 
-    public void countQuestions(String coordinatingConjunction) {
+    public void countQuestions(String coordinatingConjunction) throws Exception {
         String FCs = "";
         String FCs_tag = "";
         switch (coordinatingConjunction) {
@@ -284,7 +230,7 @@ public class StarQuestion {
         }
     }
 
-    public void askQuestions_true_answer(String coordinatingConjunction) {
+    public void askQuestions_true_answer(String coordinatingConjunction) throws Exception {
         String FCs = "";
         switch (coordinatingConjunction) {
             case CoordinatingConjunction.AND:
@@ -306,16 +252,22 @@ public class StarQuestion {
         }
         if (FCs != null) {
             String subject = starGraph.getStar().get(0).getSubject().getValue();
+            subject = EntityProcessing.decide_quotes_without_type(subject, starGraph.getStar().get(0).getS_type());
             String question = selectWhichQuestions(coordinatingConjunction).replaceFirst("Which", "");
             String question_tagged = selectWhichQuestions_tagged(coordinatingConjunction).replaceFirst("<qt>Which</qt>", "");
-            question = ("Is " + subject.replace(T, "") + " " + question.replace("whose", "its")).replaceFirst(BasicNLP_FromPython.nounPlural(T), T);
-            question_tagged = ("<qt>Is</qt> <s>" + subject.replace(T, "") + "</s> " + question_tagged.replace("whose", "its")).replaceFirst(BasicNLP_FromPython.nounPlural(T), T);
+            if (subject.contains("\"")) {
+                question = ("Is " + subject + " " + question.replace("whose", "its").replace("their", "its")).replaceFirst(" its ", "'s ").replace(" and's ", " its ").replace(" or's ", " its ").replaceFirst(BasicNLP_FromPython.nounPlural(T), T).replaceFirst(" is", "");
+                question_tagged = ("<qt>Is</qt> <s>" + subject + "</s> " + question_tagged.replace("whose", "its")).replaceFirst(" its ", "'s ").replace(" and's ", " its ").replace(" or's ", " its ").replaceFirst(BasicNLP_FromPython.nounPlural(T), T).replaceFirst(" is", "");
+            } else {
+                question = ("Is " + subject.replace(T, "") + " " + question.replace("whose", "its").replace("their", "its")).replaceFirst(" its ", "'s ").replace(" and's ", " its ").replace(" or's ", " its ").replaceFirst(BasicNLP_FromPython.nounPlural(T), T).replaceFirst(" is", "");
+                question_tagged = ("<qt>Is</qt> <s>" + subject.replace(T, "") + "</s> " + question_tagged.replace("whose", "its")).replaceFirst(" its ", "'s ").replace(" and's ", " its ").replace(" or's ", " its ").replaceFirst(BasicNLP_FromPython.nounPlural(T), T).replaceFirst(" is", "");
+            }
             String askQuery = askQuery_true_answer(starGraph, coordinatingConjunction);
             allPossibleQuestions.add(new GeneratedQuestion(starGraph.getStar().get(0).getSubject().getValueWithPrefix(), starGraph.getStar().get(0).getS_type(), question, question_tagged, askQuery, starGraph.toString(), starGraph.getStar().size() + 1, GeneratedQuestion.QT_YES_NO_IS, GeneratedQuestion.SH_STAR));
         }
     }
 
-    public void askQuestions_false_answer(String coordinatingConjunction) {
+    public void askQuestions_false_answer(String coordinatingConjunction) throws Exception {
         String FCs = "";
         String FCs_tag = "";
         switch (coordinatingConjunction) {
@@ -342,12 +294,16 @@ public class StarQuestion {
             default:
         }
         if (FCs != null) {
-            String whichQuestion = selectWhichQuestions(coordinatingConjunction).replaceFirst("Which", ("Is " + somethingElseWithoutPrefix).replace(T, "")).replaceFirst(BasicNLP_FromPython.nounPlural(T), T)
-                    .replace(FCs, FCs);
-            String whichQuestion_tagged = selectWhichQuestions_tagged(coordinatingConjunction).replaceFirst("<qt>Which</qt>", ("<qt>Is</qt> <s>" + somethingElseWithoutPrefix.replace(T, "") + "</s>")
-                    .replace(FCs_tag, FCs_tag).replaceFirst(BasicNLP_FromPython.nounPlural(T), T));
-            String question = whichQuestion.replace("whose", "its");
-            String question_tagged = whichQuestion_tagged.replace("whose", "its");
+            String question = selectWhichQuestions(coordinatingConjunction).replaceFirst("Which", "");
+            String question_tagged = selectWhichQuestions_tagged(coordinatingConjunction).replaceFirst("<qt>Which</qt>", "");
+            
+            if (somethingElseWithoutPrefix.contains("\"")) {
+                question = ("Is " + somethingElseWithoutPrefix + " " + question.replace("whose", "its").replace("their", "its")).replaceFirst(" its ", "'s ").replace(" and's ", " its ").replace(" or's ", " its ").replaceFirst(BasicNLP_FromPython.nounPlural(T), T).replaceFirst(" is", "");
+                question_tagged = ("<qt>Is</qt> <s>" + somethingElseWithoutPrefix + "</s> " + question_tagged.replace("whose", "its")).replaceFirst(" its ", "'s ").replace(" and's ", " its ").replace(" or's ", " its ").replaceFirst(BasicNLP_FromPython.nounPlural(T), T).replaceFirst(" is", "");
+            } else {
+                question = ("Is " + somethingElseWithoutPrefix.replace(T, "") + " " + question.replace("whose", "its").replace("their", "its")).replaceFirst(" its ", "'s ").replace(" and's ", " its ").replace(" or's ", " its ").replaceFirst(BasicNLP_FromPython.nounPlural(T), T).replaceFirst(" is", "");
+                question_tagged = ("<qt>Is</qt> <s>" + somethingElseWithoutPrefix.replace(T, "") + "</s> " + question_tagged.replace("whose", "its")).replaceFirst(" its ", "'s ").replace(" and's ", " its ").replace(" or's ", " its ").replaceFirst(BasicNLP_FromPython.nounPlural(T), T).replaceFirst(" is", "");
+            }
             String askQuery = askQuery_false_answer(starGraph, coordinatingConjunction);
             allPossibleQuestions.add(new GeneratedQuestion(starGraph.getStar().get(0).getSubject().getValueWithPrefix(), starGraph.getStar().get(0).getS_type(), question, question_tagged, askQuery, starGraph.toString(), starGraph.getStar().size() + 1, GeneratedQuestion.QT_YES_NO_IS, GeneratedQuestion.SH_STAR));
 
@@ -355,7 +311,7 @@ public class StarQuestion {
         }
     }
 
-    public void selectQuestions(String coordinatingConjunction) {
+    public void selectQuestions(String coordinatingConjunction) throws Exception {
         String FCs = "";
         switch (coordinatingConjunction) {
             case CoordinatingConjunction.AND:
@@ -391,11 +347,12 @@ public class StarQuestion {
 
             String req = Request.getRequestPrefix().trim();
             question = whichQuestion.replaceFirst("Which ", req + " ");
-            question_tagged = whichQuestion_tagged.replaceFirst("Which", req);
+            
             allPossibleQuestions.add(new GeneratedQuestion(starGraph.getStar().get(0).getSubject().getValueWithPrefix(), starGraph.getStar().get(0).getS_type(), question, question_tagged, selectQuery, starGraph.toString(), starGraph.getStar().size() + 1, GeneratedQuestion.QT_REQUEST, GeneratedQuestion.SH_STAR));
 
             question = whichQuestion.replaceFirst("Which ", "");
             question_tagged = whichQuestion_tagged.replaceFirst("<qt>Which</qt> ", "");
+            
             allPossibleQuestions.add(new GeneratedQuestion(starGraph.getStar().get(0).getSubject().getValueWithPrefix(), starGraph.getStar().get(0).getS_type(), question, question_tagged, selectQuery, starGraph.toString(), starGraph.getStar().size() + 1, GeneratedQuestion.QT_TOPICAL_PRUNE, GeneratedQuestion.SH_STAR));
         }
     }
@@ -465,7 +422,6 @@ public class StarQuestion {
 
         if (coordinatingConjunction.equals(CoordinatingConjunction.AND)) {
             for (TriplePattern triple : star) {
-//                triples += "\n\t" + triple.toQueryTriplePattern().replace("<" + triple.getSubject().getValueWithPrefix() + ">", "?Seed") + ". ";
                 if (triple.getS_type().equals(Settings.Number) || triple.getS_type().equals(Settings.Date) || triple.getS_type().equals(Settings.Literal)) {
                     triples += "\n\t" + triple.toQueryTriplePattern()
                             .replace("\"" + triple.getSubject().getValueWithPrefix() + "\"^^xsd:dateTime ", "?Seed")
@@ -494,7 +450,6 @@ public class StarQuestion {
             query = "SELECT DISTINCT ?Seed WHERE{" + triples + "\n}";
         } else if (coordinatingConjunction.equals(CoordinatingConjunction.AND_NOT)) {
             for (TriplePattern triple : star) {
-//                triples += "\n\t{" + triple.toQueryTriplePattern().replace("<" + triple.getSubject().getValueWithPrefix() + ">", "?Seed") + ".} MINUS ";
                 if (triple.getS_type().equals(Settings.Number) || triple.getS_type().equals(Settings.Date) || triple.getS_type().equals(Settings.Literal)) {
                     triples += "\n\t{" + triple.toQueryTriplePattern()
                             .replace("\"" + triple.getSubject().getValueWithPrefix() + "\"^^xsd:dateTime ", "?Seed")
@@ -510,7 +465,6 @@ public class StarQuestion {
         } else if (coordinatingConjunction.equals(CoordinatingConjunction.NOT_NOT)) {
             triples += "\n\tMINUS{ ";
             for (TriplePattern triple : star) {
-//                triples += "\n\t\t{" + triple.toQueryTriplePattern().replace("<" + triple.getSubject().getValueWithPrefix() + ">", "?Seed") + ".} UNION ";
                 if (triple.getS_type().equals(Settings.Number) || triple.getS_type().equals(Settings.Date) || triple.getS_type().equals(Settings.Literal)) {
                     triples += "\n\t\t{" + triple.toQueryTriplePattern()
                             .replace("\"" + triple.getSubject().getValueWithPrefix() + "\"^^xsd:dateTime ", "?Seed")
@@ -526,7 +480,6 @@ public class StarQuestion {
             query = "SELECT DISTINCT ?Seed WHERE{" + triples + "\n}";
         } else if (coordinatingConjunction.equals(CoordinatingConjunction.OR_NOT)) {
             triples += "\n\tMINUS{ ";
-//            triples += "\n\t\t {{ ?Seed \t rdf:type \t <" + T + "> .} MINUS{ " + star.get(0).toQueryTriplePattern().replace("<" + star.get(0).getSubject().getValueWithPrefix() + ">", "?Seed") + "}} . ";
             triples += "\n\t\t {{ ?Seed \t rdf:type \t <" + T + "> .} MINUS{ " + star.get(0).toQueryTriplePattern()
                     .replace("<" + star.get(0).getSubject().getValueWithPrefix() + ">", "?Seed")
                     .replace("\"" + star.get(0).getSubject().getValueWithPrefix() + "\"", "?Seed")
@@ -627,10 +580,10 @@ public class StarQuestion {
                     FCs_Representation_tagged.add(" <p>" + p_SO_NP + "</p> " + O_tagged);
                 } else if (predicateNL.getPredicate_s_O_VP() != null) {
                     String p_SO_VP = predicateNL.getPredicate_s_O_VP().trim();
-                    if((p_SO_VP.startsWith("was ") || p_SO_VP.startsWith("were ") || p_SO_VP.startsWith("is ") || p_SO_VP.startsWith("are "))){
+                    if ((p_SO_VP.startsWith("was ") || p_SO_VP.startsWith("were ") || p_SO_VP.startsWith("is ") || p_SO_VP.startsWith("are "))) {
                         FCs_Representation.add(" " + p_SO_VP + " " + O);
                         FCs_Representation_tagged.add(" <p>" + p_SO_VP + "</p> " + O_tagged);
-                    }else{
+                    } else {
                         FCs_Representation.add(" were " + p_SO_VP + " " + O);
                         FCs_Representation_tagged.add(" were <p>" + p_SO_VP + "</p> " + O_tagged);
                     }

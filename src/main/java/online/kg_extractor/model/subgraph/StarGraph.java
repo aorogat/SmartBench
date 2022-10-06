@@ -80,7 +80,7 @@ public class StarGraph extends Graph {
 //            }
             if (i >= endsType.length) {
                 filter += "FILTER isIRI(?o" + i + "). ";
-                continue;
+                break;
             }
             else if (endsType[i] == NodeType.URI) {
                 filter += "FILTER isIRI(?o" + i + "). ";

@@ -67,12 +67,18 @@ public class TriplePattern {
                 }
             }
         }
+        
+        if (s_type == null) {
+            s_type = Settings.knowledgeGraph.getType(Settings.explorer, subject.getValueWithPrefix());
+        }
+        if (o_type == null) {
+            o_type = Settings.knowledgeGraph.getType(Settings.explorer, object.getValueWithPrefix());
+        }
+        
         s_type_without_prefix = Settings.explorer.removePrefix(s_type);
         o_type_without_prefix = Settings.explorer.removePrefix(o_type);
 
-//        if (s_type == null || o_type == null) {
-//            return;
-//        }
+        
 //
 //        if (o_type.equals(Settings.Number)) {
 //            s_type_without_prefix = Settings.explorer.removePrefix(s_type);

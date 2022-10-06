@@ -15,7 +15,7 @@ public class FlowerQuestion {
     
     ArrayList<GeneratedQuestion> allPossibleQuestions = new ArrayList<>();
 
-    public FlowerQuestion(FlowerGraph flowerGraph) {
+    public FlowerQuestion(FlowerGraph flowerGraph) throws Exception {
         this.flowerGraph = flowerGraph;
         starQuestion = new StarQuestion(flowerGraph.getStar(), true);
         cycleQuestion = new CycleQuestion(flowerGraph.getCycle());
