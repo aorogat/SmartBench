@@ -40,6 +40,9 @@ public class StarSetQuestion {
         } else {
             O = starGraph.getStar().get(0).getObject().getValue();
         }
+        
+//        O = EntityProcessing.decide_quotes(O, O_Type_withPrefix);
+        
         String O_withPrefix = starGraph.getStar().get(0).getObject().getValueWithPrefix();
 
         String compareEntityTop_withPrefix = Settings.knowledgeGraph.getTopEntity(T_withprefix, P_withPrefix, true);
@@ -47,6 +50,11 @@ public class StarSetQuestion {
 
         String compareEntityDown = Settings.explorer.removePrefix(compareEntityDown_withPrefix);
         String compareEntityTop = Settings.explorer.removePrefix(compareEntityTop_withPrefix);
+        
+        compareEntityDown = EntityProcessing.decide_quotes(compareEntityDown, T_withprefix);
+        compareEntityTop = EntityProcessing.decide_quotes(compareEntityTop, T_withprefix);
+        
+        
 
         PredicateNLRepresentation predicateNL = PredicatesLexicon.getPredicateNL(P_withPrefix, S_Type_withPrefix, O_Type_withPrefix);
         if (predicateNL == null) {

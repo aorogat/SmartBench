@@ -145,7 +145,7 @@ public class RandomSeedGenerator {
             }
         } else {
             for (int j = c;
-                    j <= c + 2; j = (int) ((j * 3.2) + 1)) {
+                    j <= c + 2; j = (int) ((j * Settings.mu) + 1)) {
                 Branch branch = Settings.knowledgeGraph.getBranchOfType_SType_connectTo_OType(Settings.explorer, p.getPredicateContext().getSubjectType(),
                         p.getPredicateContext().getObjectType(), p.getPredicateURI(), j);
                 if (branch == null) {

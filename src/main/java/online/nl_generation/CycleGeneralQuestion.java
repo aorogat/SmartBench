@@ -133,6 +133,8 @@ public class CycleGeneralQuestion {
             QT = GeneratedQuestion.QT_WHERE;
         else if(whQuestion.toLowerCase().startsWith("when"))
             QT = GeneratedQuestion.QT_WHEN;
+        else if(whQuestion.toLowerCase().startsWith("which"))
+            QT = GeneratedQuestion.QT_WHICH;
         
         
         if (whQuestion != null && !whQuestion.contains("null")) {
@@ -166,7 +168,9 @@ public class CycleGeneralQuestion {
                     if (FCs == null || FCs.contains("null")) {
                         return null;
                     }
+//                    question_tagged = "<qt>Which</qt> <t>" + seed_type_without_prefix + "</t> " + fcs_tagged + "?";
                     question_tagged = "<qt>What</qt> " + fcs_tagged + "?";
+//                    return "Which " + seed_type_without_prefix + " " + FCs + "?";
                     return "What " + FCs + "?";
                 } else if (phrase.equals("VP")) {
                     FCs = factConstraints_toString_VP_forward(cycleGraph, coordinatingConjunction);
@@ -184,8 +188,10 @@ public class CycleGeneralQuestion {
                     if (FCs == null || FCs.contains("null")) {
                         return null;
                     }
-                    question_tagged = "<qt>What</qt> " + fcs_tagged + "?";
-                    return "What " + FCs + "?";
+                    question_tagged = "<qt>Which</qt> <t>" + seed_type_without_prefix + "</t> " + fcs_tagged + "?";
+//                    question_tagged = "<qt>What</qt> " + fcs_tagged + "?";
+                    return "Which " + seed_type_without_prefix + " " + FCs + "?";
+//                    return "What " + FCs + "?";
                 } else if (phrase.equals("VP")) {
                     FCs = factConstraints_toString_NP_forward(cycleGraph, coordinatingConjunction);
 
@@ -219,7 +225,9 @@ public class CycleGeneralQuestion {
                     if (FCs == null || FCs.contains("null")) {
                         return null;
                     }
+//                    question_tagged = "<qt>Which</qt> <t>" + seed_type_without_prefix + "</t> " + fcs_tagged + "?";
                     question_tagged = "<qt>What</qt> " + fcs_tagged + "?";
+//                    return "Which " + seed_type_without_prefix + " " + FCs + "?";
                     return "What " + FCs + "?";
                 }
             }
@@ -245,7 +253,9 @@ public class CycleGeneralQuestion {
                     if (FCs == null || FCs.contains("null")) {
                         return null;
                     }
+//                    question_tagged = "<qt>Whicc</qt> <t>" + seed_type_without_prefix + "</t> " + fcs_tagged + "?";
                     question_tagged = "<qt>What</qt> " + fcs_tagged + "?";
+//                    return "Whicc " + seed_type_without_prefix + " " + FCs + "?";
                     return "What " + FCs + "?";
                 } else if (phrase.equals("VP")) {
 
@@ -296,7 +306,10 @@ public class CycleGeneralQuestion {
                     if (FCs == null || FCs.contains("null")) {
                         return null;
                     }
+                    
+//                    question_tagged = "<qt>Whicc</qt> <t>" + seed_type_without_prefix + "</t> " + fcs_tagged + "?";
                     question_tagged = "<qt>What</qt> " + fcs_tagged + "?";
+//                    return "Whicc " + seed_type_without_prefix + " " + FCs + "?";
                     return "What " + FCs + "?";
                 } else if (phrase.equals("VP")) {
 

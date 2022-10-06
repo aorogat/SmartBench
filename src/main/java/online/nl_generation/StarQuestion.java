@@ -40,8 +40,9 @@ public class StarQuestion {
 
     public StarQuestion(StarGraph starGraph) {
         this.starGraph = starGraph;
+        String S_type = starGraph.getStar().get(0).getS_type();
 
-        somethingElse = Settings.knowledgeGraph.getSimilarEntity(Settings.explorer, starGraph.getStar().get(0).getSubject().getValueWithPrefix(), starGraph.getStar().get(0).getS_type());
+        somethingElse = Settings.knowledgeGraph.getSimilarEntity(Settings.explorer, starGraph.getStar().get(0).getSubject().getValueWithPrefix(), S_type);
         somethingElseWithoutPrefix = Settings.explorer.removePrefix(somethingElse);
 
         T = Settings.explorer.removePrefix(starGraph.getSeedType()).toLowerCase();
@@ -60,6 +61,10 @@ public class StarQuestion {
             } else {
                 o = triple.getObject().getValue();
             }
+            
+            s = EntityProcessing.decide_quotes(s, S_type);
+            o = EntityProcessing.decide_quotes(o, triple.getO_type());
+            somethingElseWithoutPrefix = EntityProcessing.decide_quotes(somethingElseWithoutPrefix, S_type);
 
             if (!starPredicates.containsKey(p)) {
                 HashSet<String> objects = new HashSet<>();
@@ -133,8 +138,9 @@ public class StarQuestion {
 
     public StarQuestion(StarGraph starGraph, boolean isTree) {
         this.starGraph = starGraph;
+        String S_type = starGraph.getStar().get(0).getS_type();
 
-        somethingElse = Settings.knowledgeGraph.getSimilarEntity(Settings.explorer, starGraph.getStar().get(0).getSubject().getValueWithPrefix(), starGraph.getStar().get(0).getS_type());
+        somethingElse = Settings.knowledgeGraph.getSimilarEntity(Settings.explorer, starGraph.getStar().get(0).getSubject().getValueWithPrefix(), S_type);
         somethingElseWithoutPrefix = Settings.explorer.removePrefix(somethingElse);
 
         T = Settings.explorer.removePrefix(starGraph.getSeedType()).toLowerCase();
@@ -153,6 +159,10 @@ public class StarQuestion {
             } else {
                 o = triple.getObject().getValue();
             }
+            
+            s = EntityProcessing.decide_quotes(s, S_type);
+            o = EntityProcessing.decide_quotes(o, triple.getO_type());
+            somethingElseWithoutPrefix = EntityProcessing.decide_quotes(somethingElseWithoutPrefix, S_type);
 
             if (!starPredicates.containsKey(p)) {
                 HashSet<String> objects = new HashSet<>();
@@ -298,8 +308,8 @@ public class StarQuestion {
             String subject = starGraph.getStar().get(0).getSubject().getValue();
             String question = selectWhichQuestions(coordinatingConjunction).replaceFirst("Which", "");
             String question_tagged = selectWhichQuestions_tagged(coordinatingConjunction).replaceFirst("<qt>Which</qt>", "");
-            question = "Is " + subject.toLowerCase().replace(T.toLowerCase(), "") + " " + question.replace("whose", "its");
-            question_tagged = "<qt>Is</qt> <s>" + subject.toLowerCase().replace(T.toLowerCase(), "") + "</s> " + question_tagged.replace("whose", "its");
+            question = ("Is " + subject.replace(T, "") + " " + question.replace("whose", "its")).replaceFirst(BasicNLP_FromPython.nounPlural(T), T);
+            question_tagged = ("<qt>Is</qt> <s>" + subject.replace(T, "") + "</s> " + question_tagged.replace("whose", "its")).replaceFirst(BasicNLP_FromPython.nounPlural(T), T);
             String askQuery = askQuery_true_answer(starGraph, coordinatingConjunction);
             allPossibleQuestions.add(new GeneratedQuestion(starGraph.getStar().get(0).getSubject().getValueWithPrefix(), starGraph.getStar().get(0).getS_type(), question, question_tagged, askQuery, starGraph.toString(), starGraph.getStar().size() + 1, GeneratedQuestion.QT_YES_NO_IS, GeneratedQuestion.SH_STAR));
         }
@@ -332,10 +342,10 @@ public class StarQuestion {
             default:
         }
         if (FCs != null) {
-            String whichQuestion = selectWhichQuestions(coordinatingConjunction).replaceFirst("Which", "Is " + somethingElseWithoutPrefix.toLowerCase().replace(T.toLowerCase(), ""))
+            String whichQuestion = selectWhichQuestions(coordinatingConjunction).replaceFirst("Which", ("Is " + somethingElseWithoutPrefix).replace(T, "")).replaceFirst(BasicNLP_FromPython.nounPlural(T), T)
                     .replace(FCs, FCs);
-            String whichQuestion_tagged = selectWhichQuestions_tagged(coordinatingConjunction).replaceFirst("<qt>Which</qt>", "<qt>Is</qt> <s>" + somethingElseWithoutPrefix.toLowerCase().replace(T.toLowerCase(), "") + "</s>")
-                    .replace(FCs_tag, FCs_tag);
+            String whichQuestion_tagged = selectWhichQuestions_tagged(coordinatingConjunction).replaceFirst("<qt>Which</qt>", ("<qt>Is</qt> <s>" + somethingElseWithoutPrefix.replace(T, "") + "</s>")
+                    .replace(FCs_tag, FCs_tag).replaceFirst(BasicNLP_FromPython.nounPlural(T), T));
             String question = whichQuestion.replace("whose", "its");
             String question_tagged = whichQuestion_tagged.replace("whose", "its");
             String askQuery = askQuery_false_answer(starGraph, coordinatingConjunction);
@@ -616,9 +626,14 @@ public class StarQuestion {
                     FCs_Representation.add(" " + p_SO_NP + " " + O);
                     FCs_Representation_tagged.add(" <p>" + p_SO_NP + "</p> " + O_tagged);
                 } else if (predicateNL.getPredicate_s_O_VP() != null) {
-                    String p_SO_VP = predicateNL.getPredicate_s_O_VP();
-                    FCs_Representation.add(" were " + p_SO_VP + " " + O);
-                    FCs_Representation_tagged.add(" were <p>" + p_SO_VP + "</p> " + O_tagged);
+                    String p_SO_VP = predicateNL.getPredicate_s_O_VP().trim();
+                    if((p_SO_VP.startsWith("was ") || p_SO_VP.startsWith("were ") || p_SO_VP.startsWith("is ") || p_SO_VP.startsWith("are "))){
+                        FCs_Representation.add(" " + p_SO_VP + " " + O);
+                        FCs_Representation_tagged.add(" <p>" + p_SO_VP + "</p> " + O_tagged);
+                    }else{
+                        FCs_Representation.add(" were " + p_SO_VP + " " + O);
+                        FCs_Representation_tagged.add(" were <p>" + p_SO_VP + "</p> " + O_tagged);
+                    }
                 } else if (predicateNL.getPredicate_o_s_VP() != null) {
                     String p_OS_VP = predicateNL.getPredicate_o_s_VP();
                     FCs_Representation.add(" " + O + " " + p_OS_VP);

@@ -298,8 +298,8 @@ public class SingleEdgeQuestion {
             allPossibleQuestions.add(new GeneratedQuestion(S_withPrefix, S_type_withPrefix, question, tagged_question, selectQuery, singleEdgeGraph.toString(), 1, GeneratedQuestion.QT_TOPICAL_PRUNE, GeneratedQuestion.SH_SINGLE_EDGE));
         }
         if (o_s_VP != null) {
-            String question = "Where " + O + " " + o_s_VP + "?";
-            String tagged_question = "<qt>Where</qt> <o>" + O + "</o> <p>" + o_s_VP + "</p>?";
+            String question = "Where does " + O + " " + o_s_VP + "?";
+            String tagged_question = "<qt>Where</qt> does <o>" + O + "</o> <p>" + o_s_VP + "</p>?";
             allPossibleQuestions.add(new GeneratedQuestion(S_withPrefix, S_type_withPrefix, question, tagged_question, selectQuery, singleEdgeGraph.toString(), 1, GeneratedQuestion.QT_WHERE, GeneratedQuestion.SH_SINGLE_EDGE));
 
         }

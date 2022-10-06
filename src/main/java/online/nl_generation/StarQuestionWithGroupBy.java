@@ -21,7 +21,7 @@ public class StarQuestionWithGroupBy {
     String p_withPrefix;
 
     ArrayList<GeneratedQuestion> allPossibleQuestions = new ArrayList<>();
-
+//
     public StarQuestionWithGroupBy(StarGraph starGraph) {
         this.starGraph = starGraph;
         T = Settings.explorer.removePrefix(starGraph.getSeedType()).toLowerCase();

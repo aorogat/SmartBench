@@ -24,6 +24,7 @@ public class ChainQuestion {
     private String O0_withPrefix;
 
     String O_Final; //last object in the chain
+    String O_Final_type_withPrefix; //last object in the chain
 
     String P1_to_n_SO_PN_series = "";
     String P1_to_n_OS_PN_series = "";
@@ -78,10 +79,12 @@ public class ChainQuestion {
         S0_withPrefix = chainGraph.getChain().get(0).getSubject().getValueWithPrefix();
         P0_withPrefix = chainGraph.getChain().get(0).getPredicate().getValueWithPrefix();
         O0_withPrefix = chainGraph.getChain().get(0).getObject().getValueWithPrefix();
+        
 
         S0_type_withPrefix = chainGraph.getChain().get(0).getS_type();
         O0_type_withPrefix = chainGraph.getChain().get(0).getO_type();
-
+        O_Final_type_withPrefix = chainGraph.getChain().get(chainGraph.getChain().size() - 1).getO_type();
+        
         somethingElse = Settings.knowledgeGraph.getSimilarEntity(Settings.explorer, S0_withPrefix, this.S0_type_withPrefix);
         somethingElseWithoutPrefix = Settings.explorer.removePrefix(somethingElse);
 
@@ -170,6 +173,13 @@ public class ChainQuestion {
         countQuery = generateCountQuery();
         askQuery_correct = generateAskQuery_Correct();
         askQuery_wrong = generateAskQuery_Wrong();
+        
+        
+        S0_Seed = EntityProcessing.decide_quotes(S0_Seed, this.S0_type_withPrefix);
+        O_Final = EntityProcessing.decide_quotes(O_Final, this.O_Final_type_withPrefix);
+        somethingElseWithoutPrefix = EntityProcessing.decide_quotes(somethingElseWithoutPrefix,  this.S0_type_withPrefix);
+        
+        
 
         generateAllPossibleChainQuestions();
     }
@@ -189,6 +199,7 @@ public class ChainQuestion {
 
         S0_type_withPrefix = chainGraph.getChain().get(length).getO_type(); //Swap
         O0_type_withPrefix = chainGraph.getChain().get(length).getS_type(); //Swap
+        O_Final_type_withPrefix = chainGraph.getChain().get(0).getS_type(); //Swap
 
         somethingElse = Settings.knowledgeGraph.getSimilarEntity(Settings.explorer, S0_withPrefix, this.S0_type_withPrefix);
         somethingElseWithoutPrefix = Settings.explorer.removePrefix(somethingElse);
@@ -272,6 +283,10 @@ public class ChainQuestion {
         countQuery = generateCountQuery();
         askQuery_correct = generateAskQuery_Correct();
         askQuery_wrong = generateAskQuery_Wrong();
+        
+        S0_Seed = EntityProcessing.decide_quotes(S0_Seed, this.S0_type_withPrefix);
+        O_Final = EntityProcessing.decide_quotes(O_Final, this.O_Final_type_withPrefix);
+        somethingElseWithoutPrefix = EntityProcessing.decide_quotes(somethingElseWithoutPrefix,  this.S0_type_withPrefix);
 
         generateAllPossibleChainQuestions();
     }

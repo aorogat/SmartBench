@@ -63,9 +63,11 @@ public class GeneratedQuestion {
     public GeneratedQuestion(String seed_withPrefix, String seedType_withPrefix, String questionString, String questionStringTagged, String query, String graphString, int noOfTriples, String QuestionType, String ShapeType) {
         this.seed_withPrefix = seed_withPrefix;
         this.seedType_withPrefix = seedType_withPrefix;
+        this.questionString = questionString.trim();
         this.questionString = questionString.replace("(", "").replace(")", "").replace("  ", " ").replace(" , ", ", ").replace(" ,", ", ").replace(" s ", " ");
         //capitalize the first letter
         this.questionString = this.questionString.substring(0, 1).toUpperCase() + this.questionString.substring(1);
+        this.questionString = this.questionString.replace(" the a ", " the ").replace(" the an ", " the ");
         this.query = query.replace("\"?Seed\"", "?Seed").replace("\"<?Seed>\"", "?Seed").replace(". .", ". ");
         this.graphString = graphString;
         this.noOfTriples = noOfTriples;
