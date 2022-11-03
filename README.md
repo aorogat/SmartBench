@@ -22,7 +22,6 @@ In recent years, a significant number of question answering (QA) systems that re
     * [MAKG](https://github.com/aorogat/Maestro/tree/main/benchmarks/MAKG)
     * [Nobel Prize](https://github.com/aorogat/Maestro/tree/main/benchmarks/Nobel%20Prize)
   * [Benchmark Fine-Grained Analysis]
-  * [QA Evaluatioe]
 
 
 ## Getting Started
