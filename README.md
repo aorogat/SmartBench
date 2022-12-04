@@ -53,6 +53,14 @@ projectFolder
 * __Configure the System:__ While the system is running, it asks you about some parameters. Theses parameters are
   * __KG's name:__ KG name as you prefer.
   * __KG's URL:__ The URL of SPARQL endpoint of the desired knowledge graph.
+  * __Questions Types:__ Althougth, Maestro can generate quetions for all types (e.g., What, When, Where, etc.), you can select specific types to be included in the generated benchmark.
+  * __Query Shape:__ Althougth, Maestro can generate quetions for all shapes (e.g., Single-Edge, Chain, Star, etc.), you can select specific shapes to be included in the generated benchmark.
+  * __Shape parameters:__ Each shape has its own parameters to be configured.
+    * __Chain:__ For the chain shape you have to configure the `length` parameter. It can accept multiple values (e.g., (2,3) to generete chain questions of length 2 and 3).
+    * __Star:__ For the star shape you have to configure the `branches` parameter. It can accept multiple values (e.g., (2,3) to generete star questions with number of 2 and 3 branches).
+    * __Tree:__ For the tree shape you have to configure the `stars` parameter. This parameter determin the number of stars in the generated tree.
+    * __Flower:__ For the flower shape you have to configure the `simpleShapes` parameter. This parameter determin the the shapes in the generated flower.
+    
 
 
 ## Support
