@@ -15,6 +15,7 @@ In recent years, a significant number of question answering (QA) systems that re
 ## Table of Content
 * Run Maestro
   * Getting Started
+  * [Configuraion](https://github.com/aorogat/Maestro/blob/main/Configuraion.md)
   * [Lexicon Generation](https://github.com/aorogat/Maestro/blob/main/lexicon_generation.md)
   * [Benchmark Generation](https://github.com/aorogat/Maestro/blob/main/benchmark_generation.md)
     * [DBpedia](https://github.com/aorogat/Maestro/tree/main/benchmarks/DBpedia)
