@@ -4,7 +4,10 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Random;
 import database.Database;
+import edu.stanford.nlp.util.ArraySet;
 import java.util.Collections;
+import java.util.List;
+import java.util.Set;
 import offLine.kg_explorer.explorer.SPARQL;
 import offLine.kg_explorer.model.Predicate;
 import settings.Settings;
@@ -23,24 +26,33 @@ public class RandomSeedGenerator {
     static ArrayList<Predicate> branches_with_date = new ArrayList<>();
     static ArrayList<Predicate> branches_with_entity = new ArrayList<>();
     static ArrayList<Predicate> branches_with_Literal = new ArrayList<>();
+    static boolean orderedSeeds = false;
 
-    public static void generateSeedList() {
-
+    private static void init(){
         branches_with_number = new ArrayList<>();
         branches_with_date = new ArrayList<>();
         branches_with_entity = new ArrayList<>();
         branches_with_Literal = new ArrayList<>();
         branchs = new ArrayList<>();
+    }
+    
+    public static void generateSeedList(int offset) {
+
+        init();
 
         //Get subject types avialable in Lexicon
-        availablePredicates = Database.getAvailablePredicates();
+        availablePredicates = Database.getAvailablePredicates(orderedSeeds);
         System.out.println("We have " + availablePredicates.size() + " types");
         System.out.println("==============================================");
 
-
         int typesSize = availablePredicates.size();
 
-        for (Predicate p : availablePredicates) {
+        for (int i = offset;
+                i < (offset + 10);
+                //                i<availablePredicates.size(); 
+                i++) {
+            Predicate p = availablePredicates.get(i);
+
             if (p.getPredicateURI().toLowerCase().contains("party")) {
                 continue;
             } else if (p.getPredicateURI().toLowerCase().contains("relation")) {
@@ -48,8 +60,6 @@ public class RandomSeedGenerator {
             } else if (p.getPredicateURI().toLowerCase().contains("child")) {
                 continue;
             } else if (p.getPredicateURI().toLowerCase().contains("musiccomposer")) {
-                continue;
-            } else if (p.getPredicateURI().toLowerCase().contains("album")) {
                 continue;
             } else if (p.getPredicateURI().toLowerCase().contains("subsequentwork")) {
                 continue;
@@ -70,24 +80,9 @@ public class RandomSeedGenerator {
             }
         }
 
-        
-        addBranchesFromList(branches_with_entity, 5);
-        addBranchesFromList(branches_with_date, 2);
-        addBranchesFromList(branches_with_number, 2);
-        
-        
-
-
-        Predicate pp = null;
-        for (Predicate p : availablePredicates) {
-            if (p.getPredicateURI().toLowerCase().contains("album")) {
-                pp = p;
-                break;
-            }
-        }
-
-        if(pp!=null)
-            addBranchs(pp);
+        addBranchesFromList(branches_with_entity, 500000000);
+        addBranchesFromList(branches_with_date, 500000000);
+        addBranchesFromList(branches_with_number, 500000000);
 
         branches_with_entity = new ArrayList<>(new HashSet<>(branches_with_entity));
         branches_with_number = new ArrayList<>(new HashSet<>(branches_with_number));
@@ -101,24 +96,19 @@ public class RandomSeedGenerator {
 
         Collections.reverse(branchs);
     }
-    
-    private static void addBranchesFromList(ArrayList<Predicate> branches, int end){
+
+    private static void addBranchesFromList(ArrayList<Predicate> branches, long end) {
         Random random = new Random();
         int count = 0;
 
-        for (int //                i = 0;
-                i = random.nextInt(3) + 1;
-                i < branches.size();
-//                i = i + 1 
-                i = (int) (i * 1.2 + 1)
-                ) { //make it 1.2
-           
+        double offset = orderedSeeds ? 1.2 : 1;
+
+        int i = random.nextInt(10) + 1;
+        while (i < branches.size() && count < end) {
             Predicate p = branches.get(i);
-            count += 1;
-            if (count >= end) {
-                break;
-            }
             addBranchs(p);
+            count++;
+            i = (int) (i * offset + 1);
         }
     }
 
@@ -126,33 +116,41 @@ public class RandomSeedGenerator {
         if (p == null) {
             return;
         }
+
+        // Create a new random number generator
         Random random = new Random();
-        int c = random.nextInt(10);
-        int count = 0;
-        for (int j = c;
-                j <= c + 2; 
-//                j=j+1
-                j=(int) ((j * 3.2) + 1)
-                ) { 
-            Branch branch = Settings.knowledgeGraph.getBranchOfType_SType_connectTo_OType(Settings.explorer, p.getPredicateContext().getSubjectType(),
-                    p.getPredicateContext().getObjectType(), p.getPredicateURI(), j);
-            if (branch == null) {
-                return;
-            }
-            String st = Settings.explorer.removePrefix(p.getPredicateContext().getSubjectType());
-            String ot = Settings.explorer.removePrefix(p.getPredicateContext().getObjectType());
-            System.out.println(p.getPredicate() + "\t"
-                    + branch.s + "[" + st + "]\t"
-                    + branch.o + "[" + ot + "]");
-            branchs.add(branch);
-            count += 1;
-            if (count >= 1) {
+
+        // Generate a random starting index for the loop
+        int startIndex = random.nextInt(2);
+
+        // Determine the loop offset based on the value of orderedSeeds
+        double loopOffset = orderedSeeds ? 1.2 : 1;
+
+        // Loop through the list of branches
+        for (int index = startIndex; index <= startIndex + 10; index = (int) ((index * loopOffset) + 1)) {
+            try {
+                // Get the next branch from the knowledge graph
+                Branch branch = Settings.knowledgeGraph.getBranchOfType_SType_connectTo_OType(
+                        Settings.explorer, p.getPredicateContext().getSubjectType(),
+                        p.getPredicateContext().getObjectType(), p.getPredicateURI(), index);
+                if (branch == null) {
+                    return;
+                }
+
+                // Remove prefixes from the subject and object types
+                String subjectType = Settings.explorer.removePrefix(p.getPredicateContext().getSubjectType());
+                String objectType = Settings.explorer.removePrefix(p.getPredicateContext().getObjectType());
+
+                // Print the branch details and add the branch to the list
+                System.out.println(p.getPredicate() + "\t" + branch.s + "[" + subjectType + "]\t" + branch.o + "[" + objectType + "]");
+                branchs.add(branch);
+            } catch (Exception e) {
                 break;
             }
         }
     }
 
     public static void main(String[] args) {
-        generateSeedList();
+        generateSeedList(0);
     }
 }

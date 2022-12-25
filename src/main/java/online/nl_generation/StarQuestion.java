@@ -62,9 +62,9 @@ public class StarQuestion {
                 o = triple.getObject().getValue();
             }
 
-            s = EntityProcessing.decide_quotes_without_type(s, S_type);
-            o = EntityProcessing.decide_quotes_without_type(o, triple.getO_type());
-            somethingElseWithoutPrefix = EntityProcessing.decide_quotes_without_type(somethingElseWithoutPrefix, S_type);
+            s = EntityProcessing.decide_quotes_only(s, S_type);
+            o = EntityProcessing.decide_quotes_only(o, triple.getO_type());
+            somethingElseWithoutPrefix = EntityProcessing.decide_quotes_only(somethingElseWithoutPrefix, S_type);
 
             if (!starPredicates.containsKey(p)) {
                 HashSet<String> objects = new HashSet<>();
@@ -151,7 +151,7 @@ public class StarQuestion {
                 o = triple.getObject().getValue();
             }
 
-            o = EntityProcessing.decide_quotes_without_type(o, triple.getO_type());
+            o = EntityProcessing.decide_quotes_only(o, triple.getO_type());
 
             if (!starPredicates.containsKey(p)) {
                 HashSet<String> objects = new HashSet<>();
@@ -162,7 +162,7 @@ public class StarQuestion {
             }
         }
 
-        somethingElseWithoutPrefix = EntityProcessing.decide_quotes_without_type(somethingElseWithoutPrefix, S_type);
+        somethingElseWithoutPrefix = EntityProcessing.decide_quotes_only(somethingElseWithoutPrefix, S_type);
 
         FCs_AND = factConstraints_toString(starGraph, CoordinatingConjunction.AND, starPredicates);
         FCs_AND_tagged = FCs_tagged;
@@ -252,7 +252,7 @@ public class StarQuestion {
         }
         if (FCs != null) {
             String subject = starGraph.getStar().get(0).getSubject().getValue();
-            subject = EntityProcessing.decide_quotes_without_type(subject, starGraph.getStar().get(0).getS_type());
+            subject = EntityProcessing.decide_quotes_only(subject, starGraph.getStar().get(0).getS_type());
             String question = selectWhichQuestions(coordinatingConjunction).replaceFirst("Which", "");
             String question_tagged = selectWhichQuestions_tagged(coordinatingConjunction).replaceFirst("<qt>Which</qt>", "");
             if (subject.contains("\"")) {
@@ -347,6 +347,7 @@ public class StarQuestion {
 
             String req = Request.getRequestPrefix().trim();
             question = whichQuestion.replaceFirst("Which ", req + " ");
+            question_tagged = whichQuestion_tagged.replaceFirst("Which", req);
             
             allPossibleQuestions.add(new GeneratedQuestion(starGraph.getStar().get(0).getSubject().getValueWithPrefix(), starGraph.getStar().get(0).getS_type(), question, question_tagged, selectQuery, starGraph.toString(), starGraph.getStar().size() + 1, GeneratedQuestion.QT_REQUEST, GeneratedQuestion.SH_STAR));
 

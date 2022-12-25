@@ -45,8 +45,8 @@ public class CycleQuestion {
         somethingElse = Settings.knowledgeGraph.getSimilarEntity(Settings.explorer, cycleGraph.getPath_1().getSubject().getValueWithPrefix(), cycleGraph.getPath_1().getS_type());
         somethingElseWithoutPrefix = Settings.explorer.removePrefix(somethingElse);
         
-        seed_without_prefix = EntityProcessing.decide_quotes(seed_without_prefix, seed_type_withPrefix);
-        somethingElseWithoutPrefix = EntityProcessing.decide_quotes(somethingElseWithoutPrefix,  seed_type_withPrefix);
+        seed_without_prefix = EntityProcessing.decide_quotes_with_type(seed_without_prefix, seed_type_withPrefix);
+        somethingElseWithoutPrefix = EntityProcessing.decide_quotes_with_type(somethingElseWithoutPrefix,  seed_type_withPrefix);
     }
 
     public void generateQuestions() throws Exception {
@@ -366,7 +366,7 @@ public class CycleQuestion {
 
             String O = cycleGraph.getPath_1().getObject().getValue();
             String O_type = cycleGraph.getPath_1().getO_type();
-            O = EntityProcessing.decide_quotes(O, O_type);
+            O = EntityProcessing.decide_quotes_with_type(O, O_type);
             
             if (p1_SO_VP != null && p2_SO_VP != null) {
                 fcs_ = p1_SO_VP + " " + coorinatingConjunction + " " + p2_SO_VP + " " + O;
@@ -401,7 +401,7 @@ public class CycleQuestion {
             
             String O = cycleGraph.getPath_1().getSubject().getValue();
             String O_type = cycleGraph.getPath_1().getS_type();
-            O = EntityProcessing.decide_quotes(O, O_type);
+            O = EntityProcessing.decide_quotes_with_type(O, O_type);
             
 
             if (p1_OS_VP != null && p2_OS_VP != null) {
@@ -440,7 +440,7 @@ public class CycleQuestion {
             
             String O = cycleGraph.getPath_1().getObject().getValue();
             String O_type = cycleGraph.getPath_1().getO_type();
-            O = EntityProcessing.decide_quotes(O, O_type);
+            O = EntityProcessing.decide_quotes_with_type(O, O_type);
             
 
             if (p1_SO_NP != null && p2_SO_NP != null) {
@@ -482,7 +482,7 @@ public class CycleQuestion {
             
             String O = cycleGraph.getPath_1().getSubject().getValue();
             String O_type = cycleGraph.getPath_1().getS_type();
-            O = EntityProcessing.decide_quotes(O, O_type);
+            O = EntityProcessing.decide_quotes_with_type(O, O_type);
 
             if (p1_OS_NP != null && p2_OS_NP != null) {
                 fcs_ = PhraseRepresentationProcessing.NP_without_Preposition(p1_OS_NP) + " " + coorinatingConjunction + " " + PhraseRepresentationProcessing.NP_without_verb___first(p2_OS_NP) + " " + O;

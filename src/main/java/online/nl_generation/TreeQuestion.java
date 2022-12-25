@@ -61,7 +61,7 @@ public class TreeQuestion {
             }
             String seed_1_0 = starGraph_1_0.getStar().get(0).getSubject().getValue();
             String seed_1_0_type = starGraph_1_0.getStar().get(0).getS_type_without_prefix();
-            String seed_1_0_preprocessed = EntityProcessing.decide_quotes_without_type(seed_1_0, seed_1_0_type);
+            String seed_1_0_preprocessed = EntityProcessing.decide_quotes_only(seed_1_0, seed_1_0_type);
 
             if (star_1_0_NL.startsWith("a")
                     || star_1_0_NL.startsWith("e")

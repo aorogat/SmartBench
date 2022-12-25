@@ -32,6 +32,7 @@ public class TriplePattern {
 
     }
 
+
     private void setContext() {
         if (o_type != null) {
             if (o_type.equals(Settings.Number) || o_type.equals(Settings.Date) || o_type.equals(Settings.Literal)) {
@@ -67,18 +68,17 @@ public class TriplePattern {
                 }
             }
         }
-        
+
         if (s_type == null) {
             s_type = Settings.knowledgeGraph.getType(Settings.explorer, subject.getValueWithPrefix());
         }
         if (o_type == null) {
             o_type = Settings.knowledgeGraph.getType(Settings.explorer, object.getValueWithPrefix());
         }
-        
+
         s_type_without_prefix = Settings.explorer.removePrefix(s_type);
         o_type_without_prefix = Settings.explorer.removePrefix(o_type);
 
-        
 //
 //        if (o_type.equals(Settings.Number)) {
 //            s_type_without_prefix = Settings.explorer.removePrefix(s_type);
@@ -157,17 +157,24 @@ public class TriplePattern {
     }
 
     public String toString() {
-        String s = "";
+        String subjectValue = subject.getValue();
+        String subjectType = s_type_without_prefix;
+        String predicateValue = predicate.getValue();
+        String objectValue = object.getValue();
+        String objectType = o_type_without_prefix;
+
         if (s_type == null || o_type == null) {
             setContext();
         }
         if (s_type == null || o_type == null || o_type_without_prefix == null || s_type_without_prefix == null) {
             return null;
         }
-        if (o_type_without_prefix.equals(Settings.Number) || o_type_without_prefix.equals(Settings.Date) || o_type_without_prefix.equals(Settings.Literal)) {
-            s = subject.getValue() + "[" + s_type_without_prefix + "]" + " ____" + predicate.getValue() + "____ " + object.getValueWithPrefix() + "[" + o_type_without_prefix + "]";
+
+        String s;
+        if (Settings.Number.equals(objectType) || Settings.Date.equals(objectType) || Settings.Literal.equals(objectType)) {
+            s = subjectValue + "[" + subjectType + "]" + " ____" + predicateValue + "____ " + object.getValueWithPrefix() + "[" + objectType + "]";
         } else {
-            s = subject.getValue() + "[" + s_type_without_prefix + "]" + " ____" + predicate.getValue() + "____ " + object.getValue() + "[" + o_type_without_prefix + "]";
+            s = subjectValue + "[" + subjectType + "]" + " ____" + predicateValue + "____ " + objectValue + "[" + objectType + "]";
         }
         return s;
     }
@@ -183,6 +190,8 @@ public class TriplePattern {
         return s;
     }
 
+    
+    //before refactor, know that space is important
     public String toQueryTriplePattern() {
         if (s_type == null || o_type == null) {
             setContext();

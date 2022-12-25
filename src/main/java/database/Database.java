@@ -20,7 +20,6 @@ import offLine.scrapping.model.PredicateNLRepresentation;
 import online.nl_generation.chunking.Phrase;
 import settings.Settings;
 
-
 public class Database {
 
     static Statement st = null;
@@ -105,7 +104,7 @@ public class Database {
         return predicatesNLRepresentations;
     }
 
-    public static ArrayList<Predicate> getAvailablePredicates() {
+    public static ArrayList<Predicate> getAvailablePredicates(boolean order) {
         connect();
         ArrayList<Predicate> predicates = new ArrayList<>();
         try {
@@ -115,8 +114,12 @@ public class Database {
                     + "    from (values (\"VP_S_O\"), (\"NP_S_O\"), (\"VP_O_S\"), (\"NP_O_S\")) as v(col)\n"
                     + "    where v.col is not null ) as counter\n"
                     + "    FROM \"Lexicon\" l, \"Predicates\" p\n"
-                    + "	where l.\"PredicateURI\" = p.\"URI\" and l.\"Context_Subject\"=p.\"Context_Subject\" and l.\"Context_Object\"=p.\"Context_Object\"\n"
-                    + "    ORDER BY p.\"ContextWeight\" DESC;";
+                    + "	where l.\"PredicateURI\" = p.\"URI\" and l.\"Context_Subject\"=p.\"Context_Subject\" and l.\"Context_Object\"=p.\"Context_Object\"\n";
+            if (order) {
+                sql += "    ORDER BY p.\"ContextWeight\" DESC;";
+            } else {
+                sql += ";";
+            }
 
             ResultSet result = st.executeQuery(sql);
             while (result.next()) {
@@ -124,10 +127,11 @@ public class Database {
                 predicate.setPredicateURI(result.getString("PredicateURI"));
                 predicate.setPredicateContext(new PredicateContext(result.getString("Context_Subject"), result.getString("Context_Object"), 0));
                 predicate.setWeight(result.getLong("ContextWeight"));
-                if(!predicate.getPredicateURI().contains("#"))
+                if (!predicate.getPredicateURI().contains("#")) {
                     predicates.add(predicate);
+                }
             }
-            con.close();
+//            con.close();
         } catch (SQLException ex) {
             ex.printStackTrace();
         }

@@ -20,22 +20,25 @@ public class PredicateNLRepresentation {
         this.object_type = object_type;
         // S is the ... of O
         this.predicate_s_O_NP = predicate_s_O_NP;
-        if(this.predicate_s_O_NP!=null)
+        if (this.predicate_s_O_NP != null) {
             this.predicate_s_O_NP = this.predicate_s_O_NP.replaceAll("\\(.*\\)", "");
+        }
         // O .... S
         this.predicate_o_s_VP = predicate_o_s_VP;
-        if(this.predicate_o_s_VP!=null)
+        if (this.predicate_o_s_VP != null) {
             this.predicate_o_s_VP = this.predicate_o_s_VP.replaceAll("\\(.*\\)", "");
+        }
         // S .... O
         this.predicate_s_O_VP = predicate_s_O_VP;
-        if(this.predicate_s_O_VP!=null)
+        if (this.predicate_s_O_VP != null) {
             this.predicate_s_O_VP = this.predicate_s_O_VP.replaceAll("\\(.*\\)", "");
+        }
         // O is the .... of S
         this.predicate_o_s_NP = predicate_o_s_NP;
-        if(this.predicate_o_s_NP!=null)
+        if (this.predicate_o_s_NP != null) {
             this.predicate_o_s_NP = this.predicate_o_s_NP.replaceAll("\\(.*\\)", "");
-        
-        
+        }
+
     }
 
     public String getPredicate() {
@@ -62,54 +65,6 @@ public class PredicateNLRepresentation {
         this.object_type = object_type;
     }
 
-    public String getPredicate_s_O_NP() {
-        if (predicate_s_O_NP == null) {
-            return predicate_s_O_NP;
-        }
-        if (predicate_s_O_NP.toLowerCase().startsWith("is ")
-                || predicate_s_O_NP.toLowerCase().startsWith("is/")
-                || predicate_s_O_NP.toLowerCase().startsWith("are ")
-                || predicate_s_O_NP.toLowerCase().startsWith("was ")
-                || predicate_s_O_NP.toLowerCase().startsWith("was/")
-                || predicate_s_O_NP.toLowerCase().startsWith("were ")) {
-            predicate_s_O_NP = predicate_s_O_NP;
-        } else {
-            predicate_s_O_NP = "is the " + predicate_s_O_NP;
-        }
-
-        if (predicate_s_O_NP.toLowerCase().endsWith(" above")
-                || predicate_s_O_NP.toLowerCase().endsWith(" across")
-                || predicate_s_O_NP.toLowerCase().endsWith(" about")
-                || predicate_s_O_NP.toLowerCase().endsWith(" of")
-                || predicate_s_O_NP.toLowerCase().endsWith(" for")
-                || predicate_s_O_NP.toLowerCase().endsWith(" against")
-                || predicate_s_O_NP.toLowerCase().endsWith(" along")
-                || predicate_s_O_NP.toLowerCase().endsWith(" among")
-                || predicate_s_O_NP.toLowerCase().endsWith(" around")
-                || predicate_s_O_NP.toLowerCase().endsWith(" at")
-                || predicate_s_O_NP.toLowerCase().endsWith(" before")
-                || predicate_s_O_NP.toLowerCase().endsWith(" behind")
-                || predicate_s_O_NP.toLowerCase().endsWith(" below")
-                || predicate_s_O_NP.toLowerCase().endsWith(" beneath")
-                || predicate_s_O_NP.toLowerCase().endsWith(" beside")
-                || predicate_s_O_NP.toLowerCase().endsWith(" between")
-                || predicate_s_O_NP.toLowerCase().endsWith(" in")
-                || predicate_s_O_NP.toLowerCase().endsWith(" into")
-                || predicate_s_O_NP.toLowerCase().endsWith(" near")
-                || predicate_s_O_NP.toLowerCase().endsWith(" on")
-                || predicate_s_O_NP.toLowerCase().endsWith(" to")
-                || predicate_s_O_NP.toLowerCase().endsWith(" toward")
-                || predicate_s_O_NP.toLowerCase().endsWith(" under")
-                || predicate_s_O_NP.toLowerCase().endsWith(" upon")
-                || predicate_s_O_NP.toLowerCase().endsWith(" with")
-                || predicate_s_O_NP.toLowerCase().endsWith(" within")) {
-            return predicate_s_O_NP;
-        } else {
-            return predicate_s_O_NP + " of";
-        }
-
-    }
-
     public void setPredicate_s_O_NP(String predicate_s_O_NP) {
         this.predicate_s_O_NP = predicate_s_O_NP;
     }
@@ -130,65 +85,57 @@ public class PredicateNLRepresentation {
         this.predicate_s_O_VP = predicate_s_O_VP;
     }
 
+    public String getPredicate_s_O_NP() {
+        if (predicate_s_O_NP == null) {
+            return predicate_s_O_NP;
+        }
+
+        String predicate = "is the " + predicate_s_O_NP;
+
+        // Check if the predicate starts with a verb
+        if (predicate_s_O_NP.toLowerCase().matches("^(is|are|was|were) .*")) {
+            predicate = predicate_s_O_NP;
+        }
+
+        // Check if the predicate ends with a preposition
+        if (predicate_s_O_NP.toLowerCase().matches(".* (above|across|about|of|for|against|along|among|around|at|before|behind|below|beneath|beside|between|in|into|near|on|to|toward|under|upon|with|within)$")) {
+            return predicate;
+        } else {
+            return predicate + " of";
+        }
+    }
+
     public String getPredicate_o_s_NP() {
         if (predicate_o_s_NP == null) {
             return predicate_o_s_NP;
         }
-        if (predicate_o_s_NP.toLowerCase().startsWith("is ")
-                || predicate_o_s_NP.toLowerCase().startsWith("is/")
-                || predicate_o_s_NP.toLowerCase().startsWith("are ")
-                || predicate_o_s_NP.toLowerCase().startsWith("was ")
-                || predicate_o_s_NP.toLowerCase().startsWith("was/")
-                || predicate_o_s_NP.toLowerCase().startsWith("were ")) {
-            predicate_o_s_NP = predicate_o_s_NP;
-        } else {
-            predicate_o_s_NP = "is the " + predicate_o_s_NP;
+
+        String predicate = "is the " + predicate_o_s_NP;
+
+        // Check if the predicate starts with a verb
+        if (predicate_o_s_NP.toLowerCase().matches("^(is|are|was|were) .*")) {
+            predicate = predicate_o_s_NP;
         }
 
-        if (predicate_o_s_NP.toLowerCase().endsWith(" above")
-                || predicate_o_s_NP.toLowerCase().endsWith(" across")
-                || predicate_o_s_NP.toLowerCase().endsWith(" about")
-                || predicate_o_s_NP.toLowerCase().endsWith(" of")
-                || predicate_o_s_NP.toLowerCase().endsWith(" for")
-                || predicate_o_s_NP.toLowerCase().endsWith(" against")
-                || predicate_o_s_NP.toLowerCase().endsWith(" along")
-                || predicate_o_s_NP.toLowerCase().endsWith(" among")
-                || predicate_o_s_NP.toLowerCase().endsWith(" around")
-                || predicate_o_s_NP.toLowerCase().endsWith(" at")
-                || predicate_o_s_NP.toLowerCase().endsWith(" before")
-                || predicate_o_s_NP.toLowerCase().endsWith(" behind")
-                || predicate_o_s_NP.toLowerCase().endsWith(" below")
-                || predicate_o_s_NP.toLowerCase().endsWith(" beneath")
-                || predicate_o_s_NP.toLowerCase().endsWith(" beside")
-                || predicate_o_s_NP.toLowerCase().endsWith(" between")
-                || predicate_o_s_NP.toLowerCase().endsWith(" in")
-                || predicate_o_s_NP.toLowerCase().endsWith(" into")
-                || predicate_o_s_NP.toLowerCase().endsWith(" near")
-                || predicate_o_s_NP.toLowerCase().endsWith(" on")
-                || predicate_o_s_NP.toLowerCase().endsWith(" to")
-                || predicate_o_s_NP.toLowerCase().endsWith(" toward")
-                || predicate_o_s_NP.toLowerCase().endsWith(" under")
-                || predicate_o_s_NP.toLowerCase().endsWith(" upon")
-                || predicate_o_s_NP.toLowerCase().endsWith(" with")
-                || predicate_o_s_NP.toLowerCase().endsWith(" within")) {
-            return predicate_o_s_NP;
+        // Check if the predicate ends with a preposition
+        if (predicate_o_s_NP.toLowerCase().matches(".* (above|across|about|of|for|against|along|among|around|at|before|behind|below|beneath|beside|between|in|into|near|on|to|toward|under|upon|with|within)$")) {
+            return predicate;
         } else {
-            return predicate_o_s_NP + " of";
+            return predicate + " of";
         }
-
     }
+
+ 
 
     public void setPredicate_o_s_NP(String predicate_o_s_NP) {
         this.predicate_o_s_NP = predicate_o_s_NP;
     }
 
-    
-    public void print()
-    {
+    public void print() {
         System.out.println(predicate + " (" + subject_type + ", " + object_type + ") ----> SO_VP=" + predicate_s_O_VP + ", "
-        + "SO_NP=" + predicate_s_O_NP + ", "
-        + "OS_VP=" + predicate_o_s_VP + ", "
-        + "OS_NP=" + predicate_o_s_NP + "");
+                + "SO_NP=" + predicate_s_O_NP + ", "
+                + "OS_VP=" + predicate_o_s_VP + ", "
+                + "OS_NP=" + predicate_o_s_NP + "");
     }
-    
+
 }

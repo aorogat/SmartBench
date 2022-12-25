@@ -169,9 +169,9 @@ public class ChainQuestion {
         askQuery_wrong = generateAskQuery_Wrong();
         
         
-        S0_Seed = EntityProcessing.decide_quotes(S0_Seed, this.S0_type_withPrefix);
-        O_Final = EntityProcessing.decide_quotes(O_Final, this.O_Final_type_withPrefix);
-        somethingElseWithoutPrefix = EntityProcessing.decide_quotes(somethingElseWithoutPrefix,  this.S0_type_withPrefix);
+        S0_Seed = EntityProcessing.decide_quotes_with_type(S0_Seed, this.S0_type_withPrefix);
+        O_Final = EntityProcessing.decide_quotes_with_type(O_Final, this.O_Final_type_withPrefix);
+        somethingElseWithoutPrefix = EntityProcessing.decide_quotes_with_type(somethingElseWithoutPrefix,  this.S0_type_withPrefix);
         
         
 
@@ -278,9 +278,9 @@ public class ChainQuestion {
         askQuery_correct = generateAskQuery_Correct();
         askQuery_wrong = generateAskQuery_Wrong();
         
-        S0_Seed = EntityProcessing.decide_quotes(S0_Seed, this.S0_type_withPrefix);
-        O_Final = EntityProcessing.decide_quotes(O_Final, this.O_Final_type_withPrefix);
-        somethingElseWithoutPrefix = EntityProcessing.decide_quotes(somethingElseWithoutPrefix,  this.S0_type_withPrefix);
+        S0_Seed = EntityProcessing.decide_quotes_with_type(S0_Seed, this.S0_type_withPrefix);
+        O_Final = EntityProcessing.decide_quotes_with_type(O_Final, this.O_Final_type_withPrefix);
+        somethingElseWithoutPrefix = EntityProcessing.decide_quotes_with_type(somethingElseWithoutPrefix,  this.S0_type_withPrefix);
 
         generateAllPossibleChainQuestions();
     }

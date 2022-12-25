@@ -72,6 +72,7 @@ public class Settings {
     public static String popularityORDER = "";  //used in SPARQL Class
     
     public static double mu = 1.2;
+    public static double benchmarkSizeBeforePrune = 4000;
     
     
     //Wikidata

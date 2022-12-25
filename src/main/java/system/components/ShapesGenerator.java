@@ -25,6 +25,7 @@ import online.nl_generation.StarQuestion;
 import online.nl_generation.StarQuestionWithGroupBy;
 import online.nl_generation.StarSetQuestion;
 import online.nl_generation.TreeQuestion;
+import settings.Configuration;
 import settings.Settings;
 
 /**
@@ -50,54 +51,65 @@ public class ShapesGenerator {
 //        generateShapes();
 //    }
     public static void generateShapes() throws Exception {
-        
-        clearGeneratedQuestions = new ArrayList<>();
-        generatedQuestions = new ArrayList<>();
-        
+        System.out.println("\n\n\n\n=============================== SmartBench will generate the questions. ===============================");
 
-        RandomSeedGenerator.generateSeedList();
-        branchs = RandomSeedGenerator.branchs;
-       
-        int currentSize = 0;
-        int oldSize = 0;
-        //Single-Edge Questions
-        System.out.println("=========================== Generated Questions tell now: " + generatedQuestions.size() + " ===========================");
-        benchmark.generatedBenchmark = generatedQuestions;
-        int i = 0;
-        for (Branch branch : branchs) {
-            
+        int benchmarkNumber = 37;
 
-            System.out.println("++++++++++++++++  Seed " + ++i + " of " + branchs.size() + " +++++++ Seed: " + branch.s);
+        for (int j = 480; j < 10000; j = j + 10) {
+
+            clearGeneratedQuestions = new ArrayList<>();
+            generatedQuestions = new ArrayList<>();
+
+            RandomSeedGenerator.generateSeedList(j);
+            branchs = RandomSeedGenerator.branchs;
+
+            int currentSize = 0;
+            int oldSize = 0;
+            long numberOfGeneratedQuestions = 0;
+
+            //Single-Edge Questions
+            System.out.println("=========================== Generated Questions tell now: " + generatedQuestions.size() + " ===========================");
+            benchmark.generatedBenchmark = generatedQuestions;
+            int i = 0;
+            for (Branch branch : branchs) {
+//            if(generatedQuestions.size()>Settings.benchmarkSizeBeforePrune)
+//                break;
+
+                System.out.println("++++++++++++++++  Seed " + ++i + " of " + branchs.size() + " +++++++ Seed: " + branch.s);
 
 //                Single-Edge
-            try {
-                    testSingleEdge(branch);
-                
-            } catch (Exception e) {
-            }
+                if (Configuration.SH_Single_Edge) {
+                    try {
+                        generateSingleEdge(branch);
 
-            try {
+                    } catch (Exception e) {
+                    }
+                }
+                if (Configuration.SH_Star) {
+                    try {
 //                    oldSize = generatedQuestions.size();
 //                    testStar(branch, 1);
 //                    currentSize = generatedQuestions.size();
 //                    if (MainBean.modified) {
 //                        if (currentSize > oldSize) {
 //                            oldSize = generatedQuestions.size();
-                    testStar(branch, 2);
-                    testStarWithGroupBy(branch, 2);
-                    currentSize = generatedQuestions.size();
+                        generateStar(branch, 2);
+                        if (Configuration.SH_Star_Having) {
+                            generateStarWithGroupBy(branch, 2);
+                        }
+                        currentSize = generatedQuestions.size();
 //                        }
 //                    }
-//                if (currentSize > oldSize) {
-//                    oldSize = generatedQuestions.size();
-//                    testStar(branch, 3);
-//                    currentSize = generatedQuestions.size();
-//                }
-//                if (currentSize > oldSize) {
-//                    oldSize = generatedQuestions.size();
-//                    testStar(branch, 4);
-//                    currentSize = generatedQuestions.size();
-//                }
+                        if (currentSize > oldSize) {
+                            oldSize = generatedQuestions.size();
+                            generateStar(branch, 3);
+                            currentSize = generatedQuestions.size();
+                        }
+                        if (currentSize > oldSize) {
+                            oldSize = generatedQuestions.size();
+                            generateStar(branch, 4);
+                            currentSize = generatedQuestions.size();
+                        }
 //                if (currentSize > oldSize) {
 //                    oldSize = generatedQuestions.size();
 //                    testStar(branch, 5);
@@ -108,106 +120,120 @@ public class ShapesGenerator {
 //                    testStar(branch, 6);
 //                    currentSize = generatedQuestions.size();
 //                }
-                
-            } catch (Exception e) {
-            }
 
-            try {
-                    testStarSet(branch, 1); //must be 1 for now
-                
-            } catch (Exception e) {
-            }
+                    } catch (Exception e) {
+                    }
+                }
 
-            try {
-                    oldSize = generatedQuestions.size();
-                    testChain(branch, 2);
-//                currentSize = generatedQuestions.size();
-//                if (currentSize > oldSize) {
-//                    testChain(branch, 3);
-                
-//                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+                if (Configuration.SH_Star_Set) {
+                    try {
+                        generateStarSet(branch, 1); //must be 1 for now
 
-            try {
-                    testCycle(branch);
-                
-            } catch (Exception e) {
-            }
-            try {
-                    testCycleGeneral(branch);
-                
-            } catch (Exception e) {
-            }
+                    } catch (Exception e) {
+                    }
+                }
+                if (Configuration.SH_Chain) {
+                    try {
+                        oldSize = generatedQuestions.size();
+                        generateChain(branch, 2);
+                        currentSize = generatedQuestions.size();
+                        if (currentSize > oldSize) {
+                            generateChain(branch, 3);
 
-            try {
-                    oldSize = generatedQuestions.size();
-                    testTree(branch, 2);
-//                    currentSize = generatedQuestions.size();
-//                    if (currentSize > oldSize) {
-//                        oldSize = generatedQuestions.size();
-//                        testTree(branch, 3);
-//                        currentSize = generatedQuestions.size();
-//                    }
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                if (Configuration.SH_Cycle) {
+                    try {
+                        generateCycle(branch);
+
+                    } catch (Exception e) {
+                    }
+                }
+
+                if (Configuration.SH_Cycle_General) {
+                    try {
+                        generateCycleGeneral(branch);
+
+                    } catch (Exception e) {
+                    }
+                }
+
+                if (Configuration.SH_Tree) {
+                    try {
+                        oldSize = generatedQuestions.size();
+                        generateTree(branch, 2);
+                        currentSize = generatedQuestions.size();
+                        if (currentSize > oldSize) {
+                            oldSize = generatedQuestions.size();
+                            generateTree(branch, 3);
+                            currentSize = generatedQuestions.size();
+                        }
 //                    if (currentSize > oldSize) {
 //                        oldSize = generatedQuestions.size();
 //                        testTree(branch, 4);
 //                        currentSize = generatedQuestions.size();
 //                    }
-                
-            } catch (Exception e) {
-            }
-            try {
-                    oldSize = generatedQuestions.size();
-                    testFlower(branch, 2);
-//                    currentSize = generatedQuestions.size();
-//                    if (currentSize > oldSize) {
-//                        oldSize = generatedQuestions.size();
-//                        testFlower(branch, 3);
-//                        currentSize = generatedQuestions.size();
-//                    }
+
+                    } catch (Exception e) {
+                    }
+                }
+
+                if (Configuration.SH_Flower) {
+                    try {
+                        oldSize = generatedQuestions.size();
+                        generateFlower(branch, 2);
+                        currentSize = generatedQuestions.size();
+                        if (currentSize > oldSize) {
+                            oldSize = generatedQuestions.size();
+                            generateFlower(branch, 3);
+                            currentSize = generatedQuestions.size();
+                        }
 //                    if (currentSize > oldSize) {
 //                        oldSize = generatedQuestions.size();
 //                        testFlower(branch, 4);
 //                        currentSize = generatedQuestions.size();
 //                    }
-                
-            } catch (Exception e) {
-            }
 
-        }
-        System.out.println("");
-        System.out.println("");
-        System.out.println("");
-        System.out.println("");
-        System.out.println("");
-        System.out.println("");
-        
+                    } catch (Exception e) {
+                    }
+                }
+                System.out.println("");
+                System.out.println("");
+                System.out.println("");
+                System.out.println("");
+                System.out.println("");
+                System.out.println("");
 
-        System.out.println("============================== Benchmark =============================");
+                System.out.println("============================== Benchmark =============================");
 //        MainBean.output += "\n" + "================== Benchmark ===============\n";
-        System.out.println("======================================================================");
+                System.out.println("======================================================================");
 
-        benchmark.generatedBenchmark = new ArrayList<>();
-        for (GeneratedQuestion generatedQuestion : generatedQuestions) {
-            generatedQuestion.print();
-            if (generatedQuestion.getAnswerCardinality() > 0) {
-                benchmark.generatedBenchmark.add(generatedQuestion);
+                benchmark.generatedBenchmark = new ArrayList<>();
+                for (GeneratedQuestion generatedQuestion : generatedQuestions) {
+                    generatedQuestion.print();
+                    if (generatedQuestion.getAnswerCardinality() > 0) {
+                        benchmark.generatedBenchmark.add(generatedQuestion);
+                    }
+                }
+
+                ArrayList<GeneratedQuestion> clearGeneratedQuestions = new ArrayList<>();
+                for (GeneratedQuestion generatedQuestion : benchmark.generatedBenchmark) {
+                    if (!(generatedQuestion.getQuestionType().equals(GeneratedQuestion.QT_HOW_MANY)
+                            && generatedQuestion.getAnswers().get(0).equals("0"))) {
+                        clearGeneratedQuestions.add(generatedQuestion);
+                    }
+                }
+
+                benchmark.generatedBenchmark = clearGeneratedQuestions;
+                BenchmarkJsonWritter.save(benchmark, Settings.benchmarkName + benchmarkNumber);
+//            Pruner.prune(Settings.benchmarkName + ".json");
             }
+            benchmarkNumber++;
         }
-
-        ArrayList<GeneratedQuestion> clearGeneratedQuestions = new ArrayList<>();
-        for (GeneratedQuestion generatedQuestion : benchmark.generatedBenchmark) {
-            if (!(generatedQuestion.getQuestionType().equals(GeneratedQuestion.QT_HOW_MANY)
-                    && generatedQuestion.getAnswers().get(0).equals("0"))) {
-                clearGeneratedQuestions.add(generatedQuestion);
-            }
-        }
-
-        benchmark.generatedBenchmark = clearGeneratedQuestions;
-        BenchmarkJsonWritter.save(benchmark, Settings.benchmarkName);
-        Pruner.prune(Settings.benchmarkName + ".json");
     }
 
     public static void addQuestions(ArrayList<GeneratedQuestion> gq) throws Exception {
@@ -221,7 +247,7 @@ public class ShapesGenerator {
         }
 
         for (GeneratedQuestion generatedQuestion : clearGeneratedQuestions) {
-            
+
             generatedQuestion.print();
         }
 
@@ -229,9 +255,9 @@ public class ShapesGenerator {
 
     }
 
-    public static void testSingleEdge(Branch branch) throws Exception {
+    public static void generateSingleEdge(Branch branch) throws Exception {
         System.out.println("============================= Single-Edge Questions ==================================");
-        
+
         //Numbers and dates are only supported in single-edge
         TriplePattern t0 = new TriplePattern(
                 new Variable("s", branch.s, branch.s_type),
@@ -243,21 +269,16 @@ public class ShapesGenerator {
 
         if (!graphString.contains("UNKONWN") && !graphString.contains("null")) {
             System.out.println(graphString);
-//            MainBean.output += "\n" + graphString;
             SingleEdgeQuestion singleEdgeQuestion = new SingleEdgeQuestion(singleEdgeGraph, branch.s_type, branch.o_type);
             ArrayList<GeneratedQuestion> gq = singleEdgeQuestion.getAllPossibleQuestions();
             addQuestions(gq);
-//            generatedQuestions.addAll(gq);
-//            for (GeneratedQuestion generatedQuestion : gq) {
-//                generatedQuestion.print();
-//            }
         } else {
         }
     }
 
-    public static void testChain(Branch branch, int n) throws Exception {
+    public static void generateChain(Branch branch, int n) throws Exception {
         System.out.println("============================= Chain (L=" + n + ") Questions ==================================");
-        
+
         //Chain - Length 2
 //            ArrayList<Graph> chainGraphs = chainGraph.generate(KG_Settings.knowledgeGraph, branch.s, NodeType.SUBJECT_ENTITY, NodeType.URI, n, true); //For one answer questions
         ArrayList<Graph> chainGraphs = new ArrayList<>();
@@ -285,7 +306,7 @@ public class ShapesGenerator {
             }
             int succededGraphs = 0;
             for (Graph chainGraph1 : chainGraphs) {
-                
+
                 chainGraph1 = (ChainGraph) chainGraph1;
                 String graphString = chainGraph1.toString();
                 if (!graphString.contains("UNKONWN") && !graphString.contains("null")) {
@@ -312,9 +333,9 @@ public class ShapesGenerator {
         }
     }
 
-    public static void testStar(Branch branch, int n) throws Exception {
+    public static void generateStar(Branch branch, int n) throws Exception {
         System.out.println("============================= Star (n=" + n + " + 1 type branch) Questions for (" + branch.s + ")==================================");
-        
+
         StarGraph starGraph = new StarGraph();
 //        int[] ends = new int[]{NodeType.LITERAL};
 //        ArrayList<StarGraph> starGraphs = starGraph.generate_SUBJECT_ENTITY(Settings.knowledgeGraph, branch.s, ends, n, 1, 10);//try 10 graphs because probability of failure increase
@@ -333,11 +354,12 @@ public class ShapesGenerator {
 //        starGraphs.addAll(starGraph.generate_SUBJECT_ENTITY(Settings.knowledgeGraph, branch.s, ends, n, 1, 1));//try 10 graphs because probability of failure increase
         int succededGraphs = 0;
         for (StarGraph currentStarGraph : starGraphs) {
-            
+
             String graphString = currentStarGraph.toString();
             if (!graphString.contains("UNKONWN") && !graphString.contains("null")) { //if it contains null, this means one of the objects not belonging to contexts in the DB: i.e, its type not start with dbo:
-                if(graphString.contains("recorded in"))
+                if (graphString.contains("recorded in")) {
                     continue;
+                }
                 System.out.println(currentStarGraph.getSeedType());
                 System.out.println(graphString);
 //                MainBean.output += "\n" + graphString;
@@ -363,9 +385,9 @@ public class ShapesGenerator {
 
     }
 
-    public static void testTree(Branch branch, int n) {
+    public static void generateTree(Branch branch, int n) {
         System.out.println("============================= Tree (n=" + n + " + 1 type branch) Questions for (" + branch.s + ")==================================");
-        
+
         StarGraph starGraph = new StarGraph();
         int[] ends = new int[]{NodeType.URI, NodeType.URI, NodeType.URI};
         ArrayList<StarGraph> rootStarGraphs = starGraph.generate_SUBJECT_ENTITY(Settings.knowledgeGraph, branch.s, ends, n, 1, 1);//try 10 graphs because probability of failure increase
@@ -377,7 +399,7 @@ public class ShapesGenerator {
 //        rootStarGraphs.addAll(starGraph.generate_SUBJECT_ENTITY(Settings.knowledgeGraph, branch.s, ends, n, 1, 1));//try 10 graphs because probability of failure increase
         int succededGraphs = 0;
         for (StarGraph currentStarGraph : rootStarGraphs) {
-            
+
             try {
                 ArrayList<StarGraph> tree_starGraphs = new ArrayList<>();
                 tree_starGraphs.add(currentStarGraph);
@@ -423,15 +445,15 @@ public class ShapesGenerator {
 
     }
 
-    public static void testCycle(Branch branch) throws Exception {
+    public static void generateCycle(Branch branch) throws Exception {
         System.out.println("============================= Cycle Questions ==================================");
-        
+
         //Cycle 
         CycleGraph cycleGraph = new CycleGraph();
         ArrayList<CycleGraph> graphs = cycleGraph.generate_SUBJECT_ENTITY(Settings.knowledgeGraph, branch.s, NodeType.SUBJECT_ENTITY, 10); //For one or many answers questions
         int succededGraphs = 0;
         for (CycleGraph currecntCycleGraph : graphs) {
-            
+
             String graphString = currecntCycleGraph.toString();
             if (!graphString.contains("UNKONWN") && !graphString.contains("null")) {
                 System.out.println(graphString);
@@ -460,15 +482,15 @@ public class ShapesGenerator {
         }
     }
 
-    public static void testCycleGeneral(Branch branch) throws Exception {
+    public static void generateCycleGeneral(Branch branch) throws Exception {
         System.out.println("============================= Cycle General Questions ==================================");
-        
+
         //Cycle 
         CycleGraph cycleGraph = new CycleGraph();
         ArrayList<CycleGraph> graphs = cycleGraph.generate_SUBJECT_ENTITY(Settings.knowledgeGraph, branch.s, NodeType.SUBJECT_ENTITY, 10); //For one or many answers questions
         int succededGraphs = 0;
         for (CycleGraph currecntCycleGraph : graphs) {
-            
+
             String graphString = currecntCycleGraph.toString();
             if (!graphString.contains("UNKONWN") && !graphString.contains("null")) {
                 System.out.println(graphString);
@@ -497,9 +519,9 @@ public class ShapesGenerator {
         }
     }
 
-    public static void testFlower(Branch branch, int n) {
+    public static void generateFlower(Branch branch, int n) {
         System.out.println("============================= Flower (n=" + n + " + 1 type branch) Questions for (" + branch.s + ")==================================");
-        
+
         StarGraph starGraph = new StarGraph();
         int[] ends = new int[]{NodeType.URI, NodeType.URI, NodeType.URI};
         ArrayList<StarGraph> rootStarGraphs = starGraph.generate_SUBJECT_ENTITY(Settings.knowledgeGraph, branch.s, ends, n, 1, 1);//try 10 graphs because probability of failure increase
@@ -514,7 +536,7 @@ public class ShapesGenerator {
 //        rootStarGraphs.addAll(starGraph.generate_SUBJECT_ENTITY(Settings.knowledgeGraph, branch.s, ends, n, 1, 1));//try 10 graphs because probability of failure increase
         int succededGraphs = 0;
         for (StarGraph currentStarGraph : rootStarGraphs) {
-            
+
             try {
                 String starPredicates = "";
                 for (TriplePattern tp : currentStarGraph.getStar()) {
@@ -527,7 +549,7 @@ public class ShapesGenerator {
                 ArrayList<CycleGraph> graphs = cycleGraph.generate_SUBJECT_ENTITY(Settings.knowledgeGraph, branch.s, NodeType.SUBJECT_ENTITY, 10); //For one or many answers questions
 
                 for (CycleGraph currecntCycleGraph : graphs) {
-                    
+
                     FlowerGraph flowerGraph = new FlowerGraph(currentStarGraph, currecntCycleGraph);
                     String graphString = flowerGraph.toString();
                     if (!graphString.contains("UNKONWN") && !graphString.contains("null")) {
@@ -558,9 +580,9 @@ public class ShapesGenerator {
 
     }
 
-    public static void testStarSet(Branch branch, int n) throws Exception {
+    public static void generateStarSet(Branch branch, int n) throws Exception {
         System.out.println("============================= Star Set (n=" + n + " + 1 type branch) Questions for (" + branch.s + ")==================================");
-        
+
         StarGraph starGraph = new StarGraph();
         int[] ends = new int[]{NodeType.NUMBER};
         ArrayList<StarGraph> starGraphs = starGraph.generate_SUBJECT_ENTITY(Settings.knowledgeGraph, branch.s, ends, n, 1, 2);//try 10 graphs because probability of failure increase
@@ -569,7 +591,7 @@ public class ShapesGenerator {
 
         int succededGraphs = 0;
         for (StarGraph currentStarGraph : starGraphs) {
-            
+
             String graphString = currentStarGraph.toString();
             if (!graphString.contains("UNKONWN") && !graphString.contains("null")) { //if it contains null, this means one of the objects not belonging to contexts in the DB: i.e, its type not start with dbo:
                 System.out.println(currentStarGraph.getSeedType());
@@ -594,16 +616,16 @@ public class ShapesGenerator {
         }
     }
 
-    public static void testStarWithGroupBy(Branch branch, int n) throws Exception {
+    public static void generateStarWithGroupBy(Branch branch, int n) throws Exception {
         System.out.println("============================= Star With Group By (n=" + n + " + 1 type branch) Questions for (" + branch.s + ")==================================");
-        
+
         StarGraph starGraph = new StarGraph();
         int[] ends = new int[]{NodeType.URI, NodeType.URI, NodeType.URI};
         ArrayList<StarGraph> starGraphs = starGraph.generate_SUBJECT_ENTITY_All_predicates_are_the_same(Settings.knowledgeGraph, branch.s, ends, n, 1, 10);//try 10 graphs because probability of failure increase
 
         int succededGraphs = 0;
         for (StarGraph currentStarGraph : starGraphs) {
-            
+
             String graphString = currentStarGraph.toString();
             if (!graphString.contains("UNKONWN") && !graphString.contains("null")) { //if it contains null, this means one of the objects not belonging to contexts in the DB: i.e, its type not start with dbo:
                 System.out.println(currentStarGraph.getSeedType());

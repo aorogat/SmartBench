@@ -11,7 +11,7 @@ public class DBpedia_Settings extends Settings {
 
     public static void intializeSetttings() {
         Query_SLICING_SIZE = 450;
-        benchmarkName = "Smart_450_COMPARE";
+        benchmarkName = "Smart_dbpedia_";
 
         //Database
         databaseName = "dbpedia";

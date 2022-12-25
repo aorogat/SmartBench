@@ -80,7 +80,15 @@ public class GeneratedQuestion {
         this.noOfTriples = noOfTriples;
         this.QuestionType = QuestionType;
         this.ShapeType = ShapeType;
-        this.questionStringTagged = questionStringTagged.replace("(", "").replace(")", "").replace("  ", " ").replace(" , ", ", ").replace(" ,", ", ").replace(" s ", " ");
+        this.questionStringTagged = questionStringTagged.replace("(", "").replace(")", "").replace("  ", " ").replace(" , ", ", ")
+                .replace(" ,", ", ").replace(" s ", " ")
+//                .replace("<s>", "").replace("</s>", "")
+//                .replace("<o>", "").replace("</o>", "")
+//                .replace("<qt>", "").replace("</qt>", "")
+//                .replace("<t>", "").replace("</t>", "")
+//                .replace("<cc>", "").replace("</cc>", "")
+//                .replace("<op>", "").replace("</op>", "")
+                ;
 
         try {
             ArrayList<VariableSet> answersVar = Settings.knowledgeGraph.runQuery(query);
