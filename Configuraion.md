@@ -1,6 +1,6 @@
 ## Configuration Documentation for Maestro System
 
-The Maestro system has a number of components that can be configured to run based on the needs of the user. These configurations are specified in a property file. Below is a description of the various properties that can be set in the property file:
+The Maestro system has a number of components that can be configured to run based on the needs of the user. These configurations are specified in a property file. Below is a description of the various properties that can be set in the [property file](https://github.com/aorogat/Maestro/blob/main/src/main/resources/conf.properties):
 
 ### kg_name
 
