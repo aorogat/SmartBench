@@ -161,28 +161,20 @@ public class GeneratedQuestion {
         }
 //        System.out.println("=================================== Question Start ==========================================");
         
-        System.out.println("Seed with prefix: " + seed_withPrefix);
-        System.out.println("Seed type with prefix: " + seedType_withPrefix);
-        System.out.println(graphString);
-        
-        System.out.print("\033[1;35m");//MAGENTA Color
-        System.out.println(questionString);
-        
-        System.out.println(query);
-        
-        System.out.print("\033[1;35m");//MAGENTA Color
-        System.out.println(questionStringTagged);
-//        MainBean.output += "\n" + questionStringTagged;
-        System.out.println("Answer Cardinality: " + answerCardinality);
-        System.out.println("Answer: " + answers.toString());
-        System.out.println("#Tokens: " + noOfTokens);
-        System.out.println("#Triple Patterns: " + noOfTriples);
-        System.out.println("#Query Keywords: " + keywords);
-        System.out.println("#Question Complexity: " + questionComplexity);
-        System.out.println("QT: " + QuestionType);
-        System.out.println("Shape: " + ShapeType);
-//        System.out.println("=================================== Question End ============================================");
-//        System.out.println("");
+        System.out.println("\t \033[30m Seed with prefix: \033[1;35m " + seed_withPrefix);
+        System.out.println("\t \033[30m Seed type with prefix: \033[1;35m " + seedType_withPrefix);
+        System.out.println("\t \033[30m Question Graph: \033[1;35m " + graphString);
+        System.out.println("\t \033[30m Questing String: \033[1;35m " + questionString);
+        System.out.println("\t \033[30m Questing Tagged String: \033[1;35m " + questionStringTagged);
+        System.out.println("\t \033[30m Question Query: \033[1;35m " + query.replace("\n", " "));
+        System.out.println("\t \033[30m Answer Cardinality: \033[1;35m " + answerCardinality);
+        System.out.println("\t \033[30m Answer: \033[1;35m " + answers.toString());
+        System.out.println("\t \033[30m #Tokens: \033[1;35m " + noOfTokens);
+        System.out.println("\t \033[30m #Triple Patterns: \033[1;35m " + noOfTriples);
+        System.out.println("\t \033[30m #Query Keywords: \033[1;35m " + keywords);
+        System.out.println("\t \033[30m #Question Complexity: \033[1;35m " + questionComplexity);
+        System.out.println("\t \033[30m QT: \033[1;35m " + QuestionType);
+        System.out.println("\t \033[30m Shape: \033[1;35m " + ShapeType);
         System.out.println("");
     }
 

@@ -4,8 +4,6 @@ import database.Database;
 import database.DatabaseIntializer;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Properties;
 import java.util.Scanner;
 import java.util.logging.Level;
@@ -16,7 +14,6 @@ import settings.DBtune_Settings;
 import settings.GEO_Settings;
 import settings.MAKG_Settings;
 import settings.Nobel_Settings;
-import settings.Settings;
 
 /**
  *

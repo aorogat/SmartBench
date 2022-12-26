@@ -46,7 +46,7 @@ public abstract class KnowledgeGraph {
     protected String queryString;
     protected String endpoint;
     protected String[] unwantedProperties;
-    
+
     public static ArrayList<VariableSet> predicatesVariableSet_entity = new ArrayList<>();
     public static ArrayList<VariableSet> predicatesVariableSet_number = new ArrayList<>();
     public static ArrayList<VariableSet> predicatesVariableSet_date = new ArrayList<>();
@@ -57,8 +57,9 @@ public abstract class KnowledgeGraph {
     protected ArrayList<Predicate> predicateList = new ArrayList<>();
 
     public String getNodeLabel(Explorer explorer, String node) {
-        if(!node.contains("http"))
+        if (!node.contains("http")) {
             return node;
+        }
 //        if (Settings.name.toLowerCase().equals("makg")) {
 //            return getNodeFOAFLabel(explorer, node);
 //        }
@@ -108,7 +109,6 @@ public abstract class KnowledgeGraph {
 //            return null;
 //        }
 //    }
-
     public String getTopEntity(String T, String P, boolean top) {
 
         String order = "";
@@ -143,26 +143,29 @@ public abstract class KnowledgeGraph {
         }
     }
 
+ 
+
     //Return an entitiy of the same type
     public String getSimilarEntity(Explorer explorer, String entity, String entityType) {
         String query = "";
         //get labels
         try {
             if (entityType.equals(Settings.Number)) {
-                return "" + (Double.parseDouble(entity) + Double.parseDouble(entity)/2);
+                return "" + (Double.parseDouble(entity) + Double.parseDouble(entity) / 2);
             } else if (entityType.equals(Settings.Date)) {
-                String y = entity.substring(3,4);
-                int yy = Integer.parseInt(y)-5;
-                if(yy<1){
-                    if(Integer.parseInt(y)!=1)
-                        yy=1;
-                    else
-                        yy=2;
+                String y = entity.substring(3, 4);
+                int yy = Integer.parseInt(y) - 5;
+                if (yy < 1) {
+                    if (Integer.parseInt(y) != 1) {
+                        yy = 1;
+                    } else {
+                        yy = 2;
+                    }
                 }
                 entity = entity.substring(0, 3) + yy + entity.substring(4);
                 return entity;
             } else if (entityType.equals(Settings.Literal)) {
-                return entity + entity.substring(0,entity.length()/2);
+                return entity + entity.substring(0, entity.length() / 2);
             } else {
                 query = "SELECT ?similar WHERE { "
                         + "?similar rdf:type <" + entityType + ">. "
@@ -263,7 +266,6 @@ public abstract class KnowledgeGraph {
 //                    + "    <" + objectURI + ">      rdf:type              ?o_type.\n"
 //                    + "    }.\n";
 //        }
-
         if (Settings.requiredTypePrefix != null && !"".equals(Settings.requiredTypePrefix)) {
             query += "  FILTER strstarts(str(?s_type ), str(" + Settings.requiredTypePrefix + ")).\n"
                     + "  FILTER strstarts(str(?o_type ), str(" + Settings.requiredTypePrefix + ")).\n";
@@ -316,10 +318,12 @@ public abstract class KnowledgeGraph {
     }
 
     public boolean isASubtypeOf(Explorer explorer, String child, String parent) {
-        if(child.toLowerCase().equals(parent.toLowerCase()))
+        if (child.toLowerCase().equals(parent.toLowerCase())) {
             return true;
-        if(child.equals(Settings.Number) || child.equals(Settings.Date) || child.equals(Settings.Literal))
+        }
+        if (child.equals(Settings.Number) || child.equals(Settings.Date) || child.equals(Settings.Literal)) {
             return false;
+        }
         String query = "";
         //A better solution is to use property path expressions in SPARQL 1.1. This would be rewritten as
         if (child.startsWith("http")) {
@@ -394,7 +398,7 @@ public abstract class KnowledgeGraph {
     }
 
     public ArrayList<VariableSet> runQuery(String queryString) {
-        if (!queryString.toLowerCase().contains("limit ") && !queryString.toLowerCase().contains("ask ")) { 
+        if (!queryString.toLowerCase().contains("limit ") && !queryString.toLowerCase().contains("ask ")) {
             queryString = queryString + "\n LIMIT " + (Settings.maxAnswerCardinalityAllowed + 10);
         }
         ArrayList<VariableSet> queryResult = new ArrayList<>();
@@ -551,11 +555,6 @@ public abstract class KnowledgeGraph {
         return unwantedPropertiesString;
     }
 
-    
-    
-    
-    
-    
     public ArrayList<VariableSet> getPredicateList_EntityObjects(int from, int length) {
         ArrayList<VariableSet> predicatesVariableSet = new ArrayList<>();
 
@@ -695,7 +694,6 @@ public abstract class KnowledgeGraph {
 //            return -1;
 //        }
 //    }
-
     public ArrayList<PredicateTripleExample> getOneTripleExample(String predicate, String sType, String oType, String lable, int noOfExamples) {
         String query = "";
         ArrayList<PredicateTripleExample> predicateTriples = predicateTriples = new ArrayList<>();
@@ -705,18 +703,18 @@ public abstract class KnowledgeGraph {
                         + "?s <" + predicate.trim() + "> ?o .\n"
                         + "?s rdf:type <" + sType + ">. \n"
                         + "\n"
-                                                + "    FILTER NOT EXISTS {\n"
-                                                + "      ?s rdf:type ?type1 .\n"
-                                                + "      ?type1 rdfs:subClassOf <" + sType + ">.\n"
-                                                + "      FILTER NOT EXISTS {\n"
-                                                + "         ?type1 owl:equivalentClass <" + sType + ">.\n"
-                                                + "      }\n"
-                                                + "    }.\n"
-                                                + "    FILTER EXISTS {\n"
-                                                + "      <" + sType + "> rdfs:subClassOf ?superType1 .\n"
-                                                + "      ?s rdf:type ?superType1 .\n"
-                                                + "    }.\n"
-                                                + "\n"
+                        + "    FILTER NOT EXISTS {\n"
+                        + "      ?s rdf:type ?type1 .\n"
+                        + "      ?type1 rdfs:subClassOf <" + sType + ">.\n"
+                        + "      FILTER NOT EXISTS {\n"
+                        + "         ?type1 owl:equivalentClass <" + sType + ">.\n"
+                        + "      }\n"
+                        + "    }.\n"
+                        + "    FILTER EXISTS {\n"
+                        + "      <" + sType + "> rdfs:subClassOf ?superType1 .\n"
+                        + "      ?s rdf:type ?superType1 .\n"
+                        + "    }.\n"
+                        + "\n"
                         + "\n";
                 //Get only dbpedia types
                 if (Settings.requiredTypePrefix != null && !"".equals(Settings.requiredTypePrefix)) {
@@ -732,17 +730,17 @@ public abstract class KnowledgeGraph {
                         + "?s <" + predicate.trim() + "> ?o .\n"
                         + "?s rdf:type <" + sType + ">. \n"
                         + "\n"
-                                                + "    FILTER NOT EXISTS {\n"
-                                                + "      ?s rdf:type ?type1 .\n"
-                                                + "      ?type1 rdfs:subClassOf <" + sType + ">.\n"
-                                                + "      FILTER NOT EXISTS {\n"
-                                                + "         ?type1 owl:equivalentClass <" + sType + ">.\n"
-                                                + "      }\n"
-                                                + "    }.\n"
-                                                + "    FILTER EXISTS {\n"
-                                                + "      <" + sType + "> rdfs:subClassOf ?superType1 .\n"
-                                                + "      ?s rdf:type ?superType1 .\n"
-                                                + "    }.\n"
+                        + "    FILTER NOT EXISTS {\n"
+                        + "      ?s rdf:type ?type1 .\n"
+                        + "      ?type1 rdfs:subClassOf <" + sType + ">.\n"
+                        + "      FILTER NOT EXISTS {\n"
+                        + "         ?type1 owl:equivalentClass <" + sType + ">.\n"
+                        + "      }\n"
+                        + "    }.\n"
+                        + "    FILTER EXISTS {\n"
+                        + "      <" + sType + "> rdfs:subClassOf ?superType1 .\n"
+                        + "      ?s rdf:type ?superType1 .\n"
+                        + "    }.\n"
                         + "\n"
                         + "\n";
                 if (Settings.requiredTypePrefix != null && !"".equals(Settings.requiredTypePrefix)) {
@@ -758,35 +756,34 @@ public abstract class KnowledgeGraph {
                         + "?s <" + predicate.trim() + "> ?o .\n"
                         + "?s rdf:type <" + sType + ">. \n"
                         + "?o rdf:type <" + oType + ">. \n" //                        + "\n"
-                                                + "\n"
-                                                + "    FILTER NOT EXISTS {\n"
-                                                + "      ?s rdf:type ?type1 .\n"
-                                                + "      ?type1 rdfs:subClassOf <" + sType + ">.\n"
-                                                + "      FILTER NOT EXISTS {\n"
-                                                + "         ?type1 owl:equivalentClass <" + sType + ">.\n"
-                                                + "      }\n"
-                                                + "    }.\n"
-                                                + "    FILTER EXISTS {\n"
-                                                + "      <" + sType + "> rdfs:subClassOf ?superType1 .\n"
-                                                + "      ?s rdf:type ?superType1 .\n"
-                                                + "    }.\n"
-                                                + "\n"
-                                                + "\n"
-                                                + "\n"
-                                                + "    FILTER NOT EXISTS {\n"
-                                                + "      ?o rdf:type ?type2 .\n"
-                                                + "      ?type2 rdfs:subClassOf <" + oType + ">.\n"
-                                                + "      FILTER NOT EXISTS {\n"
-                                                + "         ?type2 owl:equivalentClass <" + oType + ">.\n"
-                                                + "      }\n"
-                                                + "    }.\n"
-                                                + "    FILTER EXISTS {\n"
-                                                + "      <" + oType + "> rdfs:subClassOf ?superType2 .\n"
-                                                + "      ?o rdf:type ?superType2 .\n"
-                                                + "    }.\n"
-                                                + "\n"
-                                                + "\n"
-                        ;
+                        + "\n"
+                        + "    FILTER NOT EXISTS {\n"
+                        + "      ?s rdf:type ?type1 .\n"
+                        + "      ?type1 rdfs:subClassOf <" + sType + ">.\n"
+                        + "      FILTER NOT EXISTS {\n"
+                        + "         ?type1 owl:equivalentClass <" + sType + ">.\n"
+                        + "      }\n"
+                        + "    }.\n"
+                        + "    FILTER EXISTS {\n"
+                        + "      <" + sType + "> rdfs:subClassOf ?superType1 .\n"
+                        + "      ?s rdf:type ?superType1 .\n"
+                        + "    }.\n"
+                        + "\n"
+                        + "\n"
+                        + "\n"
+                        + "    FILTER NOT EXISTS {\n"
+                        + "      ?o rdf:type ?type2 .\n"
+                        + "      ?type2 rdfs:subClassOf <" + oType + ">.\n"
+                        + "      FILTER NOT EXISTS {\n"
+                        + "         ?type2 owl:equivalentClass <" + oType + ">.\n"
+                        + "      }\n"
+                        + "    }.\n"
+                        + "    FILTER EXISTS {\n"
+                        + "      <" + oType + "> rdfs:subClassOf ?superType2 .\n"
+                        + "      ?o rdf:type ?superType2 .\n"
+                        + "    }.\n"
+                        + "\n"
+                        + "\n";
                 if (Settings.requiredTypePrefix != null && !"".equals(Settings.requiredTypePrefix)) {
                     //Get only dbpedia types
                     query += "  FILTER strstarts(str(<" + sType + ">  ), str(" + Settings.requiredTypePrefix + ")).\n"
@@ -828,8 +825,7 @@ public abstract class KnowledgeGraph {
                 + "WHERE{\n"
                 + "?s      " + predicateURI + "      ?o.\n"
                 + "?s      rdf:type              ?s_type.\n"
-                + "   ?o      rdf:type              ?o_type.\n"
-                ;
+                + "   ?o      rdf:type              ?o_type.\n";
         if (Settings.requiredTypePrefix != null && !"".equals(Settings.requiredTypePrefix)) {
             query += "  FILTER (strstarts(str(?s_type ), str(" + Settings.requiredTypePrefix + "))).\n"
                     + "  FILTER (strstarts(str(?o_type ), str(" + Settings.requiredTypePrefix + "))).\n";
@@ -871,16 +867,16 @@ public abstract class KnowledgeGraph {
                 + "WHERE{\n"
                 + "?s      " + predicateURI + "      ?o.\n"
                 + "?s      rdf:type              ?s_type.\n"
-                                + "    FILTER NOT EXISTS {\n"
-                                + "      ?s rdf:type ?type1 .\n"
-                                + "      ?type1 rdfs:subClassOf ?s_type.\n"
-                                + "      FILTER NOT EXISTS {\n"
-                                + "         ?type1 owl:equivalentClass ?s_type.\n"
-                                + "      }\n"
-                                + "    FILTER EXISTS {\n"
-                                + "      ?s_type rdfs:subClassOf ?superType1 .\n"
-                                + "      ?s rdf:type ?superType1 .\n"
-                                + "    }.\n"
+                + "    FILTER NOT EXISTS {\n"
+                + "      ?s rdf:type ?type1 .\n"
+                + "      ?type1 rdfs:subClassOf ?s_type.\n"
+                + "      FILTER NOT EXISTS {\n"
+                + "         ?type1 owl:equivalentClass ?s_type.\n"
+                + "      }\n"
+                + "    FILTER EXISTS {\n"
+                + "      ?s_type rdfs:subClassOf ?superType1 .\n"
+                + "      ?s rdf:type ?superType1 .\n"
+                + "    }.\n"
                 + "\n";
 
         if (Settings.requiredTypePrefix != null && !"".equals(Settings.requiredTypePrefix)) {
@@ -923,17 +919,16 @@ public abstract class KnowledgeGraph {
                 + "WHERE{\n"
                 + "?s      " + predicateURI + "      ?o.\n"
                 + "?s      rdf:type              ?s_type.\n" //                + "    FILTER NOT EXISTS {\n"
-                                + "      ?s rdf:type ?type1 .\n"
-                                + "      ?type1 rdfs:subClassOf ?s_type.\n"
-                                + "      FILTER NOT EXISTS {\n"
-                                + "         ?type1 owl:equivalentClass ?s_type.\n"
-                                + "      }\n"
-                                + "    FILTER EXISTS {\n"
-                                + "      ?s_type rdfs:subClassOf ?superType1 .\n"
-                                + "      ?s rdf:type ?superType1 .\n"
-                                + "    }.\n"
-                                + "\n"
-                ;
+                + "      ?s rdf:type ?type1 .\n"
+                + "      ?type1 rdfs:subClassOf ?s_type.\n"
+                + "      FILTER NOT EXISTS {\n"
+                + "         ?type1 owl:equivalentClass ?s_type.\n"
+                + "      }\n"
+                + "    FILTER EXISTS {\n"
+                + "      ?s_type rdfs:subClassOf ?superType1 .\n"
+                + "      ?s rdf:type ?superType1 .\n"
+                + "    }.\n"
+                + "\n";
         if (Settings.requiredTypePrefix != null && !"".equals(Settings.requiredTypePrefix)) {
             query += "  FILTER (strstarts(str(?s_type ), str(" + Settings.requiredTypePrefix + "))).\n";
         }
@@ -974,17 +969,16 @@ public abstract class KnowledgeGraph {
                 + "WHERE{\n"
                 + "?s      " + predicateURI + "      ?o.\n"
                 + "?s      rdf:type              ?s_type.\n" //                + "    FILTER NOT EXISTS {\n"
-                                + "      ?s rdf:type ?type1 .\n"
-                                + "      ?type1 rdfs:subClassOf ?s_type.\n"
-                                + "      FILTER NOT EXISTS {\n"
-                                + "         ?type1 owl:equivalentClass ?s_type.\n"
-                                + "      }\n"
-                                + "    FILTER EXISTS {\n"
-                                + "      ?s_type rdfs:subClassOf ?superType1 .\n"
-                                + "      ?s rdf:type ?superType1 .\n"
-                                + "    }.\n"
-                                + "\n"
-                ;
+                + "      ?s rdf:type ?type1 .\n"
+                + "      ?type1 rdfs:subClassOf ?s_type.\n"
+                + "      FILTER NOT EXISTS {\n"
+                + "         ?type1 owl:equivalentClass ?s_type.\n"
+                + "      }\n"
+                + "    FILTER EXISTS {\n"
+                + "      ?s_type rdfs:subClassOf ?superType1 .\n"
+                + "      ?s rdf:type ?superType1 .\n"
+                + "    }.\n"
+                + "\n";
         if (Settings.requiredTypePrefix != null && !"".equals(Settings.requiredTypePrefix)) {
             query += "  FILTER (strstarts(str(?s_type ), str(" + Settings.requiredTypePrefix + "))).\n";
         }
@@ -1030,13 +1024,4 @@ public abstract class KnowledgeGraph {
         return newContexts;
     }
 
-    
-    
-    
-    
-    
-    
-    
-    
-    
 }

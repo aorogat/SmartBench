@@ -5,6 +5,7 @@ import offLine.kg_explorer.ontology.KGOntology;
 import online.kg_extractor.model.subgraph.SingleEdgeGraph;
 import offLine.scrapping.model.PredicateNLRepresentation;
 import offLine.scrapping.model.PredicatesLexicon;
+import online.nl_generation.query.QueryGenerator;
 import settings.Settings;
 
 public class SingleEdgeQuestion {
@@ -46,6 +47,37 @@ public class SingleEdgeQuestion {
         generate_questions_O_is_Seed(singleEdgeGraph, S_type_withPrefix, O_type_withPrefix);
     }
 
+    private void fillPredicateRepresentations(boolean forward, String P_withPrefix, String S_type_withPrefix, String O_type_withPrefix) {
+        PredicateNLRepresentation predicateNL = PredicatesLexicon.getPredicateNL(P_withPrefix, S_type_withPrefix, O_type_withPrefix);
+        if (forward) {
+            s_o_VP = predicateNL.getPredicate_s_O_VP();
+            s_o_NP = predicateNL.getPredicate_s_O_NP();
+            o_s_VP = predicateNL.getPredicate_o_s_VP();
+            o_s_NP = predicateNL.getPredicate_o_s_NP();
+        } else {
+            o_s_VP = predicateNL.getPredicate_s_O_VP();
+            o_s_NP = predicateNL.getPredicate_s_O_NP();
+            s_o_VP = predicateNL.getPredicate_o_s_VP();
+            s_o_NP = predicateNL.getPredicate_o_s_NP();
+        }
+        fillNounPhraseRepresentations(s_o_NP, o_s_NP);
+    }
+
+    private void fillNounPhraseRepresentations(String s_o_NP, String o_s_NP) {
+        s_o_NP_without_verb = null;
+        o_s_NP_without_verb = null;
+        s_o_NP_only = null;
+        o_s_NP_only = null;
+        if (s_o_NP != null) {
+            s_o_NP_without_verb = PhraseRepresentationProcessing.NP_without_verb(s_o_NP);
+            s_o_NP_only = PhraseRepresentationProcessing.NP_only(s_o_NP);
+        }
+        if (o_s_NP != null) {
+            o_s_NP_without_verb = PhraseRepresentationProcessing.NP_without_verb(o_s_NP);
+            o_s_NP_only = PhraseRepresentationProcessing.NP_only(o_s_NP);
+        }
+    }
+
     void generate_questions_S_is_Seed(SingleEdgeGraph singleEdgeGraph, String S_type_withPrefix, String O_type_withPrefix) throws Exception {
         this.singleEdgeGraph = singleEdgeGraph;
         this.S_type_withPrefix = S_type_withPrefix;
@@ -67,21 +99,7 @@ public class SingleEdgeQuestion {
         somethingElse = Settings.knowledgeGraph.getSimilarEntity(Settings.explorer, S_withPrefix, this.S_type_withPrefix);
         somethingElseWithoutPrefix = Settings.explorer.removePrefix(somethingElse);
 
-        PredicateNLRepresentation predicateNL = PredicatesLexicon.getPredicateNL(P_withPrefix, S_type_withPrefix, O_type_withPrefix);
-        s_o_VP = predicateNL.getPredicate_s_O_VP();
-        s_o_NP = predicateNL.getPredicate_s_O_NP();
-        o_s_VP = predicateNL.getPredicate_o_s_VP();
-        o_s_NP = predicateNL.getPredicate_o_s_NP();
-
-        if (s_o_NP != null) {
-            s_o_NP_without_verb = PhraseRepresentationProcessing.NP_without_verb(s_o_NP);
-            s_o_NP_only = PhraseRepresentationProcessing.NP_only(s_o_NP);
-        }
-
-        if (o_s_NP != null) {
-            o_s_NP_without_verb = PhraseRepresentationProcessing.NP_without_verb(o_s_NP);
-            o_s_NP_only = PhraseRepresentationProcessing.NP_only(o_s_NP);
-        }
+        fillPredicateRepresentations(true, P_withPrefix, S_type_withPrefix, O_type_withPrefix);
 
         selectQuery = generateSELECTQuery();
         countQuery = generateCountQuery();
@@ -119,27 +137,7 @@ public class SingleEdgeQuestion {
         somethingElse = Settings.knowledgeGraph.getSimilarEntity(Settings.explorer, S_withPrefix, this.S_type_withPrefix);
         somethingElseWithoutPrefix = Settings.explorer.removePrefix(somethingElse);
 
-        PredicateNLRepresentation predicateNL = PredicatesLexicon.getPredicateNL(P_withPrefix, S_type_withPrefix, O_type_withPrefix); //except this one
-
-        o_s_VP = predicateNL.getPredicate_s_O_VP();
-        o_s_NP = predicateNL.getPredicate_s_O_NP();
-        s_o_VP = predicateNL.getPredicate_o_s_VP();
-        s_o_NP = predicateNL.getPredicate_o_s_NP();
-
-        s_o_NP_without_verb = null;
-        o_s_NP_without_verb = null;
-        s_o_NP_only = null;
-        o_s_NP_only = null;
-
-        if (s_o_NP != null) {
-            s_o_NP_without_verb = PhraseRepresentationProcessing.NP_without_verb(s_o_NP);
-            s_o_NP_only = PhraseRepresentationProcessing.NP_only(s_o_NP);
-        }
-
-        if (o_s_NP != null) {
-            o_s_NP_without_verb = PhraseRepresentationProcessing.NP_without_verb(o_s_NP);
-            o_s_NP_only = PhraseRepresentationProcessing.NP_only(o_s_NP);
-        }
+        fillPredicateRepresentations(false, P_withPrefix, S_type_withPrefix, O_type_withPrefix);
 
         selectQuery = generateSELECTQuery();
         countQuery = generateCountQuery();
@@ -190,23 +188,14 @@ public class SingleEdgeQuestion {
      * in the triple pattern
      */
     public String generateSELECTQuery() {
-        String triple = "";
-        if (S_type_withPrefix.equals(Settings.Number) || S_type_withPrefix.equals(Settings.Date) || S_type_withPrefix.equals(Settings.Literal)) {
-            triple = singleEdgeGraph.getTriplePattern().toQueryTriplePattern()
-                    .replace("\"" + S_withPrefix + "\"^^xsd:dateTime ", "?Seed")
-                    .replace("\"" + S_withPrefix + "\"", "?Seed")
-                    .replace(" " + S_withPrefix + " ", "?Seed")
-                    + " .";
-        } else {
-            triple = singleEdgeGraph.getTriplePattern().toQueryTriplePattern().replace("<" + S_withPrefix + ">", "?Seed") + " .";
-        }
-        return "SELECT DISTINCT ?Seed WHERE{\n\t" + triple + "\n}";
+        String triple = singleEdgeGraph.getTriplePattern().toQueryTriplePattern();
+        return QueryGenerator.generateSELECTQuery(triple, "<" + S_withPrefix + ">", S_type_withPrefix, "?Seed");
     }
 
     /**
      *
      * This method generates a SPARQL query to count the number of entities in
-     * the graph that match the seed entity. The query replaces the seed entity
+     * the graph that match the seed entity. The queryreplaces the seed entity
      * in the triple pattern with a variable, and counts the number of values
      * that the variable can take on.
      *
@@ -214,22 +203,13 @@ public class SingleEdgeQuestion {
      * entities in the graph that match the seed entity
      */
     public String generateCountQuery() {
-        String triple = "";
-        if (S_type_withPrefix.equals(Settings.Number) || S_type_withPrefix.equals(Settings.Date) || S_type_withPrefix.equals(Settings.Literal)) {
-            triple = singleEdgeGraph.getTriplePattern().toQueryTriplePattern()
-                    .replace("\"" + S_withPrefix + "\"^^xsd:dateTime ", "?Seed")
-                    .replace("\"" + S_withPrefix + "\"", "?Seed")
-                    .replace(" " + S_withPrefix + " ", "?Seed")
-                    + " .";
-        } else {
-            triple = singleEdgeGraph.getTriplePattern().toQueryTriplePattern().replace("<" + S_withPrefix + ">", "?Seed") + " .";
-        }
-        return "SELECT COUNT(?Seed) WHERE{\n\t" + triple + "\n}";
+        String triple = singleEdgeGraph.getTriplePattern().toQueryTriplePattern();
+        return QueryGenerator.generateCountQuery(triple, "<" + S_withPrefix + ">", S_type_withPrefix, "?Seed");
     }
 
     public String generateAskQuery_Correct() {
         String triple = singleEdgeGraph.getTriplePattern().toQueryTriplePattern() + " .";
-        return "ASK WHERE{\n\t" + triple + "\n}";
+        return QueryGenerator.generateAskQuery_Correct(triple);
     }
 
     /**
@@ -244,36 +224,7 @@ public class SingleEdgeQuestion {
             return null;
         }
         String triple = singleEdgeGraph.getTriplePattern().toQueryTriplePattern();
-        if (triple != null) {
-            if (S_type_withPrefix.equals(Settings.Number) || S_type_withPrefix.equals(Settings.Date) || S_type_withPrefix.equals(Settings.Literal)) {
-                triple = triple
-                        .replace("\"" + S_withPrefix + "\"^^xsd:dateTime ", somethingElse)
-                        .replace("\"" + S_withPrefix + "\"", somethingElse)
-                        .replace(" " + S_withPrefix + " ", somethingElse)
-                        + " .";
-            } else {
-                triple = triple.replace(S_withPrefix, somethingElse) + " .";
-            }
-            triple = triple.replace(S_withPrefix, somethingElse);
-            return "ASK WHERE{\n\t" + triple + "\n}";
-        }
-        return null;
-    }
-
-    private String triple_to_triplePattern(String triple, String node, String variable) {
-        if (triple != null) {
-            if (S_type_withPrefix.equals(Settings.Number) || S_type_withPrefix.equals(Settings.Date) || S_type_withPrefix.equals(Settings.Literal)) {
-                triple = triple
-                        .replace("\"" + node + "\"^^xsd:dateTime ", variable)
-                        .replace("\"" + node + "\"", variable)
-                        .replace(" " + node + " ", variable)
-                        + " .";
-            } else {
-                triple = triple.replace(node, variable) + " .";
-            }
-
-        }
-        return triple;
+        return QueryGenerator.generateAskQuery_Wrong(triple, S_withPrefix, S_type_withPrefix, somethingElse);
     }
 
     /**
