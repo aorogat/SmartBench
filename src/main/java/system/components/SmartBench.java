@@ -1,6 +1,6 @@
 package system.components;
 
-import lexiconGenerator.nlPatternExtractor.NLP_Pattern_Extractor;
+import lexiconGenerator.nlPatternExtractor.NLPatternExtractor;
 import lexiconGenerator.predicatesExtractor.Predicate_Extractor;
 import database.Database;
 import database.DatabaseIntializer;
@@ -63,7 +63,7 @@ public class SmartBench {
             }
 
             if (Configuration.NLP_Pattern_Extractor_Text_Corpus) {
-                NLP_Pattern_Extractor.extractNLPPatterns();
+                NLPatternExtractor.extractNLPPatterns();
             }
 
             if (Configuration.Predicate_Representations_Labels) {
@@ -123,6 +123,38 @@ public class SmartBench {
         Configuration.SH_Cycle_General = prop.getProperty("Cycle_General").trim().equals("1");
         Configuration.SH_Star_Set = prop.getProperty("Star_Set").trim().equals("1");
         Configuration.SH_Star_Having = prop.getProperty("Star_Having").trim().equals("1");
+        
+        //Read number of branches for star
+        String noOfBranches = prop.getProperty("noOfBranches");
+        if (noOfBranches != null) {
+            String[] n = noOfBranches.split(",");
+            for (String i : n) {
+                Configuration.noOfBranches.add(Byte.valueOf(i.trim()));
+            }
+        }
+        
+        //Read number of branches for Tree root star
+        String rootNoOfBranchesTree = prop.getProperty("rootNoOfBranchesTree");
+        if (rootNoOfBranchesTree != null) {
+            String[] n = noOfBranches.split(",");
+            for (String i : n) {
+                Configuration.rootNoOfBranchesTree.add(Byte.valueOf(i.trim()));
+            }
+        }
+        
+        //Read number of branches for Flower root star
+        String rootNoOfBranchesFlower = prop.getProperty("rootNoOfBranchesFlower");
+        if (rootNoOfBranchesFlower != null) {
+            String[] n = noOfBranches.split(",");
+            for (String i : n) {
+                Configuration.rootNoOfBranchesFlower.add(Byte.valueOf(i.trim()));
+            }
+        }
+        
+        
+        
+        //Read max length for chain
+        Configuration.chainMaxLength = Byte.valueOf(prop.getProperty("chainMaxLength"));
     }
 
 }

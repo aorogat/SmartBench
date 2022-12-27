@@ -5,6 +5,8 @@
  */
 package settings;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author aorogat
@@ -49,6 +51,12 @@ public class Configuration {
     public static boolean SH_Star_Having = false;
     
     
+    public static ArrayList<Byte> noOfBranches = new ArrayList<>();
+    public static ArrayList<Byte> rootNoOfBranchesTree = new ArrayList<>();
+    public static ArrayList<Byte> rootNoOfBranchesFlower = new ArrayList<>();
+    
+    
+    public static byte chainMaxLength = 2;
     
     
 }

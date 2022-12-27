@@ -2,7 +2,6 @@ package system.components;
 
 import benchmarkGenerator.benchmarkWriter.BenchmarkJsonWritter;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Random;
 import lexiconGenerator.predicateRepresentationExtractor.scrapping.model.PredicatesLexicon;
 import benchmarkGenerator.subgraphShapeGenerator.model.NodeType;
@@ -48,9 +47,7 @@ public class ShapesGenerator {
     static ArrayList<Branch> branchs;
     public static ArrayList<GeneratedQuestion> generatedQuestions = new ArrayList<>();
 
-//    public static void main(String[] args) {
-//        generateShapes();
-//    }
+
     public static void generateShapes() throws Exception {
         System.out.println("\n\n\n\n=============================== SmartBench will generate the questions. ===============================");
 
@@ -88,39 +85,19 @@ public class ShapesGenerator {
                 }
                 if (Configuration.SH_Star) {
                     try {
-//                    oldSize = generatedQuestions.size();
-//                    testStar(branch, 1);
-//                    currentSize = generatedQuestions.size();
-//                    if (MainBean.modified) {
-//                        if (currentSize > oldSize) {
-//                            oldSize = generatedQuestions.size();
-                        generateStar(branch, 2);
-                        if (Configuration.SH_Star_Having) {
-                            generateStarWithGroupBy(branch, 2);
-                        }
-                        currentSize = generatedQuestions.size();
-//                        }
-//                    }
-                        if (currentSize > oldSize) {
-                            oldSize = generatedQuestions.size();
-                            generateStar(branch, 3);
+                        oldSize = generatedQuestions.size();
+                        for (Byte b : Configuration.noOfBranches) {
+                            generateStar(branch, b);
+                            if (Configuration.SH_Star_Having) {
+                                generateStarWithGroupBy(branch, b);
+                            }
                             currentSize = generatedQuestions.size();
+                            if (currentSize > oldSize) {
+                                oldSize = generatedQuestions.size();
+                            } else {
+                                break;
+                            }
                         }
-                        if (currentSize > oldSize) {
-                            oldSize = generatedQuestions.size();
-                            generateStar(branch, 4);
-                            currentSize = generatedQuestions.size();
-                        }
-//                if (currentSize > oldSize) {
-//                    oldSize = generatedQuestions.size();
-//                    testStar(branch, 5);
-//                    currentSize = generatedQuestions.size();
-//                }
-//                if (currentSize > oldSize) {
-//                    oldSize = generatedQuestions.size();
-//                    testStar(branch, 6);
-//                    currentSize = generatedQuestions.size();
-//                }
 
                     } catch (Exception e) {
                     }
@@ -133,20 +110,23 @@ public class ShapesGenerator {
                     } catch (Exception e) {
                     }
                 }
+
                 if (Configuration.SH_Chain) {
                     try {
                         oldSize = generatedQuestions.size();
-                        generateChain(branch, 2);
-                        currentSize = generatedQuestions.size();
-                        if (currentSize > oldSize) {
-                            generateChain(branch, 3);
-
+                        for (Byte b = 2; b <= Configuration.chainMaxLength; b++) {
+                            generateChain(branch, b);
+                            currentSize = generatedQuestions.size();
+                            if (currentSize > oldSize) {
+                                oldSize = generatedQuestions.size();
+                            } else {
+                                break;
+                            }
                         }
+
                     } catch (Exception e) {
-                        e.printStackTrace();
                     }
                 }
-
                 if (Configuration.SH_Cycle) {
                     try {
                         generateCycle(branch);
@@ -164,77 +144,78 @@ public class ShapesGenerator {
                 }
 
                 if (Configuration.SH_Tree) {
+
                     try {
                         oldSize = generatedQuestions.size();
-                        generateTree(branch, 2);
-                        currentSize = generatedQuestions.size();
-                        if (currentSize > oldSize) {
-                            oldSize = generatedQuestions.size();
-                            generateTree(branch, 3);
+                        for (Byte b : Configuration.rootNoOfBranchesTree) {
+                            generateTree(branch, b);
                             currentSize = generatedQuestions.size();
+                            if (currentSize > oldSize) {
+                                oldSize = generatedQuestions.size();
+                            } else {
+                                break;
+                            }
                         }
-//                    if (currentSize > oldSize) {
-//                        oldSize = generatedQuestions.size();
-//                        testTree(branch, 4);
-//                        currentSize = generatedQuestions.size();
-//                    }
 
                     } catch (Exception e) {
                     }
+
                 }
 
                 if (Configuration.SH_Flower) {
                     try {
                         oldSize = generatedQuestions.size();
-                        generateFlower(branch, 2);
-                        currentSize = generatedQuestions.size();
-                        if (currentSize > oldSize) {
-                            oldSize = generatedQuestions.size();
-                            generateFlower(branch, 3);
+                        for (Byte b : Configuration.rootNoOfBranchesFlower) {
+                            generateFlower(branch, b);
                             currentSize = generatedQuestions.size();
+                            if (currentSize > oldSize) {
+                                oldSize = generatedQuestions.size();
+                            } else {
+                                break;
+                            }
                         }
-//                    if (currentSize > oldSize) {
-//                        oldSize = generatedQuestions.size();
-//                        testFlower(branch, 4);
-//                        currentSize = generatedQuestions.size();
-//                    }
 
                     } catch (Exception e) {
                     }
+
                 }
-                System.out.println("");
-                System.out.println("");
-                System.out.println("");
-                System.out.println("");
-                System.out.println("");
-                System.out.println("");
-
-                System.out.println("============================== Benchmark =============================");
-//        MainBean.output += "\n" + "================== Benchmark ===============\n";
-                System.out.println("======================================================================");
-
-                benchmark.generatedBenchmark = new ArrayList<>();
-                for (GeneratedQuestion generatedQuestion : generatedQuestions) {
-                    generatedQuestion.print();
-                    if (generatedQuestion.getAnswerCardinality() > 0) {
-                        benchmark.generatedBenchmark.add(generatedQuestion);
-                    }
-                }
-
-                ArrayList<GeneratedQuestion> clearGeneratedQuestions = new ArrayList<>();
-                for (GeneratedQuestion generatedQuestion : benchmark.generatedBenchmark) {
-                    if (!(generatedQuestion.getQuestionType().equals(GeneratedQuestion.QT_HOW_MANY)
-                            && generatedQuestion.getAnswers().get(0).equals("0"))) {
-                        clearGeneratedQuestions.add(generatedQuestion);
-                    }
-                }
-
-                benchmark.generatedBenchmark = clearGeneratedQuestions;
-                BenchmarkJsonWritter.save(benchmark, Settings.benchmarkName + benchmarkNumber);
-//            Pruner.prune(Settings.benchmarkName + ".json");
+                save(benchmarkNumber);
             }
             benchmarkNumber++;
         }
+    }
+
+    private static void save(int benchmarkNumber) throws Exception {
+        System.out.println("");
+        System.out.println("");
+        System.out.println("");
+        System.out.println("");
+        System.out.println("");
+        System.out.println("");
+
+        System.out.println("============================== Benchmark =============================");
+//        MainBean.output += "\n" + "================== Benchmark ===============\n";
+        System.out.println("======================================================================");
+
+        benchmark.generatedBenchmark = new ArrayList<>();
+        for (GeneratedQuestion generatedQuestion : generatedQuestions) {
+            generatedQuestion.print();
+            if (generatedQuestion.getAnswerCardinality() > 0) {
+                benchmark.generatedBenchmark.add(generatedQuestion);
+            }
+        }
+
+        ArrayList<GeneratedQuestion> clearGeneratedQuestions = new ArrayList<>();
+        for (GeneratedQuestion generatedQuestion : benchmark.generatedBenchmark) {
+            if (!(generatedQuestion.getQuestionType().equals(GeneratedQuestion.QT_HOW_MANY)
+                    && generatedQuestion.getAnswers().get(0).equals("0"))) {
+                clearGeneratedQuestions.add(generatedQuestion);
+            }
+        }
+
+        benchmark.generatedBenchmark = clearGeneratedQuestions;
+        BenchmarkJsonWritter.save(benchmark, Settings.benchmarkName + benchmarkNumber);
+//            Pruner.prune(Settings.benchmarkName + ".json");
     }
 
     public static void addQuestions(ArrayList<GeneratedQuestion> gq) throws Exception {

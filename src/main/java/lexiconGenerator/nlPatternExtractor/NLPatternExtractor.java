@@ -12,7 +12,7 @@ import settings.Settings;
  *
  * @author aorogat
  */
-public class NLP_Pattern_Extractor {
+public class NLPatternExtractor {
     
     
     
