@@ -1,5 +1,7 @@
 package system.components;
 
+import lexiconGenerator.nlPatternExtractor.NLP_Pattern_Extractor;
+import lexiconGenerator.predicatesExtractor.Predicate_Extractor;
 import database.Database;
 import database.DatabaseIntializer;
 import java.io.IOException;

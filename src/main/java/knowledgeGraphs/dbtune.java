@@ -3,11 +3,11 @@ package knowledgeGraphs;
 import java.util.ArrayList;
 import java.util.HashSet;
 import static knowledgeGraphs.KnowledgeGraph.instance;
-import offLine.kg_explorer.explorer.Explorer;
-import static offLine.kg_explorer.explorer.Explorer.kg;
-import offLine.kg_explorer.model.PredicateContext;
-import offLine.kg_explorer.model.PredicateTripleExample;
-import online.kg_extractor.model.VariableSet;
+import lexiconGenerator.kg_explorer.explorer.Explorer;
+import static lexiconGenerator.kg_explorer.explorer.Explorer.kg;
+import lexiconGenerator.kg_explorer.model.PredicateContext;
+import lexiconGenerator.kg_explorer.model.PredicateTripleExample;
+import benchmarkGenerator.kg_extractor.model.VariableSet;
 import settings.Settings;
 import system.components.Branch;
 

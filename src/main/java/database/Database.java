@@ -11,13 +11,13 @@ import java.util.ArrayList;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import offLine.kg_explorer.model.ListOfPredicates;
-import offLine.kg_explorer.model.Predicate;
-import offLine.kg_explorer.model.PredicateContext;
-import offLine.kg_explorer.model.PredicateTripleExample;
-import offLine.kg_explorer.model.Predicate_NLP_Representation;
-import offLine.scrapping.model.PredicateNLRepresentation;
-import online.nl_generation.chunking.Phrase;
+import lexiconGenerator.kg_explorer.model.ListOfPredicates;
+import lexiconGenerator.kg_explorer.model.Predicate;
+import lexiconGenerator.kg_explorer.model.PredicateContext;
+import lexiconGenerator.kg_explorer.model.PredicateTripleExample;
+import lexiconGenerator.kg_explorer.model.Predicate_NLP_Representation;
+import lexiconGenerator.scrapping.model.PredicateNLRepresentation;
+import benchmarkGenerator.questionsGenerator.chunking.Phrase;
 import settings.Settings;
 
 public class Database {

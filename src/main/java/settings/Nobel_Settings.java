@@ -1,7 +1,7 @@
 package settings;
 
 import knowledgeGraphs.NobelPrizeKG;
-import offLine.kg_explorer.explorer.MAKGExplorer;
+import lexiconGenerator.kg_explorer.explorer.MAKGExplorer;
 
 /**
  *

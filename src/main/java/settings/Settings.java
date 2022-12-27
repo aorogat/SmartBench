@@ -1,20 +1,20 @@
 package settings;
 
 import knowledgeGraphs.BabelNet;
-import offLine.kg_explorer.explorer.DBpediaExplorer;
-import offLine.kg_explorer.explorer.Explorer;
+import lexiconGenerator.kg_explorer.explorer.DBpediaExplorer;
+import lexiconGenerator.kg_explorer.explorer.Explorer;
 import knowledgeGraphs.DBpedia;
-import offLine.kg_explorer.explorer.GEOExplorer;
+import lexiconGenerator.kg_explorer.explorer.GEOExplorer;
 import knowledgeGraphs.KnowledgeGraph;
 import knowledgeGraphs.MAKG;
-import offLine.kg_explorer.explorer.MAKGExplorer;
+import lexiconGenerator.kg_explorer.explorer.MAKGExplorer;
 //import offLine.kg_explorer.explorer.NobelPrizeExplorer;
 import knowledgeGraphs.NobelPrizeKG;
 import knowledgeGraphs.WikidataKG;
 import knowledgeGraphs.dbtune;
-import offLine.kg_explorer.explorer.BabelNetExplorer;
-import offLine.kg_explorer.explorer.WikidataExplorer;
-import offLine.kg_explorer.explorer.dbtuneExplorer;
+import lexiconGenerator.kg_explorer.explorer.BabelNetExplorer;
+import lexiconGenerator.kg_explorer.explorer.WikidataExplorer;
+import lexiconGenerator.kg_explorer.explorer.dbtuneExplorer;
 //import offLine.kg_explorer.explorer.WikidataKG;
 
 /**

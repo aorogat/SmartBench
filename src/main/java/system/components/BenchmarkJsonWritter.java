@@ -6,7 +6,7 @@ import com.fasterxml.jackson.databind.ObjectWriter;
 import java.io.File;
 import java.io.IOException;
 import java.util.Scanner;
-import online.nl_generation.Benchmark;
+import benchmarkGenerator.questionsGenerator.Benchmark;
 
 /**
  *

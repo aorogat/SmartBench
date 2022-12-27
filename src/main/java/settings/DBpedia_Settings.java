@@ -1,7 +1,7 @@
 package settings;
 
 import knowledgeGraphs.DBpedia;
-import offLine.kg_explorer.explorer.DBpediaExplorer;
+import lexiconGenerator.kg_explorer.explorer.DBpediaExplorer;
 
 /**
  *

@@ -1,7 +1,7 @@
 package settings;
 
 import knowledgeGraphs.dbtune;
-import offLine.kg_explorer.explorer.dbtuneExplorer;
+import lexiconGenerator.kg_explorer.explorer.dbtuneExplorer;
 
 /**
  *

@@ -2,8 +2,8 @@ package knowledgeGraphs;
 
 import java.util.ArrayList;
 import knowledgeGraphs.KnowledgeGraph;
-import offLine.kg_explorer.explorer.Explorer;
-import online.kg_extractor.model.VariableSet;
+import lexiconGenerator.kg_explorer.explorer.Explorer;
+import benchmarkGenerator.kg_extractor.model.VariableSet;
 import settings.Settings;
 
 /**

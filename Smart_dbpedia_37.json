@@ -10,8 +10,8 @@
   "answerCardinality" : 1,
   "noOfTokens" : 12,
   "keywords" : 2,
-  "shapeType" : "SINGLE_EDGE",
   "questionType" : "Yes-No-Is",
+  "shapeType" : "SINGLE_EDGE",
   "qustionComplexity" : 0.08
 }, {
   "seed_withPrefix" : "http://dbpedia.org/resource/RWD_(aircraft_manufacturer)",
@@ -25,8 +25,8 @@
   "answerCardinality" : 1,
   "noOfTokens" : 13,
   "keywords" : 2,
-  "shapeType" : "SINGLE_EDGE",
   "questionType" : "Yes-No-Is",
+  "shapeType" : "SINGLE_EDGE",
   "qustionComplexity" : 0.087
 }, {
   "seed_withPrefix" : "http://dbpedia.org/resource/RWD_(aircraft_manufacturer)",
@@ -40,14 +40,14 @@
   "answerCardinality" : 1,
   "noOfTokens" : 9,
   "keywords" : 3,
-  "shapeType" : "SINGLE_EDGE",
   "questionType" : "What",
+  "shapeType" : "SINGLE_EDGE",
   "qustionComplexity" : 0.09
 }, {
   "seed_withPrefix" : "http://dbpedia.org/resource/RWD_(aircraft_manufacturer)",
   "seedType_withPrefix" : "http://dbpedia.org/ontology/GovernmentAgency",
-  "questionString" : "Mention the designer of the aircraft \"RWD 23\"?",
-  "questionStringTagged" : "<qt>Mention</qt> <p>the designer of</p> <o>the aircraft \"RWD 23\"</o>?",
+  "questionString" : "Return the designer of the aircraft \"RWD 23\"?",
+  "questionStringTagged" : "<qt>Return</qt> <p>the designer of</p> <o>the aircraft \"RWD 23\"</o>?",
   "query" : "SELECT DISTINCT ?Seed WHERE{\n\t<http://dbpedia.org/resource/RWD_23> \t <http://dbpedia.org/ontology/designer> \t ?Seed  .\n}",
   "graphString" : "RWD 23[aircraft] ____designer____ RWD [government agency]",
   "noOfTriples" : 1,
@@ -55,8 +55,8 @@
   "answerCardinality" : 1,
   "noOfTokens" : 8,
   "keywords" : 3,
-  "shapeType" : "SINGLE_EDGE",
   "questionType" : "Requests",
+  "shapeType" : "SINGLE_EDGE",
   "qustionComplexity" : 0.08
 }, {
   "seed_withPrefix" : "http://dbpedia.org/resource/RWD_(aircraft_manufacturer)",
@@ -70,8 +70,8 @@
   "answerCardinality" : 1,
   "noOfTokens" : 7,
   "keywords" : 3,
-  "shapeType" : "SINGLE_EDGE",
   "questionType" : "Topical-Prune",
+  "shapeType" : "SINGLE_EDGE",
   "qustionComplexity" : 0.07
 }, {
   "seed_withPrefix" : "http://dbpedia.org/resource/RWD_(aircraft_manufacturer)",
@@ -85,8 +85,8 @@
   "answerCardinality" : 1,
   "noOfTokens" : 12,
   "keywords" : 2,
-  "shapeType" : "SINGLE_EDGE",
   "questionType" : "Yes-No-Is",
+  "shapeType" : "SINGLE_EDGE",
   "qustionComplexity" : 0.08
 }, {
   "seed_withPrefix" : "http://dbpedia.org/resource/RWD_(aircraft_manufacturer)",
@@ -100,8 +100,8 @@
   "answerCardinality" : 1,
   "noOfTokens" : 13,
   "keywords" : 2,
-  "shapeType" : "SINGLE_EDGE",
   "questionType" : "Yes-No-Is",
+  "shapeType" : "SINGLE_EDGE",
   "qustionComplexity" : 0.087
 }, {
   "seed_withPrefix" : "http://dbpedia.org/resource/RWD_(aircraft_manufacturer)",
@@ -115,24 +115,24 @@
   "answerCardinality" : 1,
   "noOfTokens" : 9,
   "keywords" : 3,
-  "shapeType" : "SINGLE_EDGE",
   "questionType" : "What",
+  "shapeType" : "SINGLE_EDGE",
   "qustionComplexity" : 0.09
 }, {
   "seed_withPrefix" : "http://dbpedia.org/resource/RWD_(aircraft_manufacturer)",
   "seedType_withPrefix" : "http://dbpedia.org/ontology/GovernmentAgency",
-  "questionString" : "Mention the designer of the aircraft \"RWD 5\"?",
-  "questionStringTagged" : "<qt>Mention</qt> <p>the designer of</p> <o>the aircraft \"RWD 5\"</o>?",
+  "questionString" : "Tell me the designer of the aircraft \"RWD 5\"?",
+  "questionStringTagged" : "<qt>Tell me</qt> <p>the designer of</p> <o>the aircraft \"RWD 5\"</o>?",
   "query" : "SELECT DISTINCT ?Seed WHERE{\n\t<http://dbpedia.org/resource/RWD_5> \t <http://dbpedia.org/ontology/designer> \t ?Seed  .\n}",
   "graphString" : "RWD 5[aircraft] ____designer____ RWD [government agency]",
   "noOfTriples" : 1,
   "answers" : [ "http://dbpedia.org/resource/RWD_(aircraft_manufacturer)" ],
   "answerCardinality" : 1,
-  "noOfTokens" : 8,
+  "noOfTokens" : 9,
   "keywords" : 3,
-  "shapeType" : "SINGLE_EDGE",
   "questionType" : "Requests",
-  "qustionComplexity" : 0.08
+  "shapeType" : "SINGLE_EDGE",
+  "qustionComplexity" : 0.09
 }, {
   "seed_withPrefix" : "http://dbpedia.org/resource/RWD_(aircraft_manufacturer)",
   "seedType_withPrefix" : "http://dbpedia.org/ontology/GovernmentAgency",
@@ -145,7 +145,7 @@
   "answerCardinality" : 1,
   "noOfTokens" : 7,
   "keywords" : 3,
-  "shapeType" : "SINGLE_EDGE",
   "questionType" : "Topical-Prune",
+  "shapeType" : "SINGLE_EDGE",
   "qustionComplexity" : 0.07
 } ]

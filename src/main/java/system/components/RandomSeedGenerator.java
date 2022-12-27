@@ -4,14 +4,9 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Random;
 import database.Database;
-import edu.stanford.nlp.util.ArraySet;
 import java.util.Collections;
-import java.util.List;
-import java.util.Set;
-import offLine.kg_explorer.explorer.SPARQL;
-import offLine.kg_explorer.model.Predicate;
+import lexiconGenerator.kg_explorer.model.Predicate;
 import settings.Settings;
-//import static system.components.ShapesGenerator.branchs;
 
 /**
  *

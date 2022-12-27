@@ -15,11 +15,10 @@ import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import database.Database;
-import offLine.kg_explorer.explorer.SPARQL;
-import offLine.kg_explorer.model.Predicate;
-import offLine.scrapping.wikipedia.NLP;
-import online.nl_generation.chunking.BasicNLP_FromPython;
-import online.nl_generation.chunking.Phrase;
+import lexiconGenerator.kg_explorer.model.Predicate;
+import lexiconGenerator.scrapping.wikipedia.NLP;
+import benchmarkGenerator.questionsGenerator.chunking.BasicNLP_FromPython;
+import benchmarkGenerator.questionsGenerator.chunking.Phrase;
 import settings.Settings;
 
 /**

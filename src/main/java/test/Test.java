@@ -3,11 +3,11 @@ package test;
 import java.util.ArrayList;
 import knowledgeGraphs.DBpedia;
 import knowledgeGraphs.KnowledgeGraph;
-import online.kg_extractor.model.NodeType;
-import online.kg_extractor.model.subgraph.ChainGraph;
-import online.kg_extractor.model.subgraph.Graph;
-import online.kg_extractor.model.subgraph.SingleEdgeGraph;
-import online.kg_extractor.model.subgraph.StarGraph;
+import benchmarkGenerator.kg_extractor.model.NodeType;
+import benchmarkGenerator.kg_extractor.model.subgraph.ChainGraph;
+import benchmarkGenerator.kg_extractor.model.subgraph.Graph;
+import benchmarkGenerator.kg_extractor.model.subgraph.SingleEdgeGraph;
+import benchmarkGenerator.kg_extractor.model.subgraph.StarGraph;
 
 /**
  *
