@@ -16,9 +16,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import database.Database;
 import lexiconGenerator.kg_explorer.model.Predicate;
-import lexiconGenerator.scrapping.wikipedia.NLP;
-import benchmarkGenerator.questionsGenerator.chunking.BasicNLP_FromPython;
-import benchmarkGenerator.questionsGenerator.chunking.Phrase;
+import lexiconGenerator.predicateRepresentationExtractor.scrapping.wikipedia.NLP;
+import lexiconGenerator.predicateRepresentationExtractor.chunking.BasicNLP_FromPython;
+import lexiconGenerator.predicateRepresentationExtractor.chunking.Phrase;
 import settings.Settings;
 
 /**
@@ -529,33 +529,39 @@ public class Predicate_Representation_Extractor {
         return content.toString();
     }
 
+    
     public static String getVerbPrepositionsConcatenated(String separator) {
-        return "above" + separator
-                + "across" + separator
-                + "about" + separator
-                + "of" + separator
-                + "for" + separator
-                + "against" + separator
-                + "along" + separator
-                + "among" + separator
-                + "around" + separator
-                + "at" + separator
-                + "before" + separator
-                + "behind" + separator
-                + "below" + separator
-                + "beneath" + separator
-                + "beside" + separator
-                + "between" + separator
-                + //                "by" + separator +
-                "in" + separator
-                + "into" + separator
-                + "near" + separator
-                + "on" + separator
-                + "to" + separator
-                + "toward" + separator
-                + "under" + separator
-                + "upon" + separator
-                + "with" + separator
-                + "within";
-    }
+    String[] prepositions = {"above", "across", "about", "of", "for", "against", "along", "among", "around", "at", "before", "behind", "below", "beneath", "beside", "between", "in", "into", "near", "on", "to", "toward", "under", "upon", "with", "within"};
+    return String.join(separator, prepositions);
+}
+
+//    public static String getVerbPrepositionsConcatenated(String separator) {
+//        return "above" + separator
+//                + "across" + separator
+//                + "about" + separator
+//                + "of" + separator
+//                + "for" + separator
+//                + "against" + separator
+//                + "along" + separator
+//                + "among" + separator
+//                + "around" + separator
+//                + "at" + separator
+//                + "before" + separator
+//                + "behind" + separator
+//                + "below" + separator
+//                + "beneath" + separator
+//                + "beside" + separator
+//                + "between" + separator
+//                + //                "by" + separator +
+//                "in" + separator
+//                + "into" + separator
+//                + "near" + separator
+//                + "on" + separator
+//                + "to" + separator
+//                + "toward" + separator
+//                + "under" + separator
+//                + "upon" + separator
+//                + "with" + separator
+//                + "within";
+//    }
 }

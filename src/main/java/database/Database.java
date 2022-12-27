@@ -8,16 +8,14 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import lexiconGenerator.kg_explorer.model.ListOfPredicates;
 import lexiconGenerator.kg_explorer.model.Predicate;
 import lexiconGenerator.kg_explorer.model.PredicateContext;
 import lexiconGenerator.kg_explorer.model.PredicateTripleExample;
 import lexiconGenerator.kg_explorer.model.Predicate_NLP_Representation;
-import lexiconGenerator.scrapping.model.PredicateNLRepresentation;
-import benchmarkGenerator.questionsGenerator.chunking.Phrase;
+import lexiconGenerator.predicateRepresentationExtractor.scrapping.model.PredicateNLRepresentation;
+import lexiconGenerator.predicateRepresentationExtractor.chunking.Phrase;
 import settings.Settings;
 
 public class Database {

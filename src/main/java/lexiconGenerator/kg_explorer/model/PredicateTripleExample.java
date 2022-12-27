@@ -5,8 +5,8 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import database.Database;
 import lexiconGenerator.kg_explorer.explorer.Explorer;
-import lexiconGenerator.scrapping.wikipedia.NLP;
-import lexiconGenerator.scrapping.wikipedia.Wikipedia;
+import lexiconGenerator.predicateRepresentationExtractor.scrapping.wikipedia.NLP;
+import lexiconGenerator.predicateRepresentationExtractor.scrapping.wikipedia.Wikipedia;
 
 /**
  *

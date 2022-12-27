@@ -8,7 +8,7 @@ package lexiconGenerator.kg_explorer.explorer;
 import database.Database;
 import java.util.ArrayList;
 import knowledgeGraphs.WikidataKG;
-import benchmarkGenerator.kg_extractor.model.VariableSet;
+import benchmarkGenerator.subgraphShapeGenerator.model.VariableSet;
 import settings.Settings;
 
 /**

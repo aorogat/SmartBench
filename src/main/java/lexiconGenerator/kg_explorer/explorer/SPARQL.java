@@ -5,7 +5,7 @@ import java.util.HashSet;
 import java.util.Random;
 import static lexiconGenerator.kg_explorer.explorer.Explorer.kg;
 import lexiconGenerator.kg_explorer.model.PredicateContext;
-import benchmarkGenerator.kg_extractor.model.VariableSet;
+import benchmarkGenerator.subgraphShapeGenerator.model.VariableSet;
 import settings.Settings;
 import system.components.Branch;
 

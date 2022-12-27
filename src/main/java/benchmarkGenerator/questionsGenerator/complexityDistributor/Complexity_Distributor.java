@@ -7,9 +7,9 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import benchmarkGenerator.questionsGenerator.Benchmark;
-import benchmarkGenerator.questionsGenerator.GeneratedQuestion;
-import system.components.BenchmarkJsonWritter;
+import benchmarkGenerator.questionsGenerator.questionBuilder.helpers.Benchmark;
+import benchmarkGenerator.questionsGenerator.questionBuilder.helpers.GeneratedQuestion;
+import benchmarkGenerator.benchmarkWriter.BenchmarkJsonWritter;
 
 /**
  *

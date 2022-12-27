@@ -8,8 +8,8 @@ import lexiconGenerator.kg_explorer.model.ListOfPredicates;
 import lexiconGenerator.kg_explorer.model.Predicate;
 import lexiconGenerator.kg_explorer.model.PredicateContext;
 import lexiconGenerator.kg_explorer.model.PredicateTripleExample;
-import benchmarkGenerator.kg_extractor.model.VariableSet;
-import benchmarkGenerator.kg_extractor.model.subgraph.Graph;
+import benchmarkGenerator.subgraphShapeGenerator.model.VariableSet;
+import benchmarkGenerator.subgraphShapeGenerator.subgraph.Graph;
 import settings.Settings;
 
 /**

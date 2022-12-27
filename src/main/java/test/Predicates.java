@@ -2,11 +2,11 @@ package test;
 
 import java.util.ArrayList;
 import knowledgeGraphs.DBpedia;
-import benchmarkGenerator.kg_extractor.model.TriplePattern;
-import benchmarkGenerator.kg_extractor.model.Variable;
-import benchmarkGenerator.kg_extractor.model.VariableSet;
-import benchmarkGenerator.kg_extractor.model.subgraph.Graph;
-import benchmarkGenerator.kg_extractor.model.subgraph.SingleEdgeGraph;
+import benchmarkGenerator.subgraphShapeGenerator.model.TriplePattern;
+import benchmarkGenerator.subgraphShapeGenerator.model.Variable;
+import benchmarkGenerator.subgraphShapeGenerator.model.VariableSet;
+import benchmarkGenerator.subgraphShapeGenerator.subgraph.Graph;
+import benchmarkGenerator.subgraphShapeGenerator.subgraph.SingleEdgeGraph;
 
 /**
  *

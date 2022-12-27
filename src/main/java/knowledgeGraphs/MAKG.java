@@ -3,7 +3,7 @@ package knowledgeGraphs;
 import java.util.ArrayList;
 import knowledgeGraphs.KnowledgeGraph;
 import lexiconGenerator.kg_explorer.explorer.Explorer;
-import benchmarkGenerator.kg_extractor.model.VariableSet;
+import benchmarkGenerator.subgraphShapeGenerator.model.VariableSet;
 import settings.Settings;
 
 /**
