@@ -60,3 +60,13 @@ The Maestro system can generate a number of different query shapes, which can be
 - Cycle_General
 - Star_Set
 - Star_Having
+
+Here is additional information on the query shape parameters in the provided configuration file:
+
+1. Chain: The chainMaxLength parameter specifies the maximum length of the chain in the generated queries. The minimum length is 2. For example, setting chainMaxLength to 3 will generate chain-shaped queries with a maximum length of 3, and the minimum length will be 2.
+
+2. Star: The noOfBranches parameter specifies the number of branches in the star-shaped queries. It should be a list of numbers, such as 1,2,3. For example, setting noOfBranches to 1,2,3 will generate star-shaped queries with 1, 2, or 3 branches.
+
+3. Tree: The rootNoOfBranchesTree parameter specifies the number of branches in the root star of the tree-shaped queries. It should be a list of numbers, such as 1,2,3. For example, setting rootNoOfBranchesTree to 2,3 will generate tree-shaped queries with a root star that has 2 or 3 branches. The number of branches in the second star is fixed at 2 and cannot be customized.
+
+4. Flower: The rootNoOfBranchesFlower parameter specifies the number of branches in the root star of the flower-shaped queries. It should be a list of numbers, such as 1,2,3. For example, setting rootNoOfBranchesFlower to 2,3 will generate flower-shaped queries with a root star that has 2 or 3 branches.
