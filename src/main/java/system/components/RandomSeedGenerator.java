@@ -75,9 +75,9 @@ public class RandomSeedGenerator {
             }
         }
 
-        addBranchesFromList(branches_with_entity, 500000000);
-        addBranchesFromList(branches_with_date, 500000000);
-        addBranchesFromList(branches_with_number, 500000000);
+        addBranchesFromList(branches_with_entity);
+        addBranchesFromList(branches_with_date);
+        addBranchesFromList(branches_with_number);
 
         branches_with_entity = new ArrayList<>(new HashSet<>(branches_with_entity));
         branches_with_number = new ArrayList<>(new HashSet<>(branches_with_number));
@@ -92,14 +92,14 @@ public class RandomSeedGenerator {
         Collections.reverse(branchs);
     }
 
-    private static void addBranchesFromList(ArrayList<Predicate> branches, long end) {
+    private static void addBranchesFromList(ArrayList<Predicate> branches) {
         Random random = new Random();
         int count = 0;
 
         double offset = orderedSeeds ? 1.2 : 1;
 
         int i = random.nextInt(10) + 1;
-        while (i < branches.size() && count < end) {
+        while (i < branches.size() && count < (long) 500000000) {
             Predicate p = branches.get(i);
             addBranchs(p);
             count++;

@@ -61,7 +61,7 @@ public class BasicNLP_FromPython {
     }
     
     
-    public static String baseVerb(String w) throws MalformedURLException, ProtocolException, IOException {
+    public static String baseVerb(String w) throws IOException {
         URL url = new URL("http://127.0.0.1:12311/base?word="+w);
         HttpURLConnection con = (HttpURLConnection) url.openConnection();
         con.setRequestMethod("GET");

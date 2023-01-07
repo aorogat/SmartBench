@@ -111,8 +111,7 @@ public class Wikipedia {
     }
 
     private static Document getWikiDocumentByKeyword(String keyword) throws Exception {
-        Document doc = Jsoup.connect("https://en.wikipedia.org/wiki/" + keyword).get();
-        return doc;
+        return Jsoup.connect("https://en.wikipedia.org/wiki/" + keyword).get();
     }
 
     public static String toTitleCase(String word) {

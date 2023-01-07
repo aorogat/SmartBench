@@ -25,13 +25,11 @@ public class Branch {
         if(obj instanceof Branch)
         {
             Branch temp = (Branch) obj;
-            if(this.s.equals(temp.s) && 
-                    this.p.equals(temp.p) && 
-                    this.o.equals(temp.o) && 
-                    this.s_type.equals(temp.s_type) && 
-                    this.o_type.equals(temp.o_type)
-                    )
-                return true;
+            return this.s.equals(temp.s) &&
+                    this.p.equals(temp.p) &&
+                    this.o.equals(temp.o) &&
+                    this.s_type.equals(temp.s_type) &&
+                    this.o_type.equals(temp.o_type);
         }
         return false;
     }

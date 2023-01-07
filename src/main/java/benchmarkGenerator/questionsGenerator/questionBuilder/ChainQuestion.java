@@ -1,11 +1,14 @@
 package benchmarkGenerator.questionsGenerator.questionBuilder;
 
+import benchmarkGenerator.questionsGenerator.queryBuilder.QueryGenerator;
+import benchmarkGenerator.questionsGenerator.questionBuilder.helpers.FactConstraint;
 import benchmarkGenerator.questionsGenerator.questionBuilder.helpers.GeneratedQuestion;
-import benchmarkGenerator.questionsGenerator.questionBuilder.helpers.Request;
+import benchmarkGenerator.questionsGenerator.questionBuilder.helpers.QuestionTypePrefixGenerator;
 import benchmarkGenerator.questionsGenerator.questionBuilder.preprocessors.PhraseRepresentationProcessing;
 import benchmarkGenerator.questionsGenerator.questionBuilder.preprocessors.EntityProcessing;
+
 import java.util.ArrayList;
-import lexiconGenerator.kg_explorer.explorer.SPARQL;
+
 import lexiconGenerator.kg_explorer.ontology.KGOntology;
 import benchmarkGenerator.subgraphShapeGenerator.model.TriplePattern;
 import benchmarkGenerator.subgraphShapeGenerator.subgraph.ChainGraph;
@@ -22,36 +25,28 @@ public class ChainQuestion {
     String S0_Seed; //seed
     String P0;
     String O0;
-
+    String O_Final; //last object in the chain
+    String O_Final_type_withPrefix; //last object in the chain
+    String P1_to_n_SO_PN_series = "";
+    String P1_to_n_OS_PN_series = "";
+    String P1_to_n_SO_PN_series_Tagged = "";
+    String P1_to_n_OS_PN_series_Tagged = "";
+    ArrayList<String> predicatesRepresentationsSeries = new ArrayList<>();
+    String P1_to_n_SO_PN_series_without_verb = "";
+    String P1_to_n_SO_PN_series_without_verb_Tagged = "";
+    PredicateNLRepresentation predicateNL_for_P0;
+    ArrayList<GeneratedQuestion> allPossibleQuestions = new ArrayList<>();
     private String S0_withPrefix;
     private String P0_withPrefix;
     private String O0_withPrefix;
-
-    String O_Final; //last object in the chain
-    String O_Final_type_withPrefix; //last object in the chain
-
-    String P1_to_n_SO_PN_series = "";
-    String P1_to_n_OS_PN_series = "";
-    
-    String P1_to_n_SO_PN_series_Tagged = "";
-    String P1_to_n_OS_PN_series_Tagged = "";
-
-    String P1_to_n_SO_PN_series_without_verb = "";
-    String P1_to_n_SO_PN_series_without_verb_Tagged = "";
-
     private String S0_type_withPrefix;
     private String O0_type_withPrefix;
-
     private String P0_SO_VP;
     private String P0_SO_NP;
     private String P0_OS_VP;
     private String P0_OS_NP;
-
     private String P0_SO_NP_without_verb = "";
     private String P0_OS_NP_without_verb = "";
-
-    PredicateNLRepresentation predicateNL_for_P0;
-
     //Query
     private String selectQuery;
     private String countQuery;
@@ -60,10 +55,7 @@ public class ChainQuestion {
     private String somethingElse = "http://AnnyOther";
     private String somethingElseWithoutPrefix = "AnnyOther";
     private String query_GP_triples;
-
     private boolean missingPredicateRepresentation_s_o_NP = false;
-
-    ArrayList<GeneratedQuestion> allPossibleQuestions = new ArrayList<>();
 
     public ChainQuestion(ChainGraph chainGraph) throws Exception {
         this.chainGraph = chainGraph;
@@ -74,6 +66,7 @@ public class ChainQuestion {
     }
 
     private void initialize_forward_chain() throws Exception {
+        predicatesRepresentationsSeries = new ArrayList<>();
         missingPredicateRepresentation_s_o_NP = false;
         S0_Seed = chainGraph.getChain().get(0).getSubject().getValue(); //seed
         P0 = chainGraph.getChain().get(0).getPredicate().getValue();
@@ -83,12 +76,11 @@ public class ChainQuestion {
         S0_withPrefix = chainGraph.getChain().get(0).getSubject().getValueWithPrefix();
         P0_withPrefix = chainGraph.getChain().get(0).getPredicate().getValueWithPrefix();
         O0_withPrefix = chainGraph.getChain().get(0).getObject().getValueWithPrefix();
-        
 
         S0_type_withPrefix = chainGraph.getChain().get(0).getS_type();
         O0_type_withPrefix = chainGraph.getChain().get(0).getO_type();
         O_Final_type_withPrefix = chainGraph.getChain().get(chainGraph.getChain().size() - 1).getO_type();
-        
+
         somethingElse = Settings.knowledgeGraph.getSimilarEntity(Settings.explorer, S0_withPrefix, this.S0_type_withPrefix);
         somethingElseWithoutPrefix = Settings.explorer.removePrefix(somethingElse);
 
@@ -113,7 +105,7 @@ public class ChainQuestion {
 
         P1_to_n_SO_PN_series = "";
         P1_to_n_OS_PN_series = "";
-        
+
         P1_to_n_SO_PN_series_Tagged = "";
         P1_to_n_OS_PN_series_Tagged = "";
 
@@ -140,17 +132,19 @@ public class ChainQuestion {
 
                 System.out.println("predicate_s_O_NP: " + s_o_NP);
                 System.out.println("predicate_O_S_NP: " + o_s_NP);
+
+
             }
             //NL representation of intermediate predicates
             if (s_o_NP != null && !s_o_NP.equals("")) {
                 P1_to_n_SO_PN_series += " " + PhraseRepresentationProcessing.NP_without_verb(s_o_NP);
-                P1_to_n_SO_PN_series_Tagged += " <p>" + PhraseRepresentationProcessing.NP_without_verb(s_o_NP)+"</p>";
+                P1_to_n_SO_PN_series_Tagged += " <p>" + PhraseRepresentationProcessing.NP_without_verb(s_o_NP) + "</p>";
             } else {
                 missingPredicateRepresentation_s_o_NP = true;
             }
             if (o_s_NP != null && !o_s_NP.equals("")) {
                 P1_to_n_OS_PN_series += " " + PhraseRepresentationProcessing.NP_without_verb(o_s_NP);
-                P1_to_n_OS_PN_series_Tagged += " <p>" + PhraseRepresentationProcessing.NP_without_verb(o_s_NP)+"</p>";
+                P1_to_n_OS_PN_series_Tagged += " <p>" + PhraseRepresentationProcessing.NP_without_verb(o_s_NP) + "</p>";
             } else {
                 missingPredicateRepresentation_s_o_NP = true;
             }
@@ -163,27 +157,25 @@ public class ChainQuestion {
 
         P0_SO_NP = predicateNL_for_P0.getPredicate_o_s_NP();
         P0_OS_NP = predicateNL_for_P0.getPredicate_s_O_NP();
-        
+
         System.out.println("predicate_0_s_O_NP: " + P0_SO_NP);
         System.out.println("predicate_0_O_S_NP: " + P0_OS_NP);
 
-        selectQuery = generateSELECTQuery();
-        countQuery = generateCountQuery();
-        askQuery_correct = generateAskQuery_Correct();
-        askQuery_wrong = generateAskQuery_Wrong();
-        
-        
+        selectQuery = generateSELECTQuery_Chain();
+        countQuery = generateCountQuery_Chain();
+        askQuery_correct = generateAskQuery_Correct_Chain();
+        askQuery_wrong = generateAskQuery_Wrong_Chain();
+
         S0_Seed = EntityProcessing.decide_quotes_with_type(S0_Seed, this.S0_type_withPrefix);
         O_Final = EntityProcessing.decide_quotes_with_type(O_Final, this.O_Final_type_withPrefix);
-        somethingElseWithoutPrefix = EntityProcessing.decide_quotes_with_type(somethingElseWithoutPrefix,  this.S0_type_withPrefix);
-        
-        
+        somethingElseWithoutPrefix = EntityProcessing.decide_quotes_with_type(somethingElseWithoutPrefix, this.S0_type_withPrefix);
 
         generateAllPossibleChainQuestions();
     }
 
     //Chain take the revers direction
     private void initialize_backward_chain() throws Exception {
+        predicatesRepresentationsSeries = new ArrayList<>();
         missingPredicateRepresentation_s_o_NP = false;
         int length = chainGraph.getChain().size() - 1;
         S0_Seed = chainGraph.getChain().get(length).getObject().getValue(); //seed //Swap
@@ -220,8 +212,7 @@ public class ChainQuestion {
 
         P0_OS_NP = predicateNL_for_P0.getPredicate_s_O_NP();
         P0_OS_VP = predicateNL_for_P0.getPredicate_s_O_VP();
-        
-        
+
         System.out.println("predicate_0_s_O_NP: " + P0_SO_NP);
         System.out.println("predicate_0_s_O_VP: " + P0_SO_VP);
         System.out.println("predicate_0_O_S_NP: " + P0_OS_NP);
@@ -256,7 +247,7 @@ public class ChainQuestion {
                     s_o_NP = PhraseRepresentationProcessing.NP_without_verb(s_o_NP);
                 }
                 P1_to_n_SO_PN_series += " " + s_o_NP;
-                P1_to_n_SO_PN_series_Tagged += " <p>" + s_o_NP+"</p>";
+                P1_to_n_SO_PN_series_Tagged += " <p>" + s_o_NP + "</p>";
             } else {
                 missingPredicateRepresentation_s_o_NP = true;
             }
@@ -277,20 +268,20 @@ public class ChainQuestion {
             return;
         }
 
-        selectQuery = generateSELECTQuery();
-        countQuery = generateCountQuery();
-        askQuery_correct = generateAskQuery_Correct();
-        askQuery_wrong = generateAskQuery_Wrong();
-        
+        selectQuery = generateSELECTQuery_Chain();
+        countQuery = generateCountQuery_Chain();
+        askQuery_correct = generateAskQuery_Correct_Chain();
+        askQuery_wrong = generateAskQuery_Wrong_Chain();
+
         S0_Seed = EntityProcessing.decide_quotes_with_type(S0_Seed, this.S0_type_withPrefix);
         O_Final = EntityProcessing.decide_quotes_with_type(O_Final, this.O_Final_type_withPrefix);
-        somethingElseWithoutPrefix = EntityProcessing.decide_quotes_with_type(somethingElseWithoutPrefix,  this.S0_type_withPrefix);
+        somethingElseWithoutPrefix = EntityProcessing.decide_quotes_with_type(somethingElseWithoutPrefix, this.S0_type_withPrefix);
 
         generateAllPossibleChainQuestions();
     }
 
     public void generateAllPossibleChainQuestions() throws Exception {
-        // generateCountQuery(); //Not possible here  (Require a type branch)
+        // generateCountQuery_Chain(); //Not possible here  (Require a type branch)
         if (KGOntology.isSubtypeOf(S0_type_withPrefix, Settings.Person)) {
             generateQuestionSELECT_e_of_type_Person();
         } else if (KGOntology.isSubtypeOf(S0_type_withPrefix, Settings.Place)) {
@@ -304,94 +295,70 @@ public class ChainQuestion {
         }
     }
 
-    public String generateSELECTQuery() {
-        String triples = ""; //query_GP_triples.replaceFirst("<" + S0_withPrefix + ">", "?Seed");
-        if (S0_type_withPrefix.equals(Settings.Number) || S0_type_withPrefix.equals(Settings.Date) || S0_type_withPrefix.equals(Settings.Literal)) {
-            triples = query_GP_triples
-                    .replace("\"" + S0_withPrefix + "\"^^xsd:dateTime ", "?Seed")
-                    .replace("\"" + S0_withPrefix + "\"", "?Seed")
-                    .replace(" " + S0_withPrefix + " ", "?Seed") 
-                    ;
-        } else {
-            triples = query_GP_triples.replaceFirst("<" + S0_withPrefix + ">", "?Seed");
-        }
-
-        if (Settings.Triple_NP_Direction == Settings.LABEL_NP_SO) {
-            for (int i = 0; i < chainGraph.getChain().size() - 1; i++) {
-                triples = triples.replace("<" + chainGraph.getChain().get(i).getSubject().getValueWithPrefix() + ">", "?S" + i);
-            }
-        } else if (Settings.Triple_NP_Direction == Settings.LABEL_NP_OS) {
-            for (int i = chainGraph.getChain().size() - 1; i >= 0; i--) {
-                triples = triples.replace("<" + chainGraph.getChain().get(i).getObject().getValueWithPrefix() + ">", "?S" + i);
-            }
-        }
-
+    public String generateSELECTQuery_Chain() {
+        String triples = QueryGenerator.graph_to_graphPattern(query_GP_triples, S0_withPrefix, S0_type_withPrefix, "?Seed");
+        triples = QueryGenerator.chainGraphToChainGraphPattern(triples, chainGraph);
         return "SELECT DISTINCT ?Seed WHERE{" + triples + "\n}";
     }
 
-    public String generateCountQuery() {
-
+    public String generateCountQuery_Chain() {
         if (missingPredicateRepresentation_s_o_NP) {
             return null;
         }
-
         String triples = query_GP_triples.replaceFirst("<" + chainGraph.getChain().get(0).getSubject().getValueWithPrefix() + ">", "?Seed");
-
-        if (Settings.Triple_NP_Direction == Settings.LABEL_NP_SO) {
-            for (int i = 0; i < chainGraph.getChain().size() - 1; i++) {
-                triples = triples.replace("<" + chainGraph.getChain().get(i).getSubject().getValueWithPrefix() + ">", "?S" + i);
-            }
-        } else if (Settings.Triple_NP_Direction == Settings.LABEL_NP_OS) {
-            for (int i = chainGraph.getChain().size() - 1; i >= 0; i--) {
-                triples = triples.replace("<" + chainGraph.getChain().get(i).getObject().getValueWithPrefix() + ">", "?S" + i);
-            }
-        }
-
+        triples = QueryGenerator.chainGraphToChainGraphPattern(triples, chainGraph);
         return "SELECT COUNT(?Seed) WHERE{" + triples + "\n}";
     }
 
-    public String generateAskQuery_Correct() {
-
+    public String generateAskQuery_Correct_Chain() {
         if (missingPredicateRepresentation_s_o_NP) {
             return null;
         }
-
-        String triples = query_GP_triples;
-
-        if (Settings.Triple_NP_Direction == Settings.LABEL_NP_SO) {
-            for (int i = 1; i < chainGraph.getChain().size() - 1; i++) {
-                triples = triples.replace("<" + chainGraph.getChain().get(i).getSubject().getValueWithPrefix() + ">", "?S" + i);
-            }
-        } else if (Settings.Triple_NP_Direction == Settings.LABEL_NP_OS) {
-            for (int i = chainGraph.getChain().size() - 2; i >= 0; i--) {
-                triples = triples.replace("<" + chainGraph.getChain().get(i).getObject().getValueWithPrefix() + ">", "?S" + i);
-            }
-        }
-
+        String triples = QueryGenerator.chainGraphToChainGraphPattern(query_GP_triples, chainGraph);
         return "ASK WHERE{" + triples + "\n}";
     }
 
-    public String generateAskQuery_Wrong() {
+    public String generateAskQuery_Wrong_Chain() {
 
         if (missingPredicateRepresentation_s_o_NP) {
             return null;
         }
-
-        String triples = query_GP_triples;
-
-        if (Settings.Triple_NP_Direction == Settings.LABEL_NP_SO) {
-            for (int i = 1; i < chainGraph.getChain().size() - 1; i++) {
-                triples = triples.replace("<" + chainGraph.getChain().get(i).getSubject().getValueWithPrefix() + ">", "?S" + i);
-            }
-        } else if (Settings.Triple_NP_Direction == Settings.LABEL_NP_OS) {
-            for (int i = chainGraph.getChain().size() - 2; i >= 0; i--) {
-                triples = triples.replace("<" + chainGraph.getChain().get(i).getObject().getValueWithPrefix() + ">", "?S" + i);
-            }
+        String triples = QueryGenerator.chainGraphToChainGraphPattern(query_GP_triples, chainGraph);
+        if (triples == null) {
+            return null;
         }
+        return "ASK WHERE{" + triples.replace(S0_withPrefix, somethingElse) + "\n}";
+    }
 
-        if(triples==null) return null;
-        triples = triples.replace(S0_withPrefix, somethingElse);
-        return "ASK WHERE{" + triples + "\n}";
+    /**
+     * Generates a select question of the form "qt X P_prefix Y P_postfix?" for
+     * a single edge graph where X is the object and Y is a phrase
+     * representation of the predicate. The method also creates a
+     * GeneratedQuestion object with the question and its tagged version and
+     * adds it to the list of all possible questions.
+     *
+     * @param qt            the question type, e.g. "What", "Who", "Where", etc.
+     * @param O             the object of the triple pattern
+     * @param P_phrase      the phrase representation of the predicate
+     * @param P_phrase_type the type of the phrase representation of the
+     *                      predicate, e.g. FactConstraint.S_O_VP, FactConstraint.S_O_NP, etc.
+     * @param P_prefix      the prefix to be added before the phrase representation
+     *                      of the predicate
+     * @param P_postfix     the postfix to be added after the phrase representation
+     *                      of the predicate
+     * @param qt_type       the type of the question, e.g. GeneratedQuestion.QT_WHAT,
+     *                      GeneratedQuestion.QT_WHEN, etc.
+     * @throws Exception if there is an error while generating the question
+     */
+    private void generatQuestion(String qt, String O, String P_phrase, byte P_phrase_type, String P_prefix, String P_postfix, String qt_type) throws Exception {
+        if (qt.equals(""))
+            P_phrase = P_phrase.substring(0, 1).toUpperCase() + P_phrase.substring(1);
+        String tagged_qt = "<qt>" + qt + "</qt>";
+        String fact_Constraint = FactConstraint.constructFactContraintNL(O, P_phrase, P_phrase_type, false, P_prefix, P_postfix);
+        String tagged_fact_Constraint = FactConstraint.constructFactContraintNL(O, P_phrase, P_phrase_type, true, P_prefix, P_postfix);
+        String question = qt + " " + fact_Constraint + "?";
+        String tagged_question = tagged_qt.replace("<qt></qt>", "") + " " + tagged_fact_Constraint + "?";
+        allPossibleQuestions.add(new GeneratedQuestion(S0_withPrefix, S0_type_withPrefix, question.trim(), tagged_question.trim(), selectQuery, chainGraph.toString(), chainGraph.getChain().size(), qt_type, GeneratedQuestion.SH_CHAIN));
     }
 
     private void generateQuestionSELECT_e_of_type_Person() throws Exception {
@@ -401,25 +368,34 @@ public class ChainQuestion {
         }
 
         //Generate Question
+//        if (P0_SO_VP != null) {
+//            generatQuestion("Who", O_Final, P0_SO_VP + " " + P1_to_n_SO_PN_series, FactConstraint.S_O_VP, "", "", GeneratedQuestion.QT_WHO);
+//        }
         if (P0_SO_VP != null) {
             String question = "Who " + P0_SO_VP + " " + P1_to_n_SO_PN_series + " " + O_Final + "?";
             String questionTagged = "<qt>Who</qt> <p>" + P0_SO_VP + "</p> " + P1_to_n_SO_PN_series_Tagged + " <o>" + O_Final + "</o>?";
             allPossibleQuestions.add(new GeneratedQuestion(S0_withPrefix, S0_type_withPrefix, question, questionTagged, selectQuery, chainGraph.toString(), chainGraph.getChain().size(), GeneratedQuestion.QT_WHO, GeneratedQuestion.SH_CHAIN));
         }
+
+//        if (P0_SO_NP != null) {
+//            generatQuestion("Who", O_Final, P0_SO_NP + " " + P1_to_n_SO_PN_series, FactConstraint.S_O_VP, "", "", GeneratedQuestion.QT_WHO);
+//            generatQuestion(QuestionTypePrefixGenerator.getRequestPrefix(), O_Final, P0_SO_NP + " " + P1_to_n_SO_PN_series, FactConstraint.S_O_VP, "", "", GeneratedQuestion.QT_REQUEST);
+//            generatQuestion("", O_Final, P0_SO_NP_without_verb + " " + P1_to_n_SO_PN_series_without_verb, FactConstraint.S_O_NP, "", "", GeneratedQuestion.QT_TOPICAL_PRUNE);
+//        }
         if (P0_SO_NP != null) {
             String question = "Who " + P0_SO_NP + " " + P1_to_n_SO_PN_series + " " + O_Final + "?";
-            String questionTagged = "<qt>Who</qt> <p>" + P0_SO_NP + "</p> " + P1_to_n_SO_PN_series_Tagged + " <o>" + O_Final + "</o>?"; 
+            String questionTagged = "<qt>Who</qt> <p>" + P0_SO_NP + "</p> " + P1_to_n_SO_PN_series_Tagged + " <o>" + O_Final + "</o>?";
             allPossibleQuestions.add(new GeneratedQuestion(S0_withPrefix, S0_type_withPrefix, question, questionTagged, selectQuery, chainGraph.toString(), chainGraph.getChain().size(), GeneratedQuestion.QT_WHO, GeneratedQuestion.SH_CHAIN));
-            
-            String req = Request.getRequestPrefix();
+
+            String req = QuestionTypePrefixGenerator.getRequestPrefix();
             question = req + " " + P0_SO_NP_without_verb + " " + P1_to_n_SO_PN_series_without_verb + " " + O_Final + "?";
             questionTagged = "<qt>" + req + "</qt> <p>" + P0_SO_NP_without_verb + "</p> " + P1_to_n_SO_PN_series_without_verb_Tagged + " <o>" + O_Final + "</o>?";
 
             allPossibleQuestions.add(new GeneratedQuestion(S0_withPrefix, S0_type_withPrefix, question, questionTagged, selectQuery, chainGraph.toString(), chainGraph.getChain().size(), GeneratedQuestion.QT_REQUEST, GeneratedQuestion.SH_CHAIN));
-            
+
             question = P0_SO_NP_without_verb + " " + P1_to_n_SO_PN_series_without_verb + " " + O_Final + "?";
             questionTagged = "<p>" + P0_SO_NP_without_verb + "</p> " + P1_to_n_SO_PN_series_without_verb_Tagged + " <o>" + O_Final + "</o>?";
-           
+
             allPossibleQuestions.add(new GeneratedQuestion(S0_withPrefix, S0_type_withPrefix, question, questionTagged, selectQuery, chainGraph.toString(), chainGraph.getChain().size(), GeneratedQuestion.QT_TOPICAL_PRUNE, GeneratedQuestion.SH_CHAIN));
 
         }
@@ -447,16 +423,16 @@ public class ChainQuestion {
             String question = "What " + P0_SO_NP + " " + P1_to_n_SO_PN_series + " " + O_Final + "?";
             String questionTagged = "<qt>What</qt> <p>" + P0_SO_NP + "</p> " + P1_to_n_SO_PN_series_Tagged + " <o>" + O_Final + "</o>?";
             allPossibleQuestions.add(new GeneratedQuestion(S0_withPrefix, S0_type_withPrefix, question, questionTagged, selectQuery, chainGraph.toString(), chainGraph.getChain().size(), GeneratedQuestion.QT_WHAT, GeneratedQuestion.SH_CHAIN));
-            
-            String req = Request.getRequestPrefix();
+
+            String req = QuestionTypePrefixGenerator.getRequestPrefix();
             question = req + " " + P0_SO_NP_without_verb + " " + P1_to_n_SO_PN_series_without_verb + " " + O_Final + "?";
             questionTagged = "<qt>" + req + "</qt> <p>" + P0_SO_NP_without_verb + "</p> " + P1_to_n_SO_PN_series_without_verb_Tagged + " <o>" + O_Final + "</o>?";
-           
+
             allPossibleQuestions.add(new GeneratedQuestion(S0_withPrefix, S0_type_withPrefix, question, questionTagged, selectQuery, chainGraph.toString(), chainGraph.getChain().size(), GeneratedQuestion.QT_REQUEST, GeneratedQuestion.SH_CHAIN));
-            
+
             question = P0_SO_NP_without_verb + " " + P1_to_n_SO_PN_series_without_verb + " " + O_Final + "?";
             questionTagged = "<p>" + P0_SO_NP_without_verb + "</p> " + P1_to_n_SO_PN_series_without_verb_Tagged + " <o>" + O_Final + "</o>?";
-   
+
             allPossibleQuestions.add(new GeneratedQuestion(S0_withPrefix, S0_type_withPrefix, question, questionTagged, selectQuery, chainGraph.toString(), chainGraph.getChain().size(), GeneratedQuestion.QT_TOPICAL_PRUNE, GeneratedQuestion.SH_CHAIN));
 
         }
@@ -484,16 +460,16 @@ public class ChainQuestion {
             String question = "What " + P0_SO_NP + " " + P1_to_n_SO_PN_series + " " + O_Final + "?";
             String questionTagged = "<qt>What</qt> <p>" + P0_SO_NP + "</p> " + P1_to_n_SO_PN_series_Tagged + " <o>" + O_Final + "</o>?";
             allPossibleQuestions.add(new GeneratedQuestion(S0_withPrefix, S0_type_withPrefix, question, questionTagged, selectQuery, chainGraph.toString(), chainGraph.getChain().size(), GeneratedQuestion.QT_WHAT, GeneratedQuestion.SH_CHAIN));
-            
-            String req = Request.getRequestPrefix();
+
+            String req = QuestionTypePrefixGenerator.getRequestPrefix();
             question = req + " " + P0_SO_NP_without_verb + " " + P1_to_n_SO_PN_series_without_verb + " " + O_Final + "?";
             questionTagged = "<qt>" + req + "</qt> <p> " + P0_SO_NP_without_verb + "</p> " + P1_to_n_SO_PN_series_without_verb_Tagged + " <o>" + O_Final + "</o>?";
 
             allPossibleQuestions.add(new GeneratedQuestion(S0_withPrefix, S0_type_withPrefix, question, questionTagged, selectQuery, chainGraph.toString(), chainGraph.getChain().size(), GeneratedQuestion.QT_REQUEST, GeneratedQuestion.SH_CHAIN));
-            
+
             question = P0_SO_NP_without_verb + " " + P1_to_n_SO_PN_series_without_verb + " " + O_Final + "?";
             questionTagged = "<p>" + P0_SO_NP_without_verb + "</p> " + P1_to_n_SO_PN_series_without_verb_Tagged + " <o>" + O_Final + "</o>?";
-       
+
             allPossibleQuestions.add(new GeneratedQuestion(S0_withPrefix, S0_type_withPrefix, question, questionTagged, selectQuery, chainGraph.toString(), chainGraph.getChain().size(), GeneratedQuestion.QT_TOPICAL_PRUNE, GeneratedQuestion.SH_CHAIN));
         }
         if (P0_SO_VP != null) {
@@ -515,16 +491,16 @@ public class ChainQuestion {
             String question = "What " + P0_SO_NP + " " + P1_to_n_SO_PN_series + " " + O_Final + "?";
             String questionTagged = "<qt>What</qt> <p>" + P0_SO_NP + "</p> " + P1_to_n_SO_PN_series_Tagged + " <o>" + O_Final + "</o>?";
             allPossibleQuestions.add(new GeneratedQuestion(S0_withPrefix, S0_type_withPrefix, question, questionTagged, selectQuery, chainGraph.toString(), chainGraph.getChain().size(), GeneratedQuestion.QT_WHAT, GeneratedQuestion.SH_CHAIN));
-            
-            String req = Request.getRequestPrefix();
+
+            String req = QuestionTypePrefixGenerator.getRequestPrefix();
             question = req + " " + P0_SO_NP_without_verb + " " + P1_to_n_SO_PN_series_without_verb + " " + O_Final + "?";
             questionTagged = "<qt>" + req + "</qt> <p> " + P0_SO_NP_without_verb + "</p> " + P1_to_n_SO_PN_series_without_verb_Tagged + " <o>" + O_Final + "</o>?";
-         
+
             allPossibleQuestions.add(new GeneratedQuestion(S0_withPrefix, S0_type_withPrefix, question, questionTagged, selectQuery, chainGraph.toString(), chainGraph.getChain().size(), GeneratedQuestion.QT_REQUEST, GeneratedQuestion.SH_CHAIN));
-            
+
             question = P0_SO_NP_without_verb + " " + P1_to_n_SO_PN_series_without_verb + " " + O_Final + "?";
             questionTagged = "<p>" + P0_SO_NP_without_verb + "</p> " + P1_to_n_SO_PN_series_without_verb_Tagged + " <o>" + O_Final + "</o>?";
-            
+
             allPossibleQuestions.add(new GeneratedQuestion(S0_withPrefix, S0_type_withPrefix, question, questionTagged, selectQuery, chainGraph.toString(), chainGraph.getChain().size(), GeneratedQuestion.QT_TOPICAL_PRUNE, GeneratedQuestion.SH_CHAIN));
         }
         if (P0_OS_NP != null) {
@@ -548,16 +524,16 @@ public class ChainQuestion {
             String question = "What " + P0_SO_NP + " " + P1_to_n_SO_PN_series + " " + O_Final + "?";
             String questionTagged = "<qt>What</qt> <p>" + P0_SO_NP + "</p> " + P1_to_n_SO_PN_series_Tagged + " <o>" + O_Final + "</o>?";
             allPossibleQuestions.add(new GeneratedQuestion(S0_withPrefix, S0_type_withPrefix, question, questionTagged, selectQuery, chainGraph.toString(), chainGraph.getChain().size(), GeneratedQuestion.QT_WHAT, GeneratedQuestion.SH_CHAIN));
-            
-            String req = Request.getRequestPrefix();
+
+            String req = QuestionTypePrefixGenerator.getRequestPrefix();
             question = req + " " + P0_SO_NP + " " + P1_to_n_SO_PN_series_without_verb + " " + O_Final + "?";
             questionTagged = "<qt>" + req + "</qt> <p>" + P0_SO_NP + "</p> " + P1_to_n_SO_PN_series_without_verb_Tagged + " <o>" + O_Final + "</o>?";
-        
+
             allPossibleQuestions.add(new GeneratedQuestion(S0_withPrefix, S0_type_withPrefix, question, questionTagged, selectQuery, chainGraph.toString(), chainGraph.getChain().size(), GeneratedQuestion.QT_REQUEST, GeneratedQuestion.SH_CHAIN));
-            
+
             question = P0_SO_NP + " " + P1_to_n_SO_PN_series_without_verb + " " + O_Final + "?";
             questionTagged = "<p>" + P0_SO_NP + "</p> " + P1_to_n_SO_PN_series_without_verb_Tagged + " <o>" + O_Final + "</o>?";
-            
+
             allPossibleQuestions.add(new GeneratedQuestion(S0_withPrefix, S0_type_withPrefix, question, questionTagged, selectQuery, chainGraph.toString(), chainGraph.getChain().size(), GeneratedQuestion.QT_TOPICAL_PRUNE, GeneratedQuestion.SH_CHAIN));
 
         }

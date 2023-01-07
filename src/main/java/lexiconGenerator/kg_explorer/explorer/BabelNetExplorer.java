@@ -25,10 +25,8 @@ public class BabelNetExplorer extends Explorer {
     public static BabelNetExplorer getInstance(String url) {
         if (instance == null) {
             instance = new DBpediaExplorer(url);
-            return (BabelNetExplorer) instance;
-        } else {
-            return (BabelNetExplorer) instance;
         }
+        return (BabelNetExplorer) instance;
     }
     
    public static String getPredicateLabel(String predicate) {
@@ -45,24 +43,24 @@ public class BabelNetExplorer extends Explorer {
             return node;
         }
 
-        String s = "";
-        s = Settings.knowledgeGraph.getNodeLabel(this, node);
+        StringBuilder s = new StringBuilder();
+        s = new StringBuilder(Settings.knowledgeGraph.getNodeLabel(this, node));
 
-        if (s == null || s.equals("")) {
+        if (s == null || s.toString().equals("")) {
             if (node.startsWith("http")) {
                 String last = node.substring(node.lastIndexOf("/") + 1);
                 if (last.contains("#")) {
                     last = node.substring(node.lastIndexOf("#") + 1);
                 }
                 String[] r = last.split("(?=\\p{Lu})");
-                s = "";
+                s = new StringBuilder();
                 for (String string : r) {
-                    s += string + " ";
+                    s.append(string).append(" ");
                 }
-                s = s.trim().toLowerCase();
-                return s;
+                s = new StringBuilder(s.toString().trim().toLowerCase());
+                return s.toString();
             }
         }
-        return s;
+        return s.toString();
     }
 }

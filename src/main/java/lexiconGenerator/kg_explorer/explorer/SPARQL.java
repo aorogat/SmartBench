@@ -29,10 +29,9 @@ public class SPARQL {
                     + "FILTER(?p=<" + node.trim() + ">). "
                     + "FILTER langMatches( lang(?l), \"EN\" )."
                     + "}";
-            ArrayList<VariableSet> varSet = explorer.kg.runQuery(query);
-            String n = varSet.get(0).getVariables().get(0).toString();
+            ArrayList<VariableSet> varSet = kg.runQuery(query);
 
-            return n;
+            return varSet.get(0).getVariables().get(0).toString();
         } catch (Exception e) {
             return null;
         }
@@ -48,19 +47,17 @@ public class SPARQL {
             query = "SELECT DISTINCT ?l WHERE { <" + node.trim() + "> <http://xmlns.com/foaf/0.1/name> ?l. "
                     //                    + "FILTER(?p=<" + node.trim() + ">). "
                     + "}";
-            ArrayList<VariableSet> varSet = explorer.kg.runQuery(query);
+            ArrayList<VariableSet> varSet = kg.runQuery(query);
             if (varSet == null||varSet.size()==0) {
                 query = "SELECT DISTINCT ?l WHERE { <" + node.trim() + "> <http://purl.org/dc/terms/title> ?l. "
                         //                    + "FILTER(?p=<" + node.trim() + ">). "
                         + "}";
-                varSet = explorer.kg.runQuery(query);
-                String n = varSet.get(0).getVariables().get(0).toString();
+                varSet = kg.runQuery(query);
 
-                return n;
+                return varSet.get(0).getVariables().get(0).toString();
             }
-            String n = varSet.get(0).getVariables().get(0).toString();
 
-            return n;
+            return varSet.get(0).getVariables().get(0).toString();
         } catch (Exception e) {
             return null;
         }
@@ -91,10 +88,9 @@ public class SPARQL {
                     + "ORDER BY " + order + "(?n)\n"
                     + "LIMIT 1\n"
                     + "OFFSET " + offset;
-            ArrayList<VariableSet> varSet = Settings.explorer.kg.runQuery(query);
-            String o = varSet.get(0).getVariables().get(0).toString();
+            ArrayList<VariableSet> varSet = kg.runQuery(query);
 
-            return o;
+            return varSet.get(0).getVariables().get(0).toString();
         } catch (Exception e) {
             return null;
         }
@@ -108,7 +104,7 @@ public class SPARQL {
                     + "?similar rdf:type <" + entityType + ">. "
                     + "FILTER(?similar!=<" + entity.trim() + ">). "
                     + "} LIMIT 1";
-            ArrayList<VariableSet> varSet = explorer.kg.runQuery(query);
+            ArrayList<VariableSet> varSet = kg.runQuery(query);
             return varSet.get(0).getVariables().get(0).toString();
         } catch (Exception e) {
             return null;
@@ -147,7 +143,7 @@ public class SPARQL {
                         + "    }.\n"
                         + "}";
             }
-            ArrayList<VariableSet> varSet = explorer.kg.runQuery(query);
+            ArrayList<VariableSet> varSet = kg.runQuery(query);
             return varSet.get(0).getVariables().get(0).toString();
         } catch (Exception e) {
             return "UNKONWN";
@@ -241,14 +237,12 @@ public class SPARQL {
                         + Settings.popularityORDER
                         + "OFFSET " + offset;
             }
-            explorer.predicatesTriplesVarSets = explorer.kg.runQuery(query);
+            Explorer.predicatesTriplesVarSets = kg.runQuery(query);
 
-            String s = explorer.predicatesTriplesVarSets.get(0).getVariables().get(0).toString();
-            String o = explorer.predicatesTriplesVarSets.get(0).getVariables().get(1).toString();
+            String s = Explorer.predicatesTriplesVarSets.get(0).getVariables().get(0).toString();
+            String o = Explorer.predicatesTriplesVarSets.get(0).getVariables().get(1).toString();
 
-            Branch branch = new Branch(s, o, predicateURI, S_type, O_type);
-
-            return branch;
+            return new Branch(s, o, predicateURI, S_type, O_type);
         } catch (Exception e) {
             return null;
         }
@@ -267,13 +261,9 @@ public class SPARQL {
             query = "ASK WHERE {\n"
                     + "  " + child + " rdfs:subClassOf* " + parent + ".\n"
                     + "}";
-            ArrayList<VariableSet> varSet = explorer.kg.runQuery(query);
+            ArrayList<VariableSet> varSet = kg.runQuery(query);
             String answer = varSet.get(0).getVariables().get(0).getValueWithPrefix();
-            if (answer.equals("true")) {
-                return true;
-            } else {
-                return false;
-            }
+            return answer.equals("true");
         } catch (Exception e) {
             return false;
         }

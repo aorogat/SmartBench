@@ -8,17 +8,18 @@ import lexiconGenerator.kg_explorer.model.PredicateContext;
 import knowledgeGraphs.KnowledgeGraph;
 import benchmarkGenerator.subgraphShapeGenerator.model.VariableSet;
 import benchmarkGenerator.subgraphShapeGenerator.subgraph.Graph;
+import static database.Database.storePredicates;
+import static java.lang.System.out;
 import settings.Settings;
+import static settings.Settings.Query_SLICING_SIZE;
+import static settings.Settings.explorer;
+import static settings.Settings.knowledgeGraph;
 
-/**
- *
- * @author aorogat
- */
+
 public class Predicate_Extractor {
 
     private static int numberOfNLExamples = 100;
     private static int minContextWeight = 20;
-    int counter = 0;
     public static KnowledgeGraph kg;
     public static String endpoint;
     public static ArrayList<VariableSet> predicatesVariableSet_entity = new ArrayList<>();
@@ -28,26 +29,23 @@ public class Predicate_Extractor {
 
     public static ArrayList<VariableSet> predicatesTriplesVarSets;
     public static ArrayList<Graph> result = new ArrayList<>();
+    int counter = 0;
     protected ArrayList<Predicate> predicateList = new ArrayList<>();
 
     public Predicate_Extractor() {
-        kg = Settings.knowledgeGraph;
+        kg = knowledgeGraph;
     }
 
-    public static void main(String[] args) {
-        Predicate_Extractor extractor = new Predicate_Extractor();
-        extractor.exploreAllPredicates();
-    }
 
     public void exploreAllPredicates() {
         ListOfPredicates predicats;
-        int offset = Settings.Query_SLICING_SIZE;
+        int offset = Query_SLICING_SIZE;
         int from = 0;
         boolean firstIteration = true;
 
         predicats = getLexiconLHS(from, offset);
-//        predicats.printHeader();
-//        predicats.print();
+        predicats.printHeader();
+        predicats.print();
     }
 
     public ListOfPredicates getLexiconLHS(int from, int length) {
@@ -59,21 +57,21 @@ public class Predicate_Extractor {
 
         //get predicates LHS (e.g., uri, label, contexts)
         int i = 0;
-        Predicate predicateObject = new Predicate(Settings.explorer);
+        Predicate predicateObject = new Predicate(explorer);
         ArrayList<PredicateContext> contexts;
         ListOfPredicates predicates = new ListOfPredicates(predicateList);
 
         for (VariableSet predicate : predicatesVariableSet_entity) {
-            System.out.println("###################" + ++counter + ": New Predicate: " + predicate.toString().trim() + " ################### ");
+            out.println("###################" + ++counter + ": New Predicate: " + predicate.toString().trim() + " ################### ");
 
             String uri = predicate.toString().trim();
-            String predi = Settings.explorer.removePrefix(predicate.toString().trim());
-            String lab = Settings.knowledgeGraph.getPredicateLabel(uri);
+            String predi = explorer.removePrefix(predicate.toString().trim());
+            String lab = knowledgeGraph.getPredicateLabel(uri);
             try {
-                contexts = Settings.knowledgeGraph.getPredicatesContext_EntityObjects("<" + uri + ">");
+                contexts = knowledgeGraph.getPredicatesContext_EntityObjects("<" + uri + ">");
 
                 for (PredicateContext context : contexts) {
-                    predicateObject = new Predicate(Settings.explorer);
+                    predicateObject = new Predicate(explorer);
                     predicateObject.setPredicateURI(uri);
                     predicateObject.setPredicate(predi);
                     predicateObject.setLabel(lab);
@@ -82,9 +80,9 @@ public class Predicate_Extractor {
                     predicateObject.print();
                     predicates.getPredicates().add(predicateObject);
                     try {
-                        Database.storePredicates(predicateObject);
+                        storePredicates(predicateObject);
                     } catch (Exception e) {
-                        System.out.println("XXXXXXXXXX NOT SOTRED XXXXXXXXXXXXX");
+                        out.println("XXXXXXXXXX NOT SOTRED XXXXXXXXXXXXX");
                     }
                 }
             } catch (Exception e) {
@@ -94,15 +92,15 @@ public class Predicate_Extractor {
 
         //numbers
         for (VariableSet predicate : predicatesVariableSet_number) {
-            System.out.println("###################" + ++counter + ": New Predicate: " + predicate.toString().trim() + " ################### ");
+            out.println("###################" + ++counter + ": New Predicate: " + predicate.toString().trim() + " ################### ");
 
             String uri = predicate.toString().trim();
-            String predi = Settings.explorer.removePrefix(predicate.toString().trim());
-            String lab = Settings.knowledgeGraph.getPredicateLabel(uri);
-            contexts = Settings.knowledgeGraph.getPredicatesContext_NumberObjects("<" + uri + ">");
+            String predi = explorer.removePrefix(predicate.toString().trim());
+            String lab = knowledgeGraph.getPredicateLabel(uri);
+            contexts = knowledgeGraph.getPredicatesContext_NumberObjects("<" + uri + ">");
 
             for (PredicateContext context : contexts) {
-                predicateObject = new Predicate(Settings.explorer);
+                predicateObject = new Predicate(explorer);
                 predicateObject.setPredicateURI(uri);
                 predicateObject.setPredicate(predi);
                 predicateObject.setLabel(lab);
@@ -111,9 +109,9 @@ public class Predicate_Extractor {
                 predicateObject.print();
                 predicates.getPredicates().add(predicateObject);
                 try {
-                    Database.storePredicates(predicateObject);
+                    storePredicates(predicateObject);
                 } catch (Exception e) {
-                    System.out.println("XXXXXXXXXX NOT SOTRED XXXXXXXXXXXXX");
+                    out.println("XXXXXXXXXX NOT SOTRED XXXXXXXXXXXXX");
                 }
             }
 
@@ -121,15 +119,15 @@ public class Predicate_Extractor {
 
         //dates
         for (VariableSet predicate : predicatesVariableSet_date) {
-            System.out.println("###################" + ++counter + ": New Predicate: " + predicate.toString().trim() + " ################### ");
+            out.println("###################" + ++counter + ": New Predicate: " + predicate.toString().trim() + " ################### ");
 
             String uri = predicate.toString().trim();
-            String predi = Settings.explorer.removePrefix(predicate.toString().trim());
-            String lab = Settings.knowledgeGraph.getPredicateLabel(uri);
-            contexts = Settings.knowledgeGraph.getPredicatesContext_DateObjects("<" + uri + ">");
+            String predi = explorer.removePrefix(predicate.toString().trim());
+            String lab = knowledgeGraph.getPredicateLabel(uri);
+            contexts = knowledgeGraph.getPredicatesContext_DateObjects("<" + uri + ">");
 
             for (PredicateContext context : contexts) {
-                predicateObject = new Predicate(Settings.explorer);
+                predicateObject = new Predicate(explorer);
                 predicateObject.setPredicateURI(uri);
                 predicateObject.setPredicate(predi);
                 predicateObject.setLabel(lab);
@@ -138,9 +136,9 @@ public class Predicate_Extractor {
                 predicateObject.print();
                 predicates.getPredicates().add(predicateObject);
                 try {
-                    Database.storePredicates(predicateObject);
+                    storePredicates(predicateObject);
                 } catch (Exception e) {
-                    System.out.println("XXXXXXXXXX NOT SOTRED XXXXXXXXXXXXX");
+                    out.println("XXXXXXXXXX NOT SOTRED XXXXXXXXXXXXX");
                 }
             }
 
@@ -148,15 +146,15 @@ public class Predicate_Extractor {
 
         //Literals
         for (VariableSet predicate : predicatesVariableSet_Literals) {
-            System.out.println("###################" + ++counter + ": New Predicate: " + predicate.toString().trim() + " ################### ");
+            out.println("###################" + ++counter + ": New Predicate: " + predicate.toString().trim() + " ################### ");
 
             String uri = predicate.toString().trim();
-            String predi = Settings.explorer.removePrefix(predicate.toString().trim());
-            String lab = Settings.knowledgeGraph.getPredicateLabel(uri);
-            contexts = Settings.knowledgeGraph.getPredicatesContext_Literals("<" + uri + ">");
+            String predi = explorer.removePrefix(predicate.toString().trim());
+            String lab = knowledgeGraph.getPredicateLabel(uri);
+            contexts = knowledgeGraph.getPredicatesContext_Literals("<" + uri + ">");
 
             for (PredicateContext context : contexts) {
-                predicateObject = new Predicate(Settings.explorer);
+                predicateObject = new Predicate(explorer);
                 predicateObject.setPredicateURI(uri);
                 predicateObject.setPredicate(predi);
                 predicateObject.setLabel(lab);
@@ -165,9 +163,9 @@ public class Predicate_Extractor {
                 predicateObject.print();
                 predicates.getPredicates().add(predicateObject);
                 try {
-                    Database.storePredicates(predicateObject);
+                    storePredicates(predicateObject);
                 } catch (Exception e) {
-                    System.out.println("XXXXXXXXXX NOT SOTRED XXXXXXXXXXXXX");
+                    out.println("XXXXXXXXXX NOT SOTRED XXXXXXXXXXXXX");
                 }
             }
 
@@ -177,7 +175,7 @@ public class Predicate_Extractor {
         return predicates;
     }
 
-    public ArrayList<VariableSet> fillPredicatesURI_EntityObjects(int from, int length) {
+    private ArrayList<VariableSet> fillPredicatesURI_EntityObjects(int from, int length) {
         ArrayList<VariableSet> predicatesVariableSet = new ArrayList<>();
         predicateList.clear();
 
@@ -187,20 +185,20 @@ public class Predicate_Extractor {
         //get predicates URI from KG
         do {
             predicatesSizeOld = predicatesVariableSet.size();
-            predicatesVariableSet.addAll(Settings.knowledgeGraph.getPredicateList_EntityObjects(from, length));
+            predicatesVariableSet.addAll(knowledgeGraph.getPredicateList_EntityObjects(from, length));
 
             predicatesSizeNew = predicatesVariableSet.size();
             from += length;
-            System.out.println("Predicates size = " + predicatesSizeNew);
-            System.out.println(predicatesVariableSet.toString());
+            out.println("Predicates size = " + predicatesSizeNew);
+            out.println(predicatesVariableSet.toString());
         } while (predicatesSizeNew > predicatesSizeOld);
-        System.out.println("Predicates size = " + predicatesSizeNew);
-        System.out.println(predicatesVariableSet.toString());
+        out.println("Predicates size = " + predicatesSizeNew);
+        out.println(predicatesVariableSet.toString());
 
         return predicatesVariableSet;
     }
 
-    public ArrayList<VariableSet> fillPredicatesURI_NumberObjects(int from, int length) {
+    private ArrayList<VariableSet> fillPredicatesURI_NumberObjects(int from, int length) {
         ArrayList<VariableSet> predicatesVariableSet = new ArrayList<>();
         predicateList.clear();
 
@@ -210,20 +208,20 @@ public class Predicate_Extractor {
         //get predicates URI from KG
         do {
             predicatesSizeOld = predicatesVariableSet.size();
-            predicatesVariableSet.addAll(Settings.knowledgeGraph.getPredicateList_NumberObjects(from, length));
+            predicatesVariableSet.addAll(knowledgeGraph.getPredicateList_NumberObjects(from, length));
 
             predicatesSizeNew = predicatesVariableSet.size();
             from += length;
-            System.out.println("Predicates size = " + predicatesSizeNew);
-            System.out.println(predicatesVariableSet.toString());
+            out.println("Predicates size = " + predicatesSizeNew);
+            out.println(predicatesVariableSet.toString());
         } while (predicatesSizeNew > predicatesSizeOld);
-        System.out.println("Predicates size = " + predicatesSizeNew);
-        System.out.println(predicatesVariableSet.toString());
+        out.println("Predicates size = " + predicatesSizeNew);
+        out.println(predicatesVariableSet.toString());
 
         return predicatesVariableSet;
     }
 
-    public ArrayList<VariableSet> fillPredicatesURI_DateObjects(int from, int length) {
+    private ArrayList<VariableSet> fillPredicatesURI_DateObjects(int from, int length) {
         ArrayList<VariableSet> predicatesVariableSet = new ArrayList<>();
         predicateList.clear();
 
@@ -233,20 +231,20 @@ public class Predicate_Extractor {
         //get predicates URI from KG
         do {
             predicatesSizeOld = predicatesVariableSet.size();
-            predicatesVariableSet.addAll(Settings.knowledgeGraph.getPredicateList_DateObjects(from, length));
+            predicatesVariableSet.addAll(knowledgeGraph.getPredicateList_DateObjects(from, length));
 
             predicatesSizeNew = predicatesVariableSet.size();
             from += length;
-            System.out.println("Predicates size = " + predicatesSizeNew);
-            System.out.println(predicatesVariableSet.toString());
+            out.println("Predicates size = " + predicatesSizeNew);
+            out.println(predicatesVariableSet.toString());
         } while (predicatesSizeNew > predicatesSizeOld);
-        System.out.println("Predicates size = " + predicatesSizeNew);
-        System.out.println(predicatesVariableSet.toString());
+        out.println("Predicates size = " + predicatesSizeNew);
+        out.println(predicatesVariableSet.toString());
 
         return predicatesVariableSet;
     }
 
-    public ArrayList<VariableSet> fillPredicatesURI_Literals(int from, int length) {
+    private ArrayList<VariableSet> fillPredicatesURI_Literals(int from, int length) {
         ArrayList<VariableSet> predicatesVariableSet = new ArrayList<>();
         predicateList.clear();
 
@@ -256,15 +254,15 @@ public class Predicate_Extractor {
         //get predicates URI from KG
         do {
             predicatesSizeOld = predicatesVariableSet.size();
-            predicatesVariableSet.addAll(Settings.knowledgeGraph.getPredicateList_Literals(from, length));
+            predicatesVariableSet.addAll(knowledgeGraph.getPredicateList_Literals(from, length));
 
             predicatesSizeNew = predicatesVariableSet.size();
             from += length;
-            System.out.println("Predicates size = " + predicatesSizeNew);
-            System.out.println(predicatesVariableSet.toString());
+            out.println("Predicates size = " + predicatesSizeNew);
+            out.println(predicatesVariableSet.toString());
         } while (predicatesSizeNew > predicatesSizeOld);
-        System.out.println("Predicates size = " + predicatesSizeNew);
-        System.out.println(predicatesVariableSet.toString());
+        out.println("Predicates size = " + predicatesSizeNew);
+        out.println(predicatesVariableSet.toString());
 
         return predicatesVariableSet;
     }

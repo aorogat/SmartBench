@@ -74,9 +74,8 @@ public abstract class KnowledgeGraph {
                     + "FILTER langMatches( lang(?l), \"EN\" )."
                     + "}";
             ArrayList<VariableSet> varSet = Settings.knowledgeGraph.runQuery(query);
-            String n = varSet.get(0).getVariables().get(0).toString();
 
-            return n;
+            return varSet.get(0).getVariables().get(0).toString();
         } catch (Exception e) {
             return null;
         }
@@ -135,9 +134,8 @@ public abstract class KnowledgeGraph {
                     + "LIMIT 1\n"
                     + "OFFSET " + offset;
             ArrayList<VariableSet> varSet = Settings.knowledgeGraph.runQuery(query);
-            String o = varSet.get(0).getVariables().get(0).toString();
 
-            return o;
+            return varSet.get(0).getVariables().get(0).toString();
         } catch (Exception e) {
             return null;
         }
@@ -303,14 +301,12 @@ public abstract class KnowledgeGraph {
                         + Settings.popularityORDER
                         + "OFFSET " + offset;
             }
-            explorer.predicatesTriplesVarSets = Settings.knowledgeGraph.runQuery(query);
+            Explorer.predicatesTriplesVarSets = Settings.knowledgeGraph.runQuery(query);
 
-            String s = explorer.predicatesTriplesVarSets.get(0).getVariables().get(0).toString();
-            String o = explorer.predicatesTriplesVarSets.get(0).getVariables().get(1).toString();
+            String s = Explorer.predicatesTriplesVarSets.get(0).getVariables().get(0).toString();
+            String o = Explorer.predicatesTriplesVarSets.get(0).getVariables().get(1).toString();
 
-            Branch branch = new Branch(s, o, predicateURI, S_type, O_type);
-
-            return branch;
+            return new Branch(s, o, predicateURI, S_type, O_type);
         } catch (Exception e) {
 //            e.printStackTrace();
             return null;
@@ -338,11 +334,7 @@ public abstract class KnowledgeGraph {
                     + "}";
             ArrayList<VariableSet> varSet = Settings.knowledgeGraph.runQuery(query);
             String answer = varSet.get(0).getVariables().get(0).getValueWithPrefix();
-            if (answer.equals("true")) {
-                return true;
-            } else {
-                return false;
-            }
+            return answer.equals("true");
         } catch (Exception e) {
             return false;
         }
@@ -439,7 +431,6 @@ public abstract class KnowledgeGraph {
                         queryResult.add(variableSet);
                     }
                     if (queryResult.size() < 1) {
-                        String q = queryString;
                         System.out.println("No query result, may be boolean.");
                     }
                 } catch (Exception e) {
@@ -514,8 +505,7 @@ public abstract class KnowledgeGraph {
             BufferedReader rd = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));
             String jsonText = readAll(rd);
             //System.out.println(jsonText);
-            JSONObject json = new JSONObject(jsonText);
-            return json;
+            return new JSONObject(jsonText);
         } finally {
             is.close();
         }
@@ -556,7 +546,6 @@ public abstract class KnowledgeGraph {
     }
 
     public ArrayList<VariableSet> getPredicateList_EntityObjects(int from, int length) {
-        ArrayList<VariableSet> predicatesVariableSet = new ArrayList<>();
 
         //get predicates where the object is entity
         String unwantedPropertiesString = getUnwantedPropertiesString();
@@ -564,7 +553,7 @@ public abstract class KnowledgeGraph {
                 + "\n\t?s ?p ?o. " + " \nFilter(isIRI(?o)). " //Get only if ?o is entity
                 + " \n\tFILTER (?p NOT IN(" + unwantedPropertiesString + "))."
                 + "\n} LIMIT " + length + " OFFSET " + from;
-        predicatesVariableSet.addAll(kg.runQuery(query));
+        ArrayList<VariableSet> predicatesVariableSet = new ArrayList<>(kg.runQuery(query));
 
         //Remove duplicates
         predicatesVariableSet = new ArrayList<>(new HashSet<>(predicatesVariableSet));
@@ -572,7 +561,6 @@ public abstract class KnowledgeGraph {
     }
 
     public ArrayList<VariableSet> getPredicateList_NumberObjects(int from, int length) {
-        ArrayList<VariableSet> predicatesVariableSet = new ArrayList<>();
 
         predicateList.clear();
 
@@ -586,7 +574,7 @@ public abstract class KnowledgeGraph {
                 + "  FILTER isNumeric(?o). \n"
                 + "} LIMIT " + length + " OFFSET " + from;
 
-        predicatesVariableSet.addAll(kg.runQuery(query));
+        ArrayList<VariableSet> predicatesVariableSet = new ArrayList<>(kg.runQuery(query));
 
         //Remove duplicates
         predicatesVariableSet = new ArrayList<>(new HashSet<>(predicatesVariableSet));
@@ -594,7 +582,6 @@ public abstract class KnowledgeGraph {
     }
 
     public ArrayList<VariableSet> getPredicateList_DateObjects(int from, int length) {
-        ArrayList<VariableSet> predicatesVariableSet = new ArrayList<>();
 
         predicateList.clear();
 
@@ -606,7 +593,7 @@ public abstract class KnowledgeGraph {
                 + "  ?s ?p ?o. ?s ?l ?t.\n"
                 + "  FILTER ( datatype(?o) = xsd:dateTime ) \n"
                 + "} LIMIT " + length + " OFFSET " + from;
-        predicatesVariableSet.addAll(kg.runQuery(query));
+        ArrayList<VariableSet> predicatesVariableSet = new ArrayList<>(kg.runQuery(query));
 
         //Remove duplicates
         predicatesVariableSet = new ArrayList<>(new HashSet<>(predicatesVariableSet));
@@ -614,7 +601,6 @@ public abstract class KnowledgeGraph {
     }
 
     public ArrayList<VariableSet> getPredicateList_Literals(int from, int length) {
-        ArrayList<VariableSet> predicatesVariableSet = new ArrayList<>();
 
         predicateList.clear();
 
@@ -626,7 +612,7 @@ public abstract class KnowledgeGraph {
                 + "  ?s ?p ?o. ?s ?l ?t.\n"
                 + "  FILTER isLiteral(?o). \n"
                 + "} LIMIT " + length + " OFFSET " + from;
-        predicatesVariableSet.addAll(kg.runQuery(query));
+        ArrayList<VariableSet> predicatesVariableSet = new ArrayList<>(kg.runQuery(query));
 
         //Remove duplicates
         predicatesVariableSet = new ArrayList<>(new HashSet<>(predicatesVariableSet));

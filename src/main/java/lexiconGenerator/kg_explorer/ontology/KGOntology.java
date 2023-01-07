@@ -42,11 +42,8 @@ public class KGOntology
             return false;
         if(parent.equals(child))
             return true;
-        else 
-            if(Settings.knowledgeGraph.isASubtypeOf(Settings.explorer, child, parent))
-                return true;
         else
-                return false;
+            return Settings.knowledgeGraph.isASubtypeOf(Settings.explorer, child, parent);
                         
     }
     

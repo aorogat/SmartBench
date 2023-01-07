@@ -1,7 +1,7 @@
 package benchmarkGenerator.questionsGenerator.questionBuilder;
 
 import benchmarkGenerator.questionsGenerator.questionBuilder.helpers.GeneratedQuestion;
-import benchmarkGenerator.questionsGenerator.questionBuilder.helpers.Request;
+import benchmarkGenerator.questionsGenerator.questionBuilder.helpers.QuestionTypePrefixGenerator;
 import benchmarkGenerator.questionsGenerator.questionBuilder.helpers.FactConstraint;
 import benchmarkGenerator.questionsGenerator.questionBuilder.preprocessors.PhraseRepresentationProcessing;
 import benchmarkGenerator.questionsGenerator.questionBuilder.preprocessors.EntityProcessing;
@@ -12,6 +12,7 @@ import lexiconGenerator.predicateRepresentationExtractor.scrapping.model.Predica
 import lexiconGenerator.predicateRepresentationExtractor.scrapping.model.PredicatesLexicon;
 import benchmarkGenerator.questionsGenerator.queryBuilder.QueryGenerator;
 import settings.Settings;
+import utils.StringUtils;
 
 public class SingleEdgeQuestion {
 
@@ -164,10 +165,9 @@ public class SingleEdgeQuestion {
      * a person, a place, a date, or a number, then a corresponding select
      * question is generated. Otherwise, a generic select question is generated.
      *
-     * @return a list of all the generated questions
      * @throws Exception if there is an error while generating the questions
      */
-    public ArrayList<GeneratedQuestion> generateAllPossibleSingleEdgeQuestions() throws Exception {
+    public void generateAllPossibleSingleEdgeQuestions() throws Exception {
         generateQuestionAsk_Correct();
         generateQuestionAsk_Wrong();
 
@@ -182,7 +182,6 @@ public class SingleEdgeQuestion {
         } else {
             generateQuestionSELECT_e_of_type_Entity();
         }
-        return allPossibleQuestions;
     }
 
     /**
@@ -194,7 +193,7 @@ public class SingleEdgeQuestion {
      */
     public String generateSELECTQuery() {
         String triple = singleEdgeGraph.getTriplePattern().toQueryTriplePattern();
-        return QueryGenerator.generateSELECTQuery(triple, "<" + S_withPrefix + ">", S_type_withPrefix, "?Seed");
+        return QueryGenerator.generateSELECTQuery(triple, S_withPrefix, S_type_withPrefix, "?Seed");
     }
 
     /**
@@ -209,7 +208,7 @@ public class SingleEdgeQuestion {
      */
     public String generateCountQuery() {
         String triple = singleEdgeGraph.getTriplePattern().toQueryTriplePattern();
-        return QueryGenerator.generateCountQuery(triple, "<" + S_withPrefix + ">", S_type_withPrefix, "?Seed");
+        return QueryGenerator.generateCountQuery(triple, S_withPrefix, S_type_withPrefix, "?Seed");
     }
 
     public String generateAskQuery_Correct() {
@@ -248,8 +247,8 @@ public class SingleEdgeQuestion {
         }
         if (s_o_NP != null) {
             generatQuestion("Who", O, s_o_NP, FactConstraint.S_O_NP, "", "", GeneratedQuestion.QT_WHO);
-            generateRequestQuestion();
-            generatePrunedQuestion();
+            generatQuestion(QuestionTypePrefixGenerator.getRequestPrefix(), O, s_o_NP_without_verb, FactConstraint.S_O_NP, "", "", GeneratedQuestion.QT_REQUEST);
+            generatQuestion("", O, s_o_NP_without_verb, FactConstraint.S_O_NP, "", "", GeneratedQuestion.QT_TOPICAL_PRUNE);
         }
         if (o_s_VP != null) {
             generateWhomQuestion();
@@ -273,8 +272,8 @@ public class SingleEdgeQuestion {
         //Generate "What" questions
         if (s_o_NP != null) {
             generatQuestion("What", O, s_o_NP, FactConstraint.S_O_NP, "", "", GeneratedQuestion.QT_WHAT);
-            generateRequestQuestion();
-            generatePrunedQuestion();
+            generatQuestion(QuestionTypePrefixGenerator.getRequestPrefix(), O, s_o_NP_without_verb, FactConstraint.S_O_NP, "", "", GeneratedQuestion.QT_REQUEST);
+            generatQuestion("", O, s_o_NP_without_verb, FactConstraint.S_O_NP, "", "", GeneratedQuestion.QT_TOPICAL_PRUNE);
         }
         //Generate "Where" questions
         if (o_s_VP != null) {
@@ -299,8 +298,8 @@ public class SingleEdgeQuestion {
         //Generate Question
         if (s_o_NP != null) {
             generatQuestion("What", O, s_o_NP, FactConstraint.S_O_NP, "", "", GeneratedQuestion.QT_WHAT);
-            generateRequestQuestion();
-            generatePrunedQuestion();
+            generatQuestion(QuestionTypePrefixGenerator.getRequestPrefix(), O, s_o_NP_without_verb, FactConstraint.S_O_NP, "", "", GeneratedQuestion.QT_REQUEST);
+            generatQuestion("", O, s_o_NP_without_verb, FactConstraint.S_O_NP, "", "", GeneratedQuestion.QT_TOPICAL_PRUNE);
         }
         if (s_o_VP != null) {
             if (O_type_withPrefix.equals(Settings.Date)) {
@@ -324,8 +323,8 @@ public class SingleEdgeQuestion {
     private void generateQuestionSELECT_e_of_type_Number() throws Exception {
         if (s_o_NP != null) {
             generatQuestion("What", O, s_o_NP, FactConstraint.S_O_NP, "", "", GeneratedQuestion.QT_WHAT);
-            generateRequestQuestion();
-            generatePrunedQuestion();
+            generatQuestion(QuestionTypePrefixGenerator.getRequestPrefix(), O, s_o_NP_without_verb, FactConstraint.S_O_NP, "", "", GeneratedQuestion.QT_REQUEST);
+            generatQuestion("", O, s_o_NP_without_verb, FactConstraint.S_O_NP, "", "", GeneratedQuestion.QT_TOPICAL_PRUNE);
         }
         if (o_s_NP != null) {
             generatQuestion("How", O, o_s_NP, FactConstraint.O_S_NP, "", "is", GeneratedQuestion.QT_HOW_ADJ);
@@ -349,8 +348,8 @@ public class SingleEdgeQuestion {
         }
         if (s_o_NP != null) {
             generatQuestion("What", O, s_o_NP, FactConstraint.S_O_NP, "", "", GeneratedQuestion.QT_WHAT);
-            generateRequestQuestion();
-            generatePrunedQuestion();
+            generatQuestion(QuestionTypePrefixGenerator.getRequestPrefix(), O, s_o_NP_without_verb, FactConstraint.S_O_NP, "", "", GeneratedQuestion.QT_REQUEST);
+            generatQuestion("", O, s_o_NP_without_verb, FactConstraint.S_O_NP, "", "", GeneratedQuestion.QT_TOPICAL_PRUNE);
         }
     }
 
@@ -375,6 +374,9 @@ public class SingleEdgeQuestion {
      * @throws Exception if there is an error while generating the question
      */
     private void generatQuestion(String qt, String O, String P_phrase, byte P_phrase_type, String P_prefix, String P_postfix, String qt_type) throws Exception {
+        if (qt.equals("")) {
+            P_phrase = StringUtils.captalize(P_phrase);
+        }
         String tagged_qt = "<qt>" + qt + "</qt>";
         String fact_Constraint = FactConstraint.constructFactContraintNL(O, P_phrase, P_phrase_type, false, P_prefix, P_postfix);
         String tagged_fact_Constraint = FactConstraint.constructFactContraintNL(O, P_phrase, P_phrase_type, true, P_prefix, P_postfix);
@@ -383,44 +385,22 @@ public class SingleEdgeQuestion {
         allPossibleQuestions.add(new GeneratedQuestion(S_withPrefix, S_type_withPrefix, question.trim(), tagged_question.trim(), selectQuery, singleEdgeGraph.toString(), 1, qt_type, GeneratedQuestion.SH_SINGLE_EDGE));
     }
 
-    /**
-     *
-     * Generates a request question for the given parameters.
-     *
-     * @throws Exception if an error occurs while generating the question
-     */
-    private void generateRequestQuestion() throws Exception {
-        String req = Request.getRequestPrefix();
-        generatQuestion(req, O, s_o_NP_without_verb, FactConstraint.S_O_NP, "", "", GeneratedQuestion.QT_REQUEST);
-    }
-
-    /**
-     *
-     * Generates a pruned question by constructing a question with the form "O
-     * Predicate_representation?" and adding it to the list of all possible
-     * questions.
-     *
-     * @throws Exception if an error occurs while generating the question
-     */
-    private void generatePrunedQuestion() throws Exception {
-        String s_o_NP_without_verb_capetalized = s_o_NP_without_verb.substring(0, 1).toUpperCase() + s_o_NP_without_verb.substring(1);
-        generatQuestion("", O, s_o_NP_without_verb_capetalized, FactConstraint.S_O_NP, "", "", GeneratedQuestion.QT_TOPICAL_PRUNE);
-    }
 
     private void generateWhomQuestion() throws Exception {
-        String questionType = "Whom";
         String o_s_VP_Pronoun = o_s_VP;
         String proposition = "";
-        if (o_s_VP_Pronoun.endsWith(" by")) {
-            proposition = "By";
-        } else if (o_s_VP_Pronoun.endsWith(" for")) {
-            proposition = "For";
-        } else if (o_s_VP_Pronoun.endsWith(" with")) {
-            proposition = "With";
+        String[] prepositions = {"by", "for", "with"};
+        for (String preposition : prepositions) {
+            if (o_s_VP_Pronoun.endsWith(" " + preposition)) {
+                proposition = preposition;
+                break;
+            }
         }
+
+        String questionType = "Whom";
         if (!proposition.equals("")) {
-            questionType = proposition + " whom";
-            o_s_VP_Pronoun = o_s_VP_Pronoun.replace(" " + proposition.toLowerCase(), "");
+            questionType = StringUtils.captalize(proposition) + " whom";
+            o_s_VP_Pronoun = o_s_VP_Pronoun.replace(" " + proposition, "");
         }
 
         generatQuestion(questionType, O, o_s_VP_Pronoun, FactConstraint.O_S_VP, "was", "", GeneratedQuestion.QT_WHOM);

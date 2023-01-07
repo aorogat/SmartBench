@@ -41,7 +41,7 @@ public class PredicateTripleExample {
             //Remove Duplicates
             nlsSuggestions = new ArrayList<>(new HashSet<>(nlsSuggestions));
             fillNlsSuggestionsObjects();
-        } catch (Exception e) {
+        } catch (Exception ignored) {
 
         }
     }
@@ -135,7 +135,7 @@ public class PredicateTripleExample {
         }
     }
 
-    public ArrayList<Predicate_NLP_Representation> getNlsSuggestionsObjects() throws IOException {
+    public ArrayList<Predicate_NLP_Representation> getNlsSuggestionsObjects() {
         return nlsSuggestionsObjects;
     }
 

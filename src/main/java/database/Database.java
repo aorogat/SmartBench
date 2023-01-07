@@ -24,9 +24,9 @@ public class Database {
     static Connection con;
     static boolean connected = false;
 
-    public static Statement connect() {
+    public static void connect() {
         if (connected) {
-            return st;
+            return;
         }
         connected = true;
         String url = Settings.databaseURL;
@@ -46,10 +46,9 @@ public class Database {
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
-        return st;
     }
 
-    public static boolean storePredicates(Predicate predicate) {
+    public static void storePredicates(Predicate predicate) {
         connect();
         try {
             String sql = "";
@@ -63,11 +62,9 @@ public class Database {
                     + "ON CONFLICT (\"URI\", \"Context_Subject\", \"Context_Object\") DO NOTHING;; \n";
 
             st.executeUpdate(sql);
-            return true;
         } catch (SQLException ex) {
             Logger.getLogger(Database.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return false;
     }
 
     public static ArrayList<PredicateNLRepresentation> getPredicatesNLRepresentationLexicon() {
@@ -165,7 +162,7 @@ public class Database {
         return predicates;
     }
 
-    public static boolean storePredicates_NLP_Representation(Predicate predicate, ArrayList<PredicateTripleExample> examples) throws IOException {
+    public static void storePredicates_NLP_Representation(Predicate predicate, ArrayList<PredicateTripleExample> examples) throws IOException {
         connect();
         String sql = "";
 
@@ -224,7 +221,6 @@ public class Database {
             Logger.getLogger(Database.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        return true;
     }
 
     public static ArrayList<Predicate> getVerbPrepositionLabels() {
@@ -293,7 +289,7 @@ public class Database {
         return predicates;
     }
 
-    public static boolean populateLexicon() throws IOException {
+    public static void populateLexicon() {
         try {
             String sql = "REFRESH MATERIALIZED VIEW \"Lexicon\";";
             PreparedStatement preparedStatement = con.prepareStatement(sql);
@@ -303,10 +299,9 @@ public class Database {
             Logger.getLogger(Database.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        return true;
     }
 
-    public static boolean storePredicates_VP(String table, Predicate predicate, String vp, int confidence, double labelSimilarity, double subjectSimilarity, double objectSimilarity) throws IOException {
+    public static void storePredicates_VP(String table, Predicate predicate, String vp, int confidence, double labelSimilarity, double subjectSimilarity, double objectSimilarity) {
         System.out.println("storePredicates_VP: " + predicate.getLabel());
         connect();
         String sql = "";
@@ -335,10 +330,9 @@ public class Database {
             Logger.getLogger(Database.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        return true;
     }
 
-    public static boolean storePredicates_NP(String table, Predicate predicate, String np, int confidence, double subjectSimilarity, double objectSimilarity, double labelSimilarity) throws IOException {
+    public static void storePredicates_NP(String table, Predicate predicate, String np, int confidence, double subjectSimilarity, double objectSimilarity, double labelSimilarity) {
         System.out.println("storePredicates_NP: " + predicate.getLabel());
         connect();
         String sql = "";
@@ -367,10 +361,9 @@ public class Database {
             Logger.getLogger(Database.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        return true;
     }
 
-    public static boolean storeNL_VP(Phrase phrase, Predicate predicate) throws IOException {
+    public static void storeNL_VP(Phrase phrase, Predicate predicate) {
         System.out.println("storeNL_VP: " + phrase.getPhrase());
         connect();
         String sql = "";
@@ -423,10 +416,9 @@ public class Database {
             Logger.getLogger(Database.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        return true;
     }
 
-    public static boolean storeNL_NP(Phrase phrase, Predicate predicate) throws IOException {
+    public static void storeNL_NP(Phrase phrase, Predicate predicate) {
         System.out.println("storeNL_NP: " + phrase.getPhrase());
         connect();
         String sql = "";
@@ -475,7 +467,6 @@ public class Database {
             Logger.getLogger(Database.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        return true;
     }
 
     public static void main(String[] args) {

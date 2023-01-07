@@ -32,18 +32,14 @@ public class Predicate_Representation_Extractor {
         //1- Verbs end by a preposition (e.g., developed by, ...) if "for used, it is NP
         ArrayList<Predicate> predicates = Database.getVerbPrepositionLabels();
         for (Predicate predicate : predicates) {
-            try {
-                if (predicate.getLabel().endsWith(" of")) {
-                    if (Settings.Triple_NP_Direction == Settings.LABEL_NP_SO) {
-                        Database.storePredicates_NP("NP_S_O", predicate, predicate.getLabel(), 99, 1, 1, 1);
-                    } else {
-                        Database.storePredicates_NP("NP_O_S", predicate, predicate.getLabel(), 99, 1, 1, 1);
-                    }
+            if (predicate.getLabel().endsWith(" of")) {
+                if (Settings.Triple_NP_Direction == Settings.LABEL_NP_SO) {
+                    Database.storePredicates_NP("NP_S_O", predicate, predicate.getLabel(), 99, 1, 1, 1);
                 } else {
-                    Database.storePredicates_VP("VP_S_O", predicate, predicate.getLabel(), 100, 1, 1, 1);
+                    Database.storePredicates_NP("NP_O_S", predicate, predicate.getLabel(), 99, 1, 1, 1);
                 }
-            } catch (IOException ex) {
-                ex.printStackTrace();
+            } else {
+                Database.storePredicates_VP("VP_S_O", predicate, predicate.getLabel(), 100, 1, 1, 1);
             }
         }
         //2- Labels of one word and only can be a verb
@@ -214,20 +210,16 @@ public class Predicate_Representation_Extractor {
         //From Labels: Any label can be a verb can be added.
         //1- Verbs end by a preposition (e.g., developed by, ...) if "for used, it is NP
 
-        try {
-            if (predicate.getLabel().endsWith(" of")) {
-                if (Settings.Triple_NP_Direction == Settings.LABEL_NP_SO) {
-                    Database.storePredicates_NP("NP_S_O", predicate, predicate.getLabel(), 99, 1, 1, 1);
-                } else {
-                    Database.storePredicates_NP("NP_O_S", predicate, predicate.getLabel(), 99, 1, 1, 1);
-                }
-            } 
+        if (predicate.getLabel().endsWith(" of")) {
+            if (Settings.Triple_NP_Direction == Settings.LABEL_NP_SO) {
+                Database.storePredicates_NP("NP_S_O", predicate, predicate.getLabel(), 99, 1, 1, 1);
+            } else {
+                Database.storePredicates_NP("NP_O_S", predicate, predicate.getLabel(), 99, 1, 1, 1);
+            }
+        }
 //            else {
 //                Database.storePredicates_VP("VP_S_O", predicate, predicate.getLabel(), 100, 1, 1, 1);
 //            }
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
 
         //2- Labels of one word and only can be a verb
         ArrayList<String> tokens = new ArrayList<>();
@@ -253,7 +245,6 @@ public class Predicate_Representation_Extractor {
                 String in = null;
                 String label = predicate.getLabel().trim();
                 StringTokenizer tokenizer = new StringTokenizer(label);
-                tokens.clear();
                 boolean hasVerb = false;
                 while (tokenizer.hasMoreTokens()) {
                     tokens.add(tokenizer.nextToken());
@@ -393,13 +384,9 @@ public class Predicate_Representation_Extractor {
         //1- Verbs end by a preposition can be changed (e.g., developed by to developed)
         ArrayList<Predicate> predicates = Database.getVerbPrepositionLabels();
         for (Predicate predicate : predicates) {
-            try {
-                if (predicate.getLabel().toLowerCase().endsWith(" by")) {
-                    Database.storePredicates_VP("VP_O_S", predicate, predicate.getLabel().toLowerCase()
-                            .replace(" by", ""), 100, 1, 1, 1);
-                }
-            } catch (IOException ex) {
-                ex.printStackTrace();
+            if (predicate.getLabel().toLowerCase().endsWith(" by")) {
+                Database.storePredicates_VP("VP_O_S", predicate, predicate.getLabel().toLowerCase()
+                        .replace(" by", ""), 100, 1, 1, 1);
             }
         }
     }
@@ -430,18 +417,13 @@ public class Predicate_Representation_Extractor {
                         phrase.getPhrase())
                 );
                 phrase.setObjectSimilarity(BasicNLP_FromPython.phraseSimilarity(predicate.getLabel(), phrase.getPhrase()));
-                try {
-                    System.out.println(phrase.getSentence());
-                    System.out.println(phrase.getPhrase() + "(" + phrase.getLabelSimilarity() + ")"
-                            + "(" + phrase.getSubjectSimilarity() + ")"
-                            + "(" + phrase.getObjectSimilarity() + ")"
-                            + "(" + phrase.getBaseVerbForm() + ")");
-                    Database.storeNL_VP(phrase, predicate);
+                System.out.println(phrase.getSentence());
+                System.out.println(phrase.getPhrase() + "(" + phrase.getLabelSimilarity() + ")"
+                        + "(" + phrase.getSubjectSimilarity() + ")"
+                        + "(" + phrase.getObjectSimilarity() + ")"
+                        + "(" + phrase.getBaseVerbForm() + ")");
+                Database.storeNL_VP(phrase, predicate);
 
-                } catch (IOException ex) {
-                    Logger.getLogger(Predicate_Representation_Extractor.class
-                            .getName()).log(Level.SEVERE, null, ex);
-                }
             }
         }
 
@@ -486,12 +468,8 @@ public class Predicate_Representation_Extractor {
             System.out.println(np + "\t" + predicate.getLabel() + "\t" + phrase.getLabelSimilarity());
             System.out.println(np + "\t" + subjectType + "\t" + subjectSimilarity);
             System.out.println(np + "\t" + objectType + "\t" + objectSimilarity);
-            try {
-                if (!"".equals(phrase.getPhrase())) {
-                    Database.storeNL_NP(phrase, predicate);
-                }
-            } catch (IOException ex) {
-                ex.printStackTrace();
+            if (!"".equals(phrase.getPhrase())) {
+                Database.storeNL_NP(phrase, predicate);
             }
         }
 
@@ -507,7 +485,7 @@ public class Predicate_Representation_Extractor {
         return p;
     }
 
-    public static void main(String[] args) throws SQLException, IOException {
+    public static void main(String[] args) throws IOException {
         fill_from_Labels_VP_and_NP_S_O();
         fill_from_Labels_VP_O_S();
 //        fill_from_text_corpus_VP();
@@ -515,7 +493,7 @@ public class Predicate_Representation_Extractor {
         Database.populateLexicon();
     }
 
-    public static String wordPOS(String w) throws MalformedURLException, ProtocolException, IOException {
+    public static String wordPOS(String w) throws IOException {
         URL url = new URL("http://127.0.0.1:12311/type?word=" + w);
         HttpURLConnection con = (HttpURLConnection) url.openConnection();
         con.setRequestMethod("GET");

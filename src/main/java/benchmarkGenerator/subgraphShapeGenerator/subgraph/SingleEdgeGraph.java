@@ -203,7 +203,6 @@ public class SingleEdgeGraph extends Graph {
     
     
     public String toString() {
-        String s = triplePattern.toString();
-        return s;
+        return triplePattern.toString();
     }
 }

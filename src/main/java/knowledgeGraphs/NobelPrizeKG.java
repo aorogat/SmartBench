@@ -45,10 +45,8 @@ public class NobelPrizeKG extends KnowledgeGraph {
     public static KnowledgeGraph getInstance(String endpoint) {
         if (instance == null) {
             instance = new NobelPrizeKG(endpoint);
-            return (NobelPrizeKG) instance;
-        } else {
-            return (NobelPrizeKG) instance;
         }
+        return (NobelPrizeKG) instance;
     }
     
     @Override

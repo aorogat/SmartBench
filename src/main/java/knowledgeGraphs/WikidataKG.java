@@ -62,10 +62,8 @@ public class WikidataKG extends KnowledgeGraph {
     public static KnowledgeGraph getInstance(String endpoint) {
         if (instance == null) {
             instance = new WikidataKG(endpoint);
-            return (WikidataKG) instance;
-        } else {
-            return (WikidataKG) instance;
         }
+        return (WikidataKG) instance;
     }
 
     @Override
@@ -402,9 +400,8 @@ public class WikidataKG extends KnowledgeGraph {
                     + "LIMIT 1\n"
                     + "OFFSET " + offset;
             ArrayList<VariableSet> varSet = Settings.knowledgeGraph.runQuery(query);
-            String o = varSet.get(0).getVariables().get(0).toString();
 
-            return o;
+            return varSet.get(0).getVariables().get(0).toString();
         } catch (Exception e) {
             return null;
         }
@@ -461,14 +458,12 @@ public class WikidataKG extends KnowledgeGraph {
                         + Settings.popularityORDER
                         + "OFFSET " + offset;
             }
-            explorer.predicatesTriplesVarSets = Settings.knowledgeGraph.runQuery(query);
+            Explorer.predicatesTriplesVarSets = Settings.knowledgeGraph.runQuery(query);
 
-            String s = explorer.predicatesTriplesVarSets.get(0).getVariables().get(0).toString();
-            String o = explorer.predicatesTriplesVarSets.get(0).getVariables().get(1).toString();
+            String s = Explorer.predicatesTriplesVarSets.get(0).getVariables().get(0).toString();
+            String o = Explorer.predicatesTriplesVarSets.get(0).getVariables().get(1).toString();
 
-            Branch branch = new Branch(s, o, predicateURI, S_type, O_type);
-
-            return branch;
+            return new Branch(s, o, predicateURI, S_type, O_type);
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -496,11 +491,7 @@ public class WikidataKG extends KnowledgeGraph {
                     + "}";
             ArrayList<VariableSet> varSet = Settings.knowledgeGraph.runQuery(query);
             String answer = varSet.get(0).getVariables().get(0).getValueWithPrefix();
-            if (answer.equals("true")) {
-                return true;
-            } else {
-                return false;
-            }
+            return answer.equals("true");
         } catch (Exception e) {
             return false;
         }
@@ -599,8 +590,7 @@ public class WikidataKG extends KnowledgeGraph {
             BufferedReader rd = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));
             String jsonText = readAll(rd);
             //System.out.println(jsonText);
-            JSONObject json = new JSONObject(jsonText);
-            return json;
+            return new JSONObject(jsonText);
         } finally {
             is.close();
         }
@@ -615,7 +605,6 @@ public class WikidataKG extends KnowledgeGraph {
 
     @Override
     public ArrayList<VariableSet> getPredicateList_EntityObjects(int from, int length) {
-        ArrayList<VariableSet> predicatesVariableSet = new ArrayList<>();
 
         //get predicates where the object is entity
         String unwantedPropertiesString = getUnwantedPropertiesString();
@@ -624,7 +613,7 @@ public class WikidataKG extends KnowledgeGraph {
                 + "\n\tFILTER strstarts(str(?p), str(wdt:))."
                 + " \n\tFILTER (?p NOT IN(" + unwantedPropertiesString + "))."
                 + "\n} LIMIT " + length + " OFFSET " + from;
-        predicatesVariableSet.addAll(kg.runQuery(query));
+        ArrayList<VariableSet> predicatesVariableSet = new ArrayList<>(kg.runQuery(query));
 
         //Remove duplicates
         predicatesVariableSet = new ArrayList<>(new HashSet<>(predicatesVariableSet));
@@ -633,7 +622,6 @@ public class WikidataKG extends KnowledgeGraph {
 
     @Override
     public ArrayList<VariableSet> getPredicateList_NumberObjects(int from, int length) {
-        ArrayList<VariableSet> predicatesVariableSet = new ArrayList<>();
 
         predicateList.clear();
 
@@ -648,7 +636,7 @@ public class WikidataKG extends KnowledgeGraph {
                 + "  FILTER isNumeric(?o). \n"
                 + "} LIMIT " + length + " OFFSET " + from;
 
-        predicatesVariableSet.addAll(kg.runQuery(query));
+        ArrayList<VariableSet> predicatesVariableSet = new ArrayList<>(kg.runQuery(query));
 
         //Remove duplicates
         predicatesVariableSet = new ArrayList<>(new HashSet<>(predicatesVariableSet));
@@ -657,7 +645,6 @@ public class WikidataKG extends KnowledgeGraph {
 
     @Override
     public ArrayList<VariableSet> getPredicateList_DateObjects(int from, int length) {
-        ArrayList<VariableSet> predicatesVariableSet = new ArrayList<>();
 
         predicateList.clear();
 
@@ -670,7 +657,7 @@ public class WikidataKG extends KnowledgeGraph {
                 + "\n\tFILTER strstarts(str(?p), str(wdt:))."
                 + "  FILTER ( datatype(?o) = xsd:dateTime ) \n"
                 + "} LIMIT " + length + " OFFSET " + from;
-        predicatesVariableSet.addAll(kg.runQuery(query));
+        ArrayList<VariableSet> predicatesVariableSet = new ArrayList<>(kg.runQuery(query));
 
         //Remove duplicates
         predicatesVariableSet = new ArrayList<>(new HashSet<>(predicatesVariableSet));
@@ -679,7 +666,6 @@ public class WikidataKG extends KnowledgeGraph {
 
     @Override
     public ArrayList<VariableSet> getPredicateList_Literals(int from, int length) {
-        ArrayList<VariableSet> predicatesVariableSet = new ArrayList<>();
 
         predicateList.clear();
 
@@ -692,7 +678,7 @@ public class WikidataKG extends KnowledgeGraph {
                 + "\n\tFILTER strstarts(str(?p), str(wdt:))."
                 + "  FILTER isLiteral(?o). \n"
                 + "} LIMIT " + length + " OFFSET " + from;
-        predicatesVariableSet.addAll(kg.runQuery(query));
+        ArrayList<VariableSet> predicatesVariableSet = new ArrayList<>(kg.runQuery(query));
 
         //Remove duplicates
         predicatesVariableSet = new ArrayList<>(new HashSet<>(predicatesVariableSet));
@@ -715,9 +701,8 @@ public class WikidataKG extends KnowledgeGraph {
             try {
                 org.jsoup.nodes.Document doc = Jsoup.connect(predicate.trim()).get();
                 Element element = doc.select("span.wikibase-title-label").first();
-                String label = element.text();
-                return label;
-            } catch (Exception ex) {
+                return element.text();
+            } catch (Exception ignored) {
             }
             return (predicate.trim());
         }

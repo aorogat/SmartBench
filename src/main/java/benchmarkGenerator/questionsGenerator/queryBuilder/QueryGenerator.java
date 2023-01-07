@@ -5,6 +5,7 @@
  */
 package benchmarkGenerator.questionsGenerator.queryBuilder;
 
+import benchmarkGenerator.subgraphShapeGenerator.subgraph.ChainGraph;
 import settings.Settings;
 
 /**
@@ -46,19 +47,36 @@ public class QueryGenerator {
         return "ASK WHERE{\n\t" + graph_to_graphPattern(graph, node, nodeType, variable) + "\n}";
     }
 
-    private static String graph_to_graphPattern(String graph, String node, String nodeType, String variable) {
+    public static String graph_to_graphPattern(String graph, String node, String nodeType, String variable) {
+        if(node.startsWith("http"))
+            node = "<" + node + ">";
+        if(variable.startsWith("http"))
+            variable = "<" + variable + ">";
         if (graph != null) {
             if (nodeType.equals(Settings.Number) || nodeType.equals(Settings.Date) || nodeType.equals(Settings.Literal)) {
                 graph = graph
                         .replace("\"" + node + "\"^^xsd:dateTime ", variable)
                         .replace("\"" + node + "\"", variable)
-                        .replace(" " + node + " ", variable)
-                        + " .";
+                        .replace(" " + node + " ", variable);
             } else {
-                graph = graph.replace(node, variable) + " .";
+                graph = graph.replace(node, variable);
             }
 
         }
         return graph;
+    }
+
+    public static String chainGraphToChainGraphPattern(String query_GP_triples, ChainGraph chainGraph)
+    {
+        if (Settings.Triple_NP_Direction == Settings.LABEL_NP_SO) {
+            for (int i = 1; i < chainGraph.getChain().size() - 1; i++) {
+                query_GP_triples = query_GP_triples.replace("<" + chainGraph.getChain().get(i).getSubject().getValueWithPrefix() + ">", "?S" + i);
+            }
+        } else if (Settings.Triple_NP_Direction == Settings.LABEL_NP_OS) {
+            for (int i = chainGraph.getChain().size() - 1; i >= 0; i--) {
+                query_GP_triples = query_GP_triples.replace("<" + chainGraph.getChain().get(i).getObject().getValueWithPrefix() + ">", "?S" + i);
+            }
+        }
+        return query_GP_triples;
     }
 }

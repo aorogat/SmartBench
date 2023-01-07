@@ -27,10 +27,8 @@ public class MAKGExplorer extends Explorer {
     public static MAKGExplorer getInstance(String url) {
         if (instance == null) {
             instance = new DBpediaExplorer(url);
-            return (MAKGExplorer) instance;
-        } else {
-            return (MAKGExplorer) instance;
         }
+        return (MAKGExplorer) instance;
     }
     
    public static String getPredicateLabel(String predicate) {

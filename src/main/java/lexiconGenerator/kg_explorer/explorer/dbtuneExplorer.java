@@ -25,10 +25,8 @@ public class dbtuneExplorer extends Explorer {
     public static dbtuneExplorer getInstance(String url) {
         if (instance == null) {
             instance = new DBpediaExplorer(url);
-            return (dbtuneExplorer) instance;
-        } else {
-            return (dbtuneExplorer) instance;
         }
+        return (dbtuneExplorer) instance;
     }
     
    public static String getPredicateLabel(String predicate) {

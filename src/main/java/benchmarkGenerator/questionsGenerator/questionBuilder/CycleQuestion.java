@@ -26,7 +26,6 @@ public class CycleQuestion {
     private static String fcs_tagged = null;
 
     private String somethingElse = "http://AnnyOther";
-    private String somethingElseWithoutPrefix = "AnnyOther";
 
     String GPs_ASK; //for Graph Patterns
     String seed_withPrefix;
@@ -47,7 +46,7 @@ public class CycleQuestion {
         seed_type_withPrefix = cycleGraph.getPath_1().getS_type();
 
         somethingElse = Settings.knowledgeGraph.getSimilarEntity(Settings.explorer, cycleGraph.getPath_1().getSubject().getValueWithPrefix(), cycleGraph.getPath_1().getS_type());
-        somethingElseWithoutPrefix = Settings.explorer.removePrefix(somethingElse);
+        String somethingElseWithoutPrefix = Settings.explorer.removePrefix(somethingElse);
         
         seed_without_prefix = EntityProcessing.decide_quotes_with_type(seed_without_prefix, seed_type_withPrefix);
         somethingElseWithoutPrefix = EntityProcessing.decide_quotes_with_type(somethingElseWithoutPrefix,  seed_type_withPrefix);

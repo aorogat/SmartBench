@@ -49,10 +49,8 @@ public class BabelNet extends KnowledgeGraph {
     public static KnowledgeGraph getInstance(String endpoint) {
         if (instance == null) {
             instance = new BabelNet(endpoint);
-            return (BabelNet) instance;
-        } else {
-            return (BabelNet) instance;
         }
+        return (BabelNet) instance;
     }
 
     @Override
@@ -72,13 +70,11 @@ public class BabelNet extends KnowledgeGraph {
                         //                    + "FILTER(?p=<" + node.trim() + ">). "
                         + "}";
                 varSet = Settings.knowledgeGraph.runQuery(query);
-                String n = varSet.get(0).getVariables().get(0).toString();
 
-                return n;
+                return varSet.get(0).getVariables().get(0).toString();
             }
-            String n = varSet.get(0).getVariables().get(0).toString();
 
-            return n;
+            return varSet.get(0).getVariables().get(0).toString();
         } catch (Exception e) {
             return null;
         }
@@ -191,14 +187,12 @@ public class BabelNet extends KnowledgeGraph {
                         + Settings.popularityORDER
                         + "OFFSET " + offset;
             }
-            explorer.predicatesTriplesVarSets = Settings.knowledgeGraph.runQuery(query);
+            Explorer.predicatesTriplesVarSets = Settings.knowledgeGraph.runQuery(query);
 
-            String s = explorer.predicatesTriplesVarSets.get(0).getVariables().get(0).toString();
-            String o = explorer.predicatesTriplesVarSets.get(0).getVariables().get(1).toString();
+            String s = Explorer.predicatesTriplesVarSets.get(0).getVariables().get(0).toString();
+            String o = Explorer.predicatesTriplesVarSets.get(0).getVariables().get(1).toString();
 
-            Branch branch = new Branch(s, o, predicateURI, S_type, O_type);
-
-            return branch;
+            return new Branch(s, o, predicateURI, S_type, O_type);
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -225,11 +219,7 @@ public class BabelNet extends KnowledgeGraph {
                     + "}";
             ArrayList<VariableSet> varSet = Settings.knowledgeGraph.runQuery(query);
             String answer = varSet.get(0).getVariables().get(0).getValueWithPrefix();
-            if (answer.equals("true")) {
-                return true;
-            } else {
-                return false;
-            }
+            return answer.equals("true");
         } catch (Exception e) {
             return false;
         }
@@ -265,7 +255,7 @@ public class BabelNet extends KnowledgeGraph {
     @Override
     public ArrayList<PredicateTripleExample> getOneTripleExample(String predicate, String sType, String oType, String lable, int noOfExamples) {
         String query = "";
-        ArrayList<PredicateTripleExample> predicateTriples = predicateTriples = new ArrayList<>();
+        ArrayList<PredicateTripleExample> predicateTriples = new ArrayList<>();
         try {
             if (oType.equals("Number")) {
                 query = "SELECT DISTINCT ?s ?o WHERE { \n"

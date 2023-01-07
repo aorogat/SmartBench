@@ -42,13 +42,13 @@ public class Entity {
                     + "    " + kgFilteration + "\n"
                     + "  }";
             //query = "SELECT ?type WHERE { " + entity + " rdf:type ?type. FILTER strstarts(str(?type), str("+Settings.requiredTypePrefix+"))}";
-            explorer.predicatesTriplesVarSets = explorer.kg.runQuery(query);
-            return explorer.removePrefix(explorer.predicatesTriplesVarSets.get(0).getVariables().get(0).toString());
+            Explorer.predicatesTriplesVarSets = Explorer.kg.runQuery(query);
+            return explorer.removePrefix(Explorer.predicatesTriplesVarSets.get(0).getVariables().get(0).toString());
         } catch (Exception e) {
             try {
                 query = "SELECT ?type WHERE { " + entity + " rdf:type ?type.}";
-                explorer.predicatesTriplesVarSets = explorer.kg.runQuery(query);
-                return explorer.removePrefix(explorer.predicatesTriplesVarSets.get(0).getVariables().get(0).toString());
+                Explorer.predicatesTriplesVarSets = Explorer.kg.runQuery(query);
+                return explorer.removePrefix(Explorer.predicatesTriplesVarSets.get(0).getVariables().get(0).toString());
             } catch (Exception ex) {
                 return "";
             }

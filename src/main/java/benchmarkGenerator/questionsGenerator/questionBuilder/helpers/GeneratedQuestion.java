@@ -144,7 +144,7 @@ public class GeneratedQuestion {
         this.query = query;
     }
 
-    public void print() throws Exception {
+    public void print() {
 
         if (getQuestionString().contains(" null ")
                 || getQuestionStringTagged().contains("<p>null</p>")
@@ -305,9 +305,7 @@ public class GeneratedQuestion {
     public boolean equals(Object obj) {
         if (obj instanceof GeneratedQuestion) {
             GeneratedQuestion temp = (GeneratedQuestion) obj;
-            if (this.questionString.equals(temp.questionString)) {
-                return true;
-            }
+            return this.questionString.equals(temp.questionString);
         }
         return false;
     }
@@ -320,9 +318,6 @@ public class GeneratedQuestion {
     public boolean equals(GeneratedQuestion generatedQuestion) {
         String q1 = this.questionString;
         String q2 = generatedQuestion.questionString;
-        if (q1.equals(q2)) {
-            return true;
-        }
-        return false;
+        return q1.equals(q2);
     }
 }

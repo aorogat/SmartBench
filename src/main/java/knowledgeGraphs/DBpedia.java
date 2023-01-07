@@ -14,10 +14,8 @@ public class DBpedia extends KnowledgeGraph {
     public static KnowledgeGraph getInstance(String endpoint) {
         if (instance == null) {
             instance = new DBpedia(endpoint);
-            return (DBpedia) instance;
-        } else {
-            return (DBpedia) instance;
         }
+        return (DBpedia) instance;
     }
 
     @Override

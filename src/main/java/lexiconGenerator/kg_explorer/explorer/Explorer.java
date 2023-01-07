@@ -27,8 +27,8 @@ public abstract class Explorer {
     protected ArrayList<Predicate> predicateList = new ArrayList<>();
 
 //    public abstract ListOfPredicates explore(int from, int length);
-    private static int numberOfNLExamples = 100;
-    private static int minContextWeight = 20;
+    private static final int numberOfNLExamples = 100;
+    private static final int minContextWeight = 20;
     int counter = 0;
 
     public ListOfPredicates explore(int from, int length) {

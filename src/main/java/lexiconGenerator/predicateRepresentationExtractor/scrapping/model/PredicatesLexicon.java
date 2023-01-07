@@ -110,7 +110,6 @@ public class PredicatesLexicon {
                     String in = null;
                     String label = predicate.getLabel().trim();
                     StringTokenizer tokenizer = new StringTokenizer(label);
-                    tokens.clear();
                     boolean hasVerb = false;
                     while (tokenizer.hasMoreTokens()) {
                         tokens.add(tokenizer.nextToken());

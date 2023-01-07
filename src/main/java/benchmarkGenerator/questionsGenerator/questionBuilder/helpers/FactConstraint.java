@@ -25,7 +25,7 @@ public class FactConstraint {
                     fc = auxVerb  + " " + "<o>" + O + "</o>" + " " + preposition + " " +"<p>" + P + "</p>";
                     break;
                 case O_S_NP: 
-                    fc = auxVerb  + " " + "<o>" + O + "</o>" + " " + preposition + " " +"<p>" + P + "</p>";
+                    fc = "<p>" + P + "</p>" + " is " + "<o>" + O + "</o>";
                     break;
             }
         }

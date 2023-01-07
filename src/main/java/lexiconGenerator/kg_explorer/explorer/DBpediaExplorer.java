@@ -21,10 +21,8 @@ public class DBpediaExplorer extends Explorer {
     public static DBpediaExplorer getInstance(String url) {
         if (instance == null) {
             instance = new DBpediaExplorer(url);
-            return (DBpediaExplorer) instance;
-        } else {
-            return (DBpediaExplorer) instance;
         }
+        return (DBpediaExplorer) instance;
     }
 
 }

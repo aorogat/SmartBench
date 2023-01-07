@@ -25,10 +25,8 @@ public class GEOExplorer extends Explorer {
     public static GEOExplorer getInstance(String url) {
         if (instance == null) {
             instance = new DBpediaExplorer(url);
-            return (GEOExplorer) instance;
-        } else {
-            return (GEOExplorer) instance;
         }
+        return (GEOExplorer) instance;
     }
 
     public static String getPredicateLabel(String predicate) {
@@ -50,8 +48,9 @@ public class GEOExplorer extends Explorer {
             s = Settings.knowledgeGraph.getNodeLabel(this, node);
 
         if (s == null || s.equals("")) {
+            String last;
             if (node.startsWith("http")) {
-                String last = node.substring(node.lastIndexOf("/") + 1);
+                last = node.substring(node.lastIndexOf("/") + 1);
                 last = last.replace("#", " ").replace("_", " ");
                 //for predicates with the form XXX%3YYYY get only XXX
                 int start;
@@ -65,11 +64,9 @@ public class GEOExplorer extends Explorer {
                 for (String string : r) {
                     s += string.trim() + " ";
                 }
-                s = s.trim().toLowerCase();
-                return s;
             }
             else{
-                String last = node.replace("#", " ").replace("_", " ");
+                last = node.replace("#", " ").replace("_", " ");
                 //for predicates with the form XXX%3YYYY get only XXX
                 int start;
                 int end;
@@ -82,9 +79,9 @@ public class GEOExplorer extends Explorer {
                 for (String string : r) {
                     s += string.trim() + " ";
                 }
-                s = s.trim().toLowerCase();
-                return s;
             }
+            s = s.trim().toLowerCase();
+            return s;
         }
         return s;
     }

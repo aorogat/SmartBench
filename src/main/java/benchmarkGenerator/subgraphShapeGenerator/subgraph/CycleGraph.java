@@ -114,11 +114,8 @@ public class CycleGraph { //Only support paths of length 1
         if (c1.path_1.getPredicate().getValueWithPrefix().equals(c2.path_2.getPredicate().getValueWithPrefix())
                 && c1.path_2.getPredicate().getValueWithPrefix().equals(c2.path_1.getPredicate().getValueWithPrefix())) {
             return true;
-        } else if (c1.path_1.getPredicate().getValueWithPrefix().equals(c2.path_1.getPredicate().getValueWithPrefix())
-                && c1.path_2.getPredicate().getValueWithPrefix().equals(c2.path_2.getPredicate().getValueWithPrefix())) {
-            return true;
-        }
-        return false;
+        } else return c1.path_1.getPredicate().getValueWithPrefix().equals(c2.path_1.getPredicate().getValueWithPrefix())
+                && c1.path_2.getPredicate().getValueWithPrefix().equals(c2.path_2.getPredicate().getValueWithPrefix());
     }
 
     public TriplePattern getPath_1() {

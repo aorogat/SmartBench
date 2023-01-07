@@ -39,12 +39,12 @@ public class FlowerQuestion {
         
         cycleQuestion.direction = CycleQuestion.FORWARD;
         String cycleQuestionString = cycleQuestion.selectWh_Questions(CoordinatingConjunction.AND,  "NP");
-        String cycleQuestionString_tagged = cycleQuestion.getQuestion_tagged();
+        String cycleQuestionString_tagged = CycleQuestion.getQuestion_tagged();
         
         if(cycleQuestionString==null || cycleQuestionString.contains("null"))
         {
             cycleQuestionString = cycleQuestion.selectWh_Questions(CoordinatingConjunction.AND,  "VP");
-            cycleQuestionString_tagged = cycleQuestion.getQuestion_tagged();
+            cycleQuestionString_tagged = CycleQuestion.getQuestion_tagged();
             if(cycleQuestionString==null || cycleQuestionString.contains("null"))
                 return;
         }

@@ -1,6 +1,7 @@
 package benchmarkGenerator.subgraphShapeGenerator.model;
 
 import java.util.ArrayList;
+
 import lexiconGenerator.kg_explorer.model.PredicateContext;
 import lexiconGenerator.predicateRepresentationExtractor.scrapping.model.PredicateNLRepresentation;
 import lexiconGenerator.predicateRepresentationExtractor.scrapping.model.PredicatesLexicon;

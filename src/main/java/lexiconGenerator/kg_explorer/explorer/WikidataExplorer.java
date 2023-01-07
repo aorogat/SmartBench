@@ -27,10 +27,8 @@ public class WikidataExplorer extends Explorer {
     public static WikidataExplorer getInstance(String url) {
         if (instance == null) {
             instance = new DBpediaExplorer(url);
-            return (WikidataExplorer) instance;
-        } else {
-            return (WikidataExplorer) instance;
         }
+        return (WikidataExplorer) instance;
     }
 
     public static String getPredicateLabel(String node) {
@@ -47,9 +45,8 @@ public class WikidataExplorer extends Explorer {
                     + "  SERVICE wikibase:label { bd:serviceParam wikibase:language \"en\". }\n"
                     + "}";
             ArrayList<VariableSet> varSet = kg.runQuery(query);
-            String n = varSet.get(0).getVariables().get(0).toString();
 
-            return n;
+            return varSet.get(0).getVariables().get(0).toString();
         } catch (Exception e) {
             return null;
         }
@@ -67,9 +64,8 @@ public class WikidataExplorer extends Explorer {
                     + "FILTER langMatches( lang(?l), \"EN\" )."
                     + "}";
             ArrayList<VariableSet> varSet = kg.runQuery(query);
-            String n = varSet.get(0).getVariables().get(0).toString();
 
-            return n;
+            return varSet.get(0).getVariables().get(0).toString();
         } catch (Exception e) {
             return null;
         }
@@ -91,8 +87,9 @@ public class WikidataExplorer extends Explorer {
         }
 
         if (s == null || s.equals("")) {
+            String last;
             if (node.startsWith("http")) {
-                String last = node.substring(node.lastIndexOf("/") + 1);
+                last = node.substring(node.lastIndexOf("/") + 1);
                 last = last.replace("#", " ").replace("_", " ");
                 //for predicates with the form XXX%3YYYY get only XXX
                 int start;
@@ -106,10 +103,8 @@ public class WikidataExplorer extends Explorer {
                 for (String string : r) {
                     s += string.trim() + " ";
                 }
-                s = s.trim().toLowerCase();
-                return s;
             } else {
-                String last = node.replace("#", " ").replace("_", " ");
+                last = node.replace("#", " ").replace("_", " ");
                 //for predicates with the form XXX%3YYYY get only XXX
                 int start;
                 int end;
@@ -122,9 +117,9 @@ public class WikidataExplorer extends Explorer {
                 for (String string : r) {
                     s += string.trim() + " ";
                 }
-                s = s.trim().toLowerCase();
-                return s;
             }
+            s = s.trim().toLowerCase();
+            return s;
         }
         return s;
     }

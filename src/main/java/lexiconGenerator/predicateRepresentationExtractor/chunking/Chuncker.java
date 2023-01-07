@@ -243,7 +243,7 @@ public class Chuncker {
 //         final String sentence = "The pretty cat chased the ugly rat.";
 //        final String sentence = "It is very beautiful.";
         final String sentence = "sssss is the brother of ooooo"; //add extra word as the chunker always remove the last word?!
-        String tokens[] = example.getTokens(sentence);
+        String tokens[] = getTokens(sentence);
         String pos_tags[] = example.getPOS(tokens);
         String chunker_tags[] = example.getChunker().chunk(tokens, pos_tags);
         double[] probs = example.getChunker().probs();

@@ -1,7 +1,7 @@
 package benchmarkGenerator.questionsGenerator.questionBuilder;
 
 import benchmarkGenerator.questionsGenerator.questionBuilder.helpers.GeneratedQuestion;
-import benchmarkGenerator.questionsGenerator.questionBuilder.helpers.Request;
+import benchmarkGenerator.questionsGenerator.questionBuilder.helpers.QuestionTypePrefixGenerator;
 import benchmarkGenerator.questionsGenerator.questionBuilder.helpers.CoordinatingConjunction;
 import benchmarkGenerator.questionsGenerator.questionBuilder.preprocessors.PhraseRepresentationProcessing;
 import benchmarkGenerator.questionsGenerator.questionBuilder.preprocessors.EntityProcessing;
@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
-import lexiconGenerator.kg_explorer.explorer.SPARQL;
+
 import benchmarkGenerator.subgraphShapeGenerator.model.TriplePattern;
 import benchmarkGenerator.subgraphShapeGenerator.subgraph.StarGraph;
 import lexiconGenerator.predicateRepresentationExtractor.scrapping.model.PredicateNLRepresentation;
@@ -228,9 +228,10 @@ public class StarQuestion {
             default:
         }
         if (FCs != null) {
+            String howMany = QuestionTypePrefixGenerator.getHowManyPrefix();
             String countQuery = countQuery(starGraph, coordinatingConjunction);
-            String question = selectWhichQuestions(coordinatingConjunction).replaceFirst("Which", "How many");
-            String question_tagged = selectWhichQuestions_tagged(coordinatingConjunction).replaceFirst("Which", "How many");
+            String question = selectWhichQuestions(coordinatingConjunction).replaceFirst("Which", howMany);
+            String question_tagged = selectWhichQuestions_tagged(coordinatingConjunction).replaceFirst("Which", howMany);
             allPossibleQuestions.add(new GeneratedQuestion(starGraph.getStar().get(0).getSubject().getValueWithPrefix(), starGraph.getStar().get(0).getS_type(), question, question_tagged, countQuery, starGraph.toString(), starGraph.getStar().size() + 1, GeneratedQuestion.QT_HOW_MANY, GeneratedQuestion.SH_STAR));
         }
     }
@@ -350,7 +351,7 @@ public class StarQuestion {
             question_tagged = whichQuestion_tagged.replaceFirst("<qt>Which</qt> <t>" + BasicNLP_FromPython.nounPlural(T).trim() + "</t>", "<qt>What</qt> are the <t>" + BasicNLP_FromPython.nounPlural(T) + "</t> ");
             allPossibleQuestions.add(new GeneratedQuestion(starGraph.getStar().get(0).getSubject().getValueWithPrefix(), starGraph.getStar().get(0).getS_type(), question, question_tagged, selectQuery, starGraph.toString(), starGraph.getStar().size() + 1, GeneratedQuestion.QT_WHAT, GeneratedQuestion.SH_STAR));
 
-            String req = Request.getRequestPrefix().trim();
+            String req = QuestionTypePrefixGenerator.getRequestPrefix().trim();
             question = whichQuestion.replaceFirst("Which ", req + " ");
             question_tagged = whichQuestion_tagged.replaceFirst("Which", req);
             
@@ -385,8 +386,7 @@ public class StarQuestion {
         }
 
         if (FCs != null) {
-            String whichQuestion = "Which " + BasicNLP_FromPython.nounPlural(T) + FCs + "?";
-            return whichQuestion;
+            return "Which " + BasicNLP_FromPython.nounPlural(T) + FCs + "?";
         }
         return null;
     }
@@ -413,8 +413,7 @@ public class StarQuestion {
         }
 
         if (FCs_tag != null) {
-            String whichQuestion = "<qt>Which</qt> <t>" + BasicNLP_FromPython.nounPlural(T) + "</t> " + FCs_tag + "?";
-            return whichQuestion;
+            return "<qt>Which</qt> <t>" + BasicNLP_FromPython.nounPlural(T) + "</t> " + FCs_tag + "?";
         }
         return null;
     }
@@ -527,7 +526,6 @@ public class StarQuestion {
                 }
                 objectsList += " and " + "<o>" + objects.get(objects.size() - 1) + "</o>";
             }
-            return objectsList;
         } else {
             if (objects.size() == 1) {
                 objectsList = objects.get(0);
@@ -543,8 +541,8 @@ public class StarQuestion {
                 }
                 objectsList += " and " + objects.get(objects.size() - 1);
             }
-            return objectsList;
         }
+        return objectsList;
     }
 
     public ArrayList<GeneratedQuestion> getAllPossibleQuestions() {

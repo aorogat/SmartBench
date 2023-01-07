@@ -20,10 +20,8 @@ public class MAKG extends KnowledgeGraph {  //Update as BabelNet ***************
     public static KnowledgeGraph getInstance(String endpoint) {
         if (instance == null) {
             instance = new MAKG(endpoint);
-            return (MAKG) instance;
-        } else {
-            return (MAKG) instance;
         }
+        return (MAKG) instance;
     }
 
     @Override
@@ -43,13 +41,11 @@ public class MAKG extends KnowledgeGraph {  //Update as BabelNet ***************
                         //                    + "FILTER(?p=<" + node.trim() + ">). "
                         + "}";
                 varSet = Settings.knowledgeGraph.runQuery(query);
-                String n = varSet.get(0).getVariables().get(0).toString();
 
-                return n;
+                return varSet.get(0).getVariables().get(0).toString();
             }
-            String n = varSet.get(0).getVariables().get(0).toString();
 
-            return n;
+            return varSet.get(0).getVariables().get(0).toString();
         } catch (Exception e) {
             return null;
         }

@@ -80,7 +80,7 @@ public class ShapesGenerator {
                     try {
                         generateSingleEdge(branch);
 
-                    } catch (Exception e) {
+                    } catch (Exception ignored) {
                     }
                 }
                 if (Configuration.SH_Star) {
@@ -99,7 +99,7 @@ public class ShapesGenerator {
                             }
                         }
 
-                    } catch (Exception e) {
+                    } catch (Exception ignored) {
                     }
                 }
 
@@ -107,14 +107,14 @@ public class ShapesGenerator {
                     try {
                         generateStarSet(branch, 1); //must be 1 for now
 
-                    } catch (Exception e) {
+                    } catch (Exception ignored) {
                     }
                 }
 
                 if (Configuration.SH_Chain) {
                     try {
                         oldSize = generatedQuestions.size();
-                        for (Byte b = 2; b <= Configuration.chainMaxLength; b++) {
+                        for (byte b = 2; b <= Configuration.chainMaxLength; b++) {
                             generateChain(branch, b);
                             currentSize = generatedQuestions.size();
                             if (currentSize > oldSize) {
@@ -124,14 +124,14 @@ public class ShapesGenerator {
                             }
                         }
 
-                    } catch (Exception e) {
+                    } catch (Exception ignored) {
                     }
                 }
                 if (Configuration.SH_Cycle) {
                     try {
                         generateCycle(branch);
 
-                    } catch (Exception e) {
+                    } catch (Exception ignored) {
                     }
                 }
 
@@ -139,7 +139,7 @@ public class ShapesGenerator {
                     try {
                         generateCycleGeneral(branch);
 
-                    } catch (Exception e) {
+                    } catch (Exception ignored) {
                     }
                 }
 
@@ -157,7 +157,7 @@ public class ShapesGenerator {
                             }
                         }
 
-                    } catch (Exception e) {
+                    } catch (Exception ignored) {
                     }
 
                 }
@@ -175,7 +175,7 @@ public class ShapesGenerator {
                             }
                         }
 
-                    } catch (Exception e) {
+                    } catch (Exception ignored) {
                     }
 
                 }
