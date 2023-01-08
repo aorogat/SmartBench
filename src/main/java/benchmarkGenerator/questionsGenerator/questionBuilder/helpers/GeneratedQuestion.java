@@ -83,13 +83,7 @@ public class GeneratedQuestion {
         this.QuestionType = QuestionType;
         this.ShapeType = ShapeType;
         this.questionStringTagged = questionStringTagged.replace("(", "").replace(")", "").replace("  ", " ").replace(" , ", ", ")
-                .replace(" ,", ", ").replace(" s ", " ") //                .replace("<s>", "").replace("</s>", "")
-                //                .replace("<o>", "").replace("</o>", "")
-                //                .replace("<qt>", "").replace("</qt>", "")
-                //                .replace("<t>", "").replace("</t>", "")
-                //                .replace("<cc>", "").replace("</cc>", "")
-                //                .replace("<op>", "").replace("</op>", "")
-                ;
+                .replace(" ,", ", ").replace(" s ", " ");
 
         try {
             ArrayList<VariableSet> answersVar = Settings.knowledgeGraph.runQuery(query);
@@ -159,7 +153,6 @@ public class GeneratedQuestion {
             System.out.println("NO ANSWER");
             return;
         }
-//        System.out.println("=================================== Question Start ==========================================");
 
         System.out.println("\t \033[30m Seed with prefix: \033[1;35m " + seed_withPrefix);
         System.out.println("\t \033[30m Seed type with prefix: \033[1;35m " + seedType_withPrefix);

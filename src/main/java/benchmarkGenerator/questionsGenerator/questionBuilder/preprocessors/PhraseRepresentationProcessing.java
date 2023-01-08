@@ -50,4 +50,12 @@ public class PhraseRepresentationProcessing {
         return negatedPhrase;
     }
 
+    public static String verbPhraseAddAuxiliary(String verbPhrase) {
+        if ((verbPhrase.startsWith("was ") || verbPhrase.startsWith("were ") || verbPhrase.startsWith("is ") || verbPhrase.startsWith("are "))) {
+            return verbPhrase;
+        } else {
+            return " were " + verbPhrase;
+        }
+    }
+
 }
