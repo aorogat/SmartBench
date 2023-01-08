@@ -14,7 +14,7 @@ import benchmarkGenerator.questionsGenerator.queryBuilder.QueryGenerator;
 import settings.Settings;
 import utils.StringUtils;
 
-public class SingleEdgeQuestion {
+public class SingleEdgeQuestion extends ShapeQuestion {
 
     private SingleEdgeGraph singleEdgeGraph;
 
@@ -116,7 +116,7 @@ public class SingleEdgeQuestion {
         O = EntityProcessing.decide_quotes_Simple_question(O, this.O_type_withPrefix);
         somethingElseWithoutPrefix = EntityProcessing.decide_quotes_Simple_question(somethingElseWithoutPrefix, this.S_type_withPrefix);
 
-        generateAllPossibleSingleEdgeQuestions();
+        generateAllPossibleQuestions();
     }
 
     void generate_questions_O_is_Seed(SingleEdgeGraph singleEdgeGraph, String S_type_withPrefix, String O_type_withPrefix) throws Exception {
@@ -154,7 +154,7 @@ public class SingleEdgeQuestion {
         O = EntityProcessing.decide_quotes_Simple_question(O, this.O_type_withPrefix);
         somethingElseWithoutPrefix = EntityProcessing.decide_quotes_Simple_question(somethingElseWithoutPrefix, this.S_type_withPrefix);
 
-        generateAllPossibleSingleEdgeQuestions();
+        generateAllPossibleQuestions();
     }
 
     /**
@@ -167,7 +167,7 @@ public class SingleEdgeQuestion {
      *
      * @throws Exception if there is an error while generating the questions
      */
-    public void generateAllPossibleSingleEdgeQuestions() throws Exception {
+    public void generateAllPossibleQuestions() throws Exception {
         generateQuestionAsk_Correct();
         generateQuestionAsk_Wrong();
 

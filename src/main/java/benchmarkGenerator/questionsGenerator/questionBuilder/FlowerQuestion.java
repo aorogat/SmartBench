@@ -4,13 +4,12 @@ import benchmarkGenerator.questionsGenerator.questionBuilder.helpers.GeneratedQu
 import benchmarkGenerator.questionsGenerator.questionBuilder.helpers.CoordinatingConjunction;
 import java.util.ArrayList;
 import benchmarkGenerator.subgraphShapeGenerator.subgraph.FlowerGraph;
-import benchmarkGenerator.subgraphShapeGenerator.subgraph.TreeGraph;
 
 /**
  *
  * @author aorogat
  */
-public class FlowerQuestion {
+public class FlowerQuestion extends ShapeQuestion {
     FlowerGraph flowerGraph;
     StarQuestion starQuestion;
     CycleQuestion cycleQuestion;
@@ -81,6 +80,12 @@ public class FlowerQuestion {
 //        allPossibleQuestions.add(generatedQuestion);
     }
 
+
+    @Override
+    public void generateAllPossibleQuestions() throws Exception {
+
+    }
+
     public FlowerGraph getFlowerGraph() {
         return flowerGraph;
     }
@@ -112,8 +117,7 @@ public class FlowerQuestion {
     public void setAllPossibleQuestions(ArrayList<GeneratedQuestion> allPossibleQuestions) {
         this.allPossibleQuestions = allPossibleQuestions;
     }
-    
-    
-    
-    
+
+
+
 }

@@ -5,7 +5,7 @@ import benchmarkGenerator.questionsGenerator.questionBuilder.helpers.Coordinatin
 import benchmarkGenerator.questionsGenerator.questionBuilder.preprocessors.PhraseRepresentationProcessing;
 import benchmarkGenerator.questionsGenerator.questionBuilder.preprocessors.EntityProcessing;
 import java.util.ArrayList;
-import lexiconGenerator.kg_explorer.explorer.SPARQL;
+
 import lexiconGenerator.kg_explorer.ontology.KGOntology;
 import lexiconGenerator.predicateRepresentationExtractor.scrapping.model.PredicateNLRepresentation;
 import lexiconGenerator.predicateRepresentationExtractor.scrapping.model.PredicatesLexicon;
@@ -16,7 +16,7 @@ import settings.Settings;
  *
  * @author aorogat
  */
-public class CycleQuestion {
+public class CycleQuestion extends ShapeQuestion {
 
     CycleGraph cycleGraph;
     ArrayList<GeneratedQuestion> allPossibleQuestions = new ArrayList<>();
@@ -52,7 +52,7 @@ public class CycleQuestion {
         somethingElseWithoutPrefix = EntityProcessing.decide_quotes_with_type(somethingElseWithoutPrefix,  seed_type_withPrefix);
     }
 
-    public void generateQuestions() throws Exception {
+    public void generateAllPossibleQuestions() throws Exception {
         //Forward generate nonacceptable-grammatical-questions
 //        direction = FORWARD;
 //        selectQuestions(CoordinatingConjunction.AND);

@@ -16,7 +16,7 @@ import lexiconGenerator.predicateRepresentationExtractor.scrapping.model.Predica
 import lexiconGenerator.predicateRepresentationExtractor.scrapping.model.PredicatesLexicon;
 import settings.Settings;
 
-public class ChainQuestion {
+public class ChainQuestion extends ShapeQuestion {
 
     //Forward direction    (?S0)__(P0)__(O0)___(P1)___(O1)___....__(O_Final)
     // s_o_PN_series = [p0_s_o][p1_s_o][p2_s_o] ... [pn_s_o]  (((Wh.. [s_o_PN_series] [O_Final]?)))
@@ -117,9 +117,6 @@ public class ChainQuestion {
 
         for (int i = 1; i < chainGraph.getChain().size(); i++) {
             TriplePattern triple = chainGraph.getChain().get(i);
-            String s = triple.getSubject().getValue();
-            String p = triple.getPredicate().getValue();
-            String o = triple.getObject().getValue();
             String s_type = triple.getS_type();
             String o_type = triple.getO_type();
             String p_withPrefix = triple.getPredicate().getValueWithPrefix();
@@ -170,7 +167,7 @@ public class ChainQuestion {
         O_Final = EntityProcessing.decide_quotes_with_type(O_Final, this.O_Final_type_withPrefix);
         somethingElseWithoutPrefix = EntityProcessing.decide_quotes_with_type(somethingElseWithoutPrefix, this.S0_type_withPrefix);
 
-        generateAllPossibleChainQuestions();
+        generateAllPossibleQuestions();
     }
 
     //Chain take the revers direction
@@ -230,9 +227,6 @@ public class ChainQuestion {
         P1_to_n_SO_PN_series_Tagged = "";
         for (int i = length - 1; i >= 0; i--) {
             TriplePattern triple = chainGraph.getChain().get(i);
-            String s = triple.getObject().getValue();
-            String p = triple.getPredicate().getValue();
-            String o = triple.getSubject().getValue();
             String s_type = triple.getO_type();
             String o_type = triple.getS_type();
             String p_withPrefix = triple.getPredicate().getValueWithPrefix();
@@ -277,10 +271,10 @@ public class ChainQuestion {
         O_Final = EntityProcessing.decide_quotes_with_type(O_Final, this.O_Final_type_withPrefix);
         somethingElseWithoutPrefix = EntityProcessing.decide_quotes_with_type(somethingElseWithoutPrefix, this.S0_type_withPrefix);
 
-        generateAllPossibleChainQuestions();
+        generateAllPossibleQuestions();
     }
 
-    public void generateAllPossibleChainQuestions() throws Exception {
+    public void generateAllPossibleQuestions() throws Exception {
         // generateCountQuery_Chain(); //Not possible here  (Require a type branch)
         if (KGOntology.isSubtypeOf(S0_type_withPrefix, Settings.Person)) {
             generateQuestionSELECT_e_of_type_Person();

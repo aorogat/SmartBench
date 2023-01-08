@@ -63,7 +63,6 @@ public class ShapesGenerator {
 
             int currentSize = 0;
             int oldSize = 0;
-            long numberOfGeneratedQuestions = 0;
 
             //Single-Edge Questions
             System.out.println("=========================== Generated Questions tell now: " + generatedQuestions.size() + " ===========================");
@@ -293,14 +292,9 @@ public class ShapesGenerator {
                 String graphString = chainGraph1.toString();
                 if (!graphString.contains("UNKONWN") && !graphString.contains("null")) {
                     System.out.println(graphString);
-//                    MainBean.output += "\n" + graphString;
                     ChainQuestion chainQuestion = new ChainQuestion((ChainGraph) chainGraph1);
                     ArrayList<GeneratedQuestion> gq = chainQuestion.getAllPossibleQuestions();
                     addQuestions(gq);
-//                    generatedQuestions.addAll(gq);
-//                    for (GeneratedQuestion generatedQuestion : gq) {
-//                        generatedQuestion.print();
-//                    }
                     if (generatedQuestions.size() > 0) {
                         succededGraphs++;
                         if (succededGraphs > 0) {
@@ -344,23 +338,15 @@ public class ShapesGenerator {
                 }
                 System.out.println(currentStarGraph.getSeedType());
                 System.out.println(graphString);
-//                MainBean.output += "\n" + graphString;
                 StarQuestion starQuestion = new StarQuestion(currentStarGraph);
                 ArrayList<GeneratedQuestion> gq = starQuestion.getAllPossibleQuestions();
                 addQuestions(gq);
-//                generatedQuestions.addAll(gq);
-//                for (GeneratedQuestion generatedQuestion : gq) {
-//                    generatedQuestion.print();
-//                }
                 if (generatedQuestions.size() > 0) {
                     succededGraphs++;
                     if (succededGraphs > 2) {
                         return;
                     }
                 }
-//                for (GeneratedQuestion generatedQuestion : generatedQuestions) {
-//                    generatedQuestion.print();
-//                }
             } else {
             }
         }
@@ -399,10 +385,6 @@ public class ShapesGenerator {
 
                     ArrayList<GeneratedQuestion> gq = treeQuestion.getAllPossibleQuestions();
                     addQuestions(gq);
-//                    generatedQuestions.addAll(gq);
-//                    for (GeneratedQuestion generatedQuestion : gq) {
-//                        generatedQuestion.print();
-//                    }
                     if (generatedQuestions.size() > 0) {
                         succededGraphs++;
                         if (succededGraphs > 0) {
@@ -410,12 +392,7 @@ public class ShapesGenerator {
                         }
                     }
                     System.out.println(treeGraph.getSeedType());
-//                    MainBean.output += "\n" + graphString;
                     System.out.println(graphString);
-//                    for (GeneratedQuestion generatedQuestion : generatedQuestions) {
-//                        generatedQuestion.print();
-//                    }
-//
                 } else {
                 }
 
@@ -439,25 +416,16 @@ public class ShapesGenerator {
             String graphString = currecntCycleGraph.toString();
             if (!graphString.contains("UNKONWN") && !graphString.contains("null")) {
                 System.out.println(graphString);
-//                MainBean.output += "\n" + graphString;
                 CycleQuestion question = new CycleQuestion(currecntCycleGraph);
-                question.generateQuestions();
+                question.generateAllPossibleQuestions();
                 ArrayList<GeneratedQuestion> gq = question.getAllPossibleQuestions();
                 addQuestions(gq);
-//                generatedQuestions.addAll(gq);
-//                for (GeneratedQuestion generatedQuestion : gq) {
-//                    generatedQuestion.print();
-//                }
                 if (generatedQuestions.size() > 0) {
                     succededGraphs++;
                     if (succededGraphs > 0) {
                         return;
                     }
                 }
-//                for (GeneratedQuestion generatedQuestion : generatedQuestions) {
-//                    generatedQuestion.print();
-//                }
-
             } else {
             }
 
@@ -476,25 +444,16 @@ public class ShapesGenerator {
             String graphString = currecntCycleGraph.toString();
             if (!graphString.contains("UNKONWN") && !graphString.contains("null")) {
                 System.out.println(graphString);
-//                MainBean.output += "\n" + graphString;
                 CycleGeneralQuestion question = new CycleGeneralQuestion(currecntCycleGraph);
-                question.generateQuestions();
+                question.generateAllPossibleQuestions();
                 ArrayList<GeneratedQuestion> gq = question.getAllPossibleQuestions();
                 addQuestions(gq);
-//                generatedQuestions.addAll(gq);
-//                for (GeneratedQuestion generatedQuestion : gq) {
-//                    generatedQuestion.print();
-//                }
                 if (generatedQuestions.size() > 0) {
                     succededGraphs++;
                     if (succededGraphs > 0) {
                         return;
                     }
                 }
-//                for (GeneratedQuestion generatedQuestion : generatedQuestions) {
-//                    generatedQuestion.print();
-//                }
-
             } else {
             }
 
@@ -536,14 +495,9 @@ public class ShapesGenerator {
                     String graphString = flowerGraph.toString();
                     if (!graphString.contains("UNKONWN") && !graphString.contains("null")) {
                         System.out.println(graphString);
-//                        MainBean.output += "\n" + graphString;
                         FlowerQuestion question = new FlowerQuestion(flowerGraph);
                         ArrayList<GeneratedQuestion> gq = question.getAllPossibleQuestions();
                         addQuestions(gq);
-//                        generatedQuestions.addAll(gq);
-//                        for (GeneratedQuestion generatedQuestion : gq) {
-//                            generatedQuestion.print();
-//                        }
                         if (generatedQuestions.size() > 0) {
                             succededGraphs++;
                             if (succededGraphs > 0) {
@@ -578,14 +532,9 @@ public class ShapesGenerator {
             if (!graphString.contains("UNKONWN") && !graphString.contains("null")) { //if it contains null, this means one of the objects not belonging to contexts in the DB: i.e, its type not start with dbo:
                 System.out.println(currentStarGraph.getSeedType());
                 System.out.println(graphString);
-//                MainBean.output += "\n" + graphString;
                 StarSetQuestion starQuestion = new StarSetQuestion(currentStarGraph, currentStarGraph.getSeedType());
                 ArrayList<GeneratedQuestion> gq = starQuestion.getAllPossibleQuestions();
                 addQuestions(gq);
-//                generatedQuestions.addAll(gq);
-//                for (GeneratedQuestion generatedQuestion : gq) {
-//                    generatedQuestion.print();
-//                }
                 if (generatedQuestions.size() > 0) {
                     succededGraphs++;
                     if (succededGraphs > 0) { // the number must cover all types size
@@ -612,14 +561,9 @@ public class ShapesGenerator {
             if (!graphString.contains("UNKONWN") && !graphString.contains("null")) { //if it contains null, this means one of the objects not belonging to contexts in the DB: i.e, its type not start with dbo:
                 System.out.println(currentStarGraph.getSeedType());
                 System.out.println(graphString);
-//                MainBean.output += "\n" + graphString;
                 StarQuestionWithGroupBy starQuestion = new StarQuestionWithGroupBy(currentStarGraph);
                 ArrayList<GeneratedQuestion> gq = starQuestion.getAllPossibleQuestions();
                 addQuestions(gq);
-//                generatedQuestions.addAll(gq);
-//                for (GeneratedQuestion generatedQuestion : gq) {
-//                    generatedQuestion.print();
-//                }
                 if (generatedQuestions.size() > 0) {
                     succededGraphs++;
                     if (succededGraphs > 0) {

@@ -17,7 +17,14 @@ import lexiconGenerator.predicateRepresentationExtractor.scrapping.model.Predica
 import lexiconGenerator.predicateRepresentationExtractor.chunking.BasicNLP_FromPython;
 import settings.Settings;
 
-public class StarQuestion {
+public class StarQuestion extends ShapeQuestion {
+
+    /**
+     * Consider the following questions for "Which aircraft whose designer is DARPA?":
+     * What are the aircraft for which DARPA is the designer?
+     * Which aircraft have a designer that is DARPA?
+     *
+     */
 
     StarGraph starGraph;
     ArrayList<GeneratedQuestion> allPossibleQuestions = new ArrayList<>();
@@ -97,35 +104,25 @@ public class StarQuestion {
         if (starGraph.getStar().size() == 1) {
             selectQuestions(CoordinatingConjunction.AND);
             countQuestions(CoordinatingConjunction.AND);
-
         } else if (starGraph.getStar().size() == 2 && starGraph.getStar().size() == starPredicates.size()) { //no repeated predicates
             selectQuestions(CoordinatingConjunction.AND);
-            
             selectQuestions(CoordinatingConjunction.OR);
             selectQuestions(CoordinatingConjunction.AND_NOT);
             selectQuestions(CoordinatingConjunction.OR_NOT);
             selectQuestions(CoordinatingConjunction.NOT_NOT);
-
             countQuestions(CoordinatingConjunction.AND);
             countQuestions(CoordinatingConjunction.OR);
             countQuestions(CoordinatingConjunction.AND_NOT);
             countQuestions(CoordinatingConjunction.OR_NOT);
             countQuestions(CoordinatingConjunction.NOT_NOT);
-
-
         } else if (starGraph.getStar().size() == 2 && starGraph.getStar().size() != starPredicates.size()) { //repeated predicates
             selectQuestions(CoordinatingConjunction.AND);
             countQuestions(CoordinatingConjunction.AND);
-
         } else if (starGraph.getStar().size() > 2 && starGraph.getStar().size() == starPredicates.size()) { //no repeated predicates
             selectQuestions(CoordinatingConjunction.AND);
-            
             selectQuestions(CoordinatingConjunction.OR);
-
             countQuestions(CoordinatingConjunction.AND);
-            
             countQuestions(CoordinatingConjunction.OR);
-
         } else if (starGraph.getStar().size() > 2 && starGraph.getStar().size() != starPredicates.size()) { //repeated predicates
             selectQuestions(CoordinatingConjunction.AND);
             countQuestions(CoordinatingConjunction.AND);
@@ -338,6 +335,7 @@ public class StarQuestion {
             default:
         }
         if (FCs != null) {
+            //Generate QT_WHICH
             String whichQuestion = selectWhichQuestions(coordinatingConjunction);
             String whichQuestion_tagged = selectWhichQuestions_tagged(coordinatingConjunction);
             String question = whichQuestion;
@@ -345,21 +343,22 @@ public class StarQuestion {
             String selectQuery = selectQuery(starGraph, coordinatingConjunction);
             allPossibleQuestions.add(new GeneratedQuestion(starGraph.getStar().get(0).getSubject().getValueWithPrefix(), starGraph.getStar().get(0).getS_type(), question, question_tagged, selectQuery, starGraph.toString(), starGraph.getStar().size() + 1, GeneratedQuestion.QT_WHICH, GeneratedQuestion.SH_STAR));
 
+            //Generate QT_WHAT
             question = whichQuestion.replaceFirst("Which " + T.trim(), "What are the " + BasicNLP_FromPython.nounPlural(T) + " ");
             question = whichQuestion.replaceFirst("Which " + BasicNLP_FromPython.nounPlural(T).trim(), "What are the " + BasicNLP_FromPython.nounPlural(T) + " ");
             question_tagged = whichQuestion_tagged.replaceFirst("<qt>Which</qt> <t>" + T.trim() + "</t>", "<qt>What</qt> are the <t>" + BasicNLP_FromPython.nounPlural(T) + "</t> ");
             question_tagged = whichQuestion_tagged.replaceFirst("<qt>Which</qt> <t>" + BasicNLP_FromPython.nounPlural(T).trim() + "</t>", "<qt>What</qt> are the <t>" + BasicNLP_FromPython.nounPlural(T) + "</t> ");
             allPossibleQuestions.add(new GeneratedQuestion(starGraph.getStar().get(0).getSubject().getValueWithPrefix(), starGraph.getStar().get(0).getS_type(), question, question_tagged, selectQuery, starGraph.toString(), starGraph.getStar().size() + 1, GeneratedQuestion.QT_WHAT, GeneratedQuestion.SH_STAR));
 
+            //Generate QT_REQUEST
             String req = QuestionTypePrefixGenerator.getRequestPrefix().trim();
             question = whichQuestion.replaceFirst("Which ", req + " ");
             question_tagged = whichQuestion_tagged.replaceFirst("Which", req);
-            
             allPossibleQuestions.add(new GeneratedQuestion(starGraph.getStar().get(0).getSubject().getValueWithPrefix(), starGraph.getStar().get(0).getS_type(), question, question_tagged, selectQuery, starGraph.toString(), starGraph.getStar().size() + 1, GeneratedQuestion.QT_REQUEST, GeneratedQuestion.SH_STAR));
 
+            //Generate QT_TOPICAL_PRUNE
             question = whichQuestion.replaceFirst("Which ", "");
             question_tagged = whichQuestion_tagged.replaceFirst("<qt>Which</qt> ", "");
-            
             allPossibleQuestions.add(new GeneratedQuestion(starGraph.getStar().get(0).getSubject().getValueWithPrefix(), starGraph.getStar().get(0).getS_type(), question, question_tagged, selectQuery, starGraph.toString(), starGraph.getStar().size() + 1, GeneratedQuestion.QT_TOPICAL_PRUNE, GeneratedQuestion.SH_STAR));
         }
     }
@@ -556,17 +555,17 @@ public class StarQuestion {
     public static String factConstraints_toString(StarGraph starGraph, String coorinatingConjunction, Map<String, HashSet<String>> starPredicates) {
         ArrayList<String> FCs_Representation = new ArrayList<>();
         ArrayList<String> FCs_Representation_tagged = new ArrayList<>();
-        ArrayList<TriplePattern> branches = starGraph.getStar();
+        ArrayList<TriplePattern> sratTriples = starGraph.getStar();
 
         ArrayList<String> processedPredicates = new ArrayList<>();
-        for (TriplePattern branch : branches) {
-            String p_with_Prefix = branch.getPredicate().getValueWithPrefix();
-            String p = branch.getPredicate().getValue();
+        for (TriplePattern starTriple : sratTriples) {
+            String p_with_Prefix = starTriple.getPredicate().getValueWithPrefix();
+            String p = starTriple.getPredicate().getValue();
             if (processedPredicates.contains(p)) {
                 continue;
             }
-            String s_type = branch.getS_type();
-            String o_type = branch.getO_type();
+            String s_type = starTriple.getS_type();
+            String o_type = starTriple.getO_type();
             ArrayList<String> objects = new ArrayList<>(starPredicates.get(p));
             String O = objectListToString(objects, false);
             String O_tagged = objectListToString(objects, true);
@@ -630,30 +629,14 @@ public class StarQuestion {
                     FCs = " either" + FCs_Representation.get(0) + " or" + FCs_Representation.get(1);
                     FCs_tagged = " either" + FCs_Representation_tagged.get(0) + " <cc>or</cc>" + FCs_Representation_tagged.get(1);
                 } else if (coorinatingConjunction.equals(CoordinatingConjunction.AND_NOT)) {
-                    FCs = FCs_Representation.get(0) + " but" + FCs_Representation.get(1)
-                            .replaceAll("\\bis\\b", "is not")
-                            .replaceAll("\\bare\\b", "are not")
-                            .replaceAll("\\bwas\\b", "was not")
-                            .replaceAll("\\bwere\\b", "were not");
-                    FCs_tagged = FCs_Representation_tagged.get(0) + " <cc>but</cc>" + FCs_Representation_tagged.get(1)
-                            .replaceAll("\\bis\\b", "is not")
-                            .replaceAll("\\bare\\b", "are not")
-                            .replaceAll("\\bwas\\b", "was not")
-                            .replaceAll("\\bwere\\b", "were not");
+                    FCs = FCs_Representation.get(0) + " but" + PhraseRepresentationProcessing.negatePhrase(FCs_Representation.get(1));
+                    FCs_tagged = FCs_Representation_tagged.get(0) + " <cc>but</cc>" + PhraseRepresentationProcessing.negatePhrase(FCs_Representation_tagged.get(1));
                     if (!FCs.contains(" not")) {
                         return null;
                     }
                 } else if (coorinatingConjunction.equals(CoordinatingConjunction.OR_NOT)) {
-                    FCs = FCs_Representation.get(0) + " or" + FCs_Representation.get(1)
-                            .replaceAll("\\bis\\b", "is not")
-                            .replaceAll("\\bare\\b", "are not")
-                            .replaceAll("\\bwas\\b", "was not")
-                            .replaceAll("\\bwere\\b", "were not");
-                    FCs_tagged = FCs_Representation_tagged.get(0) + " or" + FCs_Representation_tagged.get(1)
-                            .replaceAll("\\bis\\b", "is not")
-                            .replaceAll("\\bare\\b", "are not")
-                            .replaceAll("\\bwas\\b", "was not")
-                            .replaceAll("\\bwere\\b", "were not");
+                    FCs = FCs_Representation.get(0) + " or" + PhraseRepresentationProcessing.negatePhrase(FCs_Representation.get(1));
+                    FCs_tagged = FCs_Representation_tagged.get(0) + " or" + PhraseRepresentationProcessing.negatePhrase(FCs_Representation_tagged.get(1));
                     if (!FCs.contains(" not")) {
                         return null;
                     }
@@ -707,4 +690,8 @@ public class StarQuestion {
         return T + FCs_NOT_NOT;
     }
 
+    @Override
+    public void generateAllPossibleQuestions() throws Exception {
+
+    }
 }

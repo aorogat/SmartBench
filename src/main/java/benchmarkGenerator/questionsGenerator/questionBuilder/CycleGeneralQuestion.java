@@ -4,7 +4,7 @@ import benchmarkGenerator.questionsGenerator.questionBuilder.helpers.GeneratedQu
 import benchmarkGenerator.questionsGenerator.questionBuilder.helpers.CoordinatingConjunction;
 import benchmarkGenerator.questionsGenerator.questionBuilder.preprocessors.PhraseRepresentationProcessing;
 import java.util.ArrayList;
-import lexiconGenerator.kg_explorer.explorer.SPARQL;
+
 import lexiconGenerator.kg_explorer.ontology.KGOntology;
 import lexiconGenerator.predicateRepresentationExtractor.scrapping.model.PredicateNLRepresentation;
 import lexiconGenerator.predicateRepresentationExtractor.scrapping.model.PredicatesLexicon;
@@ -15,7 +15,7 @@ import settings.Settings;
  *
  * @author aorogat
  */
-public class CycleGeneralQuestion {
+public class CycleGeneralQuestion extends ShapeQuestion {
 
     CycleGraph cycleGraph;
     ArrayList<GeneratedQuestion> allPossibleQuestions = new ArrayList<>();
@@ -50,7 +50,7 @@ public class CycleGeneralQuestion {
     }
     
     
-    public void generateQuestions() throws Exception {
+    public void generateAllPossibleQuestions() throws Exception {
         direction = FORWARD;
         selectQuestions(CoordinatingConjunction.AND);
 

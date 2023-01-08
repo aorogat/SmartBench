@@ -12,7 +12,7 @@ import benchmarkGenerator.subgraphShapeGenerator.subgraph.TreeGraph;
  *
  * @author aorogat
  */
-public class TreeQuestion {
+public class TreeQuestion extends ShapeQuestion {
 
     TreeGraph treeGraph;
     ArrayList<GeneratedQuestion> allPossibleQuestions = new ArrayList<>();
@@ -96,4 +96,8 @@ public class TreeQuestion {
         this.allPossibleQuestions = allPossibleQuestions;
     }
 
+    @Override
+    public void generateAllPossibleQuestions() throws Exception {
+
+    }
 }

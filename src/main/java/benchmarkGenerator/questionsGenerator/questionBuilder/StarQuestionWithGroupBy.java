@@ -10,7 +10,7 @@ import benchmarkGenerator.subgraphShapeGenerator.subgraph.StarGraph;
 import lexiconGenerator.predicateRepresentationExtractor.chunking.BasicNLP_FromPython;
 import settings.Settings;
 
-public class StarQuestionWithGroupBy {
+public class StarQuestionWithGroupBy extends ShapeQuestion {
 
     StarGraph starGraph;
     String T;
@@ -104,4 +104,8 @@ public class StarQuestionWithGroupBy {
         this.allPossibleQuestions = allPossibleQuestions;
     }
 
+    @Override
+    public void generateAllPossibleQuestions() throws Exception {
+
+    }
 }

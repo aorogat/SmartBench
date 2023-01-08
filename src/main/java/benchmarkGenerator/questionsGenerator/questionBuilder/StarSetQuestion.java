@@ -16,7 +16,7 @@ import settings.Settings;
  *
  * @author aorogat
  */
-public class StarSetQuestion {
+public class StarSetQuestion extends ShapeQuestion {
 
     StarGraph starGraph;
     ArrayList<GeneratedQuestion> allPossibleQuestions = new ArrayList<>();
@@ -410,4 +410,8 @@ public class StarSetQuestion {
         this.allPossibleQuestions = allPossibleQuestions;
     }
 
+    @Override
+    public void generateAllPossibleQuestions() throws Exception {
+
+    }
 }
