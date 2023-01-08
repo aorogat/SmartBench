@@ -30,7 +30,8 @@ public class TreeQuestion extends ShapeQuestion {
             String rootWhichQuestion_tagged = starQuestion_0_0.selectWhichQuestions_tagged(CoordinatingConjunction.AND);
             
             //Query
-            String rootWhichQuery = starQuestion_0_0.selectQuery(starGraph_0_0, CoordinatingConjunction.AND);
+//            String rootWhichQuery = starQuestion_0_0.selectQuery(starGraph_0_0, CoordinatingConjunction.AND);
+            String rootWhichQuery = starQuestion_0_0.starQueryGenerator.selectQuery(CoordinatingConjunction.AND);
 
             String triple_1_Subject = starGraph_0_0.getStar().get(0).getSubject().getValueWithPrefix();
             String triple_1_Object = starGraph_0_0.getStar().get(0).getObject().getValueWithPrefix();

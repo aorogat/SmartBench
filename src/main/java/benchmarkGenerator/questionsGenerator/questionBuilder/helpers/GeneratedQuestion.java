@@ -156,7 +156,7 @@ public class GeneratedQuestion {
 
         System.out.println("\t \033[30m Seed with prefix: \033[1;35m " + seed_withPrefix);
         System.out.println("\t \033[30m Seed type with prefix: \033[1;35m " + seedType_withPrefix);
-        System.out.println("\t \033[30m Question Graph: \033[1;35m " + graphString);
+        System.out.println("\t \033[30m Question Graph: \033[1;35m " + graphString.replace("\n", "\t||\t"));
         System.out.println("\t \033[30m Questing String: \033[1;35m " + questionString);
         System.out.println("\t \033[30m Questing Tagged String: \033[1;35m " + questionStringTagged);
         System.out.println("\t \033[30m Question Query: \033[1;35m " + query.replace("\n", " "));

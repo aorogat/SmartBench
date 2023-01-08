@@ -55,7 +55,8 @@ public class FlowerQuestion extends ShapeQuestion {
                 .replace("<qt>Whom</qt>", ", as well he/she")
                 .replace(" ,", "");
 
-        String queryString = starQuestion.selectQuery(flowerGraph.getStar(), CoordinatingConjunction.AND);
+//        String queryString = starQuestion.selectQuery(flowerGraph.getStar(), CoordinatingConjunction.AND);
+        String queryString = starQuestion.starQueryGenerator.selectQuery(CoordinatingConjunction.AND);
         queryString = queryString.substring(0,queryString.length()-1);
         
         queryString += cycleQuestion.selectQuery(flowerGraph.getCycle(), CoordinatingConjunction.AND).replace("SELECT DISTINCT ?Seed WHERE{", "");
