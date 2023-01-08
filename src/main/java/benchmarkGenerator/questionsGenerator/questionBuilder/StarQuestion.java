@@ -19,6 +19,7 @@ import settings.Settings;
 public class StarQuestion extends ShapeQuestion {
 
     static String FCs_tagged = "";
+    public StarQueryGenerator starQueryGenerator;
     /**
      * Consider the following questions for "Which aircraft whose designer is DARPA?":
      * What are the aircraft for which DARPA is the designer?
@@ -38,15 +39,11 @@ public class StarQuestion extends ShapeQuestion {
     String FCs_AND_NOT_tagged;
     String FCs_OR_NOT_tagged;
     String FCs_NOT_NOT_tagged;
-
     ArrayList<String> FCs_Representation = new ArrayList<>();
     ArrayList<String> FCs_Representation_tagged = new ArrayList<>();
-
     private String somethingElse;
     private String somethingElseWithoutPrefix;
     private Map<String, HashSet<String>> starPredicates;
-
-    public StarQueryGenerator starQueryGenerator;
 
 
     public StarQuestion(StarGraph starGraph) throws Exception {

@@ -49,7 +49,7 @@ public class ShapesGenerator {
 
 
     public static void generateShapes() throws Exception {
-        System.out.println("\n\n\n\n=============================== SmartBench will generate the questions. ===============================");
+        System.out.println("\n\n\n\n=============================== Maestro will generate the questions. ===============================");
 
         int benchmarkNumber = 37;
 
@@ -72,7 +72,7 @@ public class ShapesGenerator {
 //            if(generatedQuestions.size()>Settings.benchmarkSizeBeforePrune)
 //                break;
 
-                System.out.println("++++++++++++++++  Seed " + ++i + " of " + branchs.size() + " +++++++ Seed: " + branch.s);
+                System.out.println("=> Seed " + ++i + " of " + branchs.size() + " -- Seed: " + branch.s);
 
 //                Single-Edge
                 if (Configuration.SH_Single_Edge) {
@@ -237,7 +237,7 @@ public class ShapesGenerator {
     }
 
     public static void generateSingleEdge(Branch branch) throws Exception {
-        System.out.println("============================= Single-Edge Questions ==================================");
+        System.out.println("Single-Edge Questions ==================================");
 
         //Numbers and dates are only supported in single-edge
         TriplePattern t0 = new TriplePattern(
@@ -249,7 +249,7 @@ public class ShapesGenerator {
         String graphString = singleEdgeGraph.toString();
 
         if (!graphString.contains("UNKONWN") && !graphString.contains("null")) {
-            System.out.println(graphString);
+//            System.out.println(graphString);
             SingleEdgeQuestion singleEdgeQuestion = new SingleEdgeQuestion(singleEdgeGraph, branch.s_type, branch.o_type);
             ArrayList<GeneratedQuestion> gq = singleEdgeQuestion.getAllPossibleQuestions();
             addQuestions(gq);
@@ -258,7 +258,7 @@ public class ShapesGenerator {
     }
 
     public static void generateChain(Branch branch, int n) throws Exception {
-        System.out.println("============================= Chain (L=" + n + ") Questions ==================================");
+        System.out.println("Chain (L=" + n + ") Questions ==================================");
 
         //Chain - Length 2
 //            ArrayList<Graph> chainGraphs = chainGraph.generate(KG_Settings.knowledgeGraph, branch.s, NodeType.SUBJECT_ENTITY, NodeType.URI, n, true); //For one answer questions
@@ -291,7 +291,7 @@ public class ShapesGenerator {
                 chainGraph1 = (ChainGraph) chainGraph1;
                 String graphString = chainGraph1.toString();
                 if (!graphString.contains("UNKONWN") && !graphString.contains("null")) {
-                    System.out.println(graphString);
+//                    System.out.println(graphString);
                     ChainQuestion chainQuestion = new ChainQuestion((ChainGraph) chainGraph1);
                     ArrayList<GeneratedQuestion> gq = chainQuestion.getAllPossibleQuestions();
                     addQuestions(gq);
@@ -310,7 +310,7 @@ public class ShapesGenerator {
     }
 
     public static void generateStar(Branch branch, int n) throws Exception {
-        System.out.println("============================= Star (n=" + n + " + 1 type branch) Questions for (" + branch.s + ")==================================");
+        System.out.println("Star (n=" + n + " + 1 type branch) Questions for (" + branch.s + ")==================================");
 
         StarGraph starGraph = new StarGraph();
 //        int[] ends = new int[]{NodeType.LITERAL};
@@ -336,8 +336,8 @@ public class ShapesGenerator {
                 if (graphString.contains("recorded in")) {
                     continue;
                 }
-                System.out.println(currentStarGraph.getSeedType());
-                System.out.println(graphString);
+//                System.out.println(currentStarGraph.getSeedType());
+//                System.out.println(graphString);
                 StarQuestion starQuestion = new StarQuestion(currentStarGraph);
                 ArrayList<GeneratedQuestion> gq = starQuestion.getAllPossibleQuestions();
                 addQuestions(gq);
@@ -354,7 +354,7 @@ public class ShapesGenerator {
     }
 
     public static void generateTree(Branch branch, int n) {
-        System.out.println("============================= Tree (n=" + n + " + 1 type branch) Questions for (" + branch.s + ")==================================");
+        System.out.println("Tree (n=" + n + " + 1 type branch) Questions for (" + branch.s + ")==================================");
 
         StarGraph starGraph = new StarGraph();
         int[] ends = new int[]{NodeType.URI, NodeType.URI, NodeType.URI};
@@ -391,8 +391,8 @@ public class ShapesGenerator {
                             return;
                         }
                     }
-                    System.out.println(treeGraph.getSeedType());
-                    System.out.println(graphString);
+//                    System.out.println(treeGraph.getSeedType());
+//                    System.out.println(graphString);
                 } else {
                 }
 
@@ -405,7 +405,7 @@ public class ShapesGenerator {
     }
 
     public static void generateCycle(Branch branch) throws Exception {
-        System.out.println("============================= Cycle Questions ==================================");
+        System.out.println("Cycle Questions ==================================");
 
         //Cycle 
         CycleGraph cycleGraph = new CycleGraph();
@@ -415,7 +415,7 @@ public class ShapesGenerator {
 
             String graphString = currecntCycleGraph.toString();
             if (!graphString.contains("UNKONWN") && !graphString.contains("null")) {
-                System.out.println(graphString);
+//                System.out.println(graphString);
                 CycleQuestion question = new CycleQuestion(currecntCycleGraph);
                 question.generateAllPossibleQuestions();
                 ArrayList<GeneratedQuestion> gq = question.getAllPossibleQuestions();
@@ -433,7 +433,7 @@ public class ShapesGenerator {
     }
 
     public static void generateCycleGeneral(Branch branch) throws Exception {
-        System.out.println("============================= Cycle General Questions ==================================");
+        System.out.println("Cycle General Questions ==================================");
 
         //Cycle 
         CycleGraph cycleGraph = new CycleGraph();
@@ -443,7 +443,7 @@ public class ShapesGenerator {
 
             String graphString = currecntCycleGraph.toString();
             if (!graphString.contains("UNKONWN") && !graphString.contains("null")) {
-                System.out.println(graphString);
+//                System.out.println(graphString);
                 CycleGeneralQuestion question = new CycleGeneralQuestion(currecntCycleGraph);
                 question.generateAllPossibleQuestions();
                 ArrayList<GeneratedQuestion> gq = question.getAllPossibleQuestions();
@@ -461,7 +461,7 @@ public class ShapesGenerator {
     }
 
     public static void generateFlower(Branch branch, int n) {
-        System.out.println("============================= Flower (n=" + n + " + 1 type branch) Questions for (" + branch.s + ")==================================");
+        System.out.println("Flower (n=" + n + " + 1 type branch) Questions for (" + branch.s + ")==================================");
 
         StarGraph starGraph = new StarGraph();
         int[] ends = new int[]{NodeType.URI, NodeType.URI, NodeType.URI};
@@ -494,7 +494,7 @@ public class ShapesGenerator {
                     FlowerGraph flowerGraph = new FlowerGraph(currentStarGraph, currecntCycleGraph);
                     String graphString = flowerGraph.toString();
                     if (!graphString.contains("UNKONWN") && !graphString.contains("null")) {
-                        System.out.println(graphString);
+//                        System.out.println(graphString);
                         FlowerQuestion question = new FlowerQuestion(flowerGraph);
                         ArrayList<GeneratedQuestion> gq = question.getAllPossibleQuestions();
                         addQuestions(gq);
@@ -517,7 +517,7 @@ public class ShapesGenerator {
     }
 
     public static void generateStarSet(Branch branch, int n) throws Exception {
-        System.out.println("============================= Star Set (n=" + n + " + 1 type branch) Questions for (" + branch.s + ")==================================");
+        System.out.println("Star Set (n=" + n + " + 1 type branch) Questions for (" + branch.s + ")==================================");
 
         StarGraph starGraph = new StarGraph();
         int[] ends = new int[]{NodeType.NUMBER};
@@ -530,8 +530,8 @@ public class ShapesGenerator {
 
             String graphString = currentStarGraph.toString();
             if (!graphString.contains("UNKONWN") && !graphString.contains("null")) { //if it contains null, this means one of the objects not belonging to contexts in the DB: i.e, its type not start with dbo:
-                System.out.println(currentStarGraph.getSeedType());
-                System.out.println(graphString);
+//                System.out.println(currentStarGraph.getSeedType());
+//                System.out.println(graphString);
                 StarSetQuestion starQuestion = new StarSetQuestion(currentStarGraph, currentStarGraph.getSeedType());
                 ArrayList<GeneratedQuestion> gq = starQuestion.getAllPossibleQuestions();
                 addQuestions(gq);
@@ -548,7 +548,7 @@ public class ShapesGenerator {
     }
 
     public static void generateStarWithGroupBy(Branch branch, int n) throws Exception {
-        System.out.println("============================= Star With Group By (n=" + n + " + 1 type branch) Questions for (" + branch.s + ")==================================");
+        System.out.println("Star With Group By (n=" + n + " + 1 type branch) Questions for (" + branch.s + ")==================================");
 
         StarGraph starGraph = new StarGraph();
         int[] ends = new int[]{NodeType.URI, NodeType.URI, NodeType.URI};
@@ -559,8 +559,8 @@ public class ShapesGenerator {
 
             String graphString = currentStarGraph.toString();
             if (!graphString.contains("UNKONWN") && !graphString.contains("null")) { //if it contains null, this means one of the objects not belonging to contexts in the DB: i.e, its type not start with dbo:
-                System.out.println(currentStarGraph.getSeedType());
-                System.out.println(graphString);
+//                System.out.println(currentStarGraph.getSeedType());
+//                System.out.println(graphString);
                 StarQuestionWithGroupBy starQuestion = new StarQuestionWithGroupBy(currentStarGraph);
                 ArrayList<GeneratedQuestion> gq = starQuestion.getAllPossibleQuestions();
                 addQuestions(gq);
