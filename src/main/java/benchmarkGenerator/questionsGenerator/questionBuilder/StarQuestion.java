@@ -603,13 +603,13 @@ public class StarQuestion extends ShapeQuestion {
                     FCs_tagged = " either" + FCs_Representation_tagged.get(0) + " <cc>or</cc>" + FCs_Representation_tagged.get(1);
                 } else if (coorinatingConjunction.equals(CoordinatingConjunction.AND_NOT)) {
                     FCs = FCs_Representation.get(0) + " but" + PhraseRepresentationProcessing.negatePhrase(FCs_Representation.get(1));
-                    FCs_tagged = FCs_Representation_tagged.get(0) + " <cc>but</cc>" + PhraseRepresentationProcessing.negatePhrase(FCs_Representation_tagged.get(1));
+                    FCs_tagged = FCs_Representation_tagged.get(0) + " <cc>but not</cc>" + FCs_Representation_tagged.get(1);
                     if (!FCs.contains(" not")) {
                         return null;
                     }
                 } else if (coorinatingConjunction.equals(CoordinatingConjunction.OR_NOT)) {
                     FCs = FCs_Representation.get(0) + " or" + PhraseRepresentationProcessing.negatePhrase(FCs_Representation.get(1));
-                    FCs_tagged = FCs_Representation_tagged.get(0) + " or" + PhraseRepresentationProcessing.negatePhrase(FCs_Representation_tagged.get(1));
+                    FCs_tagged = FCs_Representation_tagged.get(0) + " <cc>or not</cc>" + FCs_Representation_tagged.get(1);
                     if (!FCs.contains(" not")) {
                         return null;
                     }
@@ -625,7 +625,7 @@ public class StarQuestion extends ShapeQuestion {
                         FCs_tagged += FCs_Representation_tagged.get(i) + " ,";
                     }
                     FCs += "and" + FCs_Representation.get(FCs_Representation.size() - 1);
-                    FCs_tagged += "and" + FCs_Representation_tagged.get(FCs_Representation_tagged.size() - 1);
+                    FCs_tagged += "<cc>and</cc>" + FCs_Representation_tagged.get(FCs_Representation_tagged.size() - 1);
                 } else if (coorinatingConjunction.equals("or")) {
                     for (int i = 0; i < FCs_Representation.size() - 1; i++) {
                         FCs += FCs_Representation.get(i) + " ,";
