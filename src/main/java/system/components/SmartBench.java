@@ -10,6 +10,8 @@ import java.util.Properties;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import org.apache.jena.base.Sys;
 import settings.Configuration;
 import settings.DBpedia_Settings;
 import settings.DBtune_Settings;
@@ -26,6 +28,9 @@ public class SmartBench {
     public static void main(String[] args) {
 
         lood_conf_file();
+
+        //print welcome message
+        welcome();
 
         switch (Configuration.kg_name) {
             case "DBPedia":
@@ -83,6 +88,22 @@ public class SmartBench {
 
         } catch (Exception ex) {
             Logger.getLogger(SmartBench.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private static void welcome() {
+        //Print Maestro Logo in stars pattern
+        System.out.println("Welcome to Maestro, a highly advanced benchmark generation system designed to support question answering over knowledge graphs.");
+        System.out.println("Our software is a powerful and reliable tool that allows users to generate a new benchmark for any given knowledge graph, with the option to include a text corpus for added coverage.");
+        System.out.println("With Maestro, you can be confident that your benchmark will include all relevant properties of natural language questions and queries, ensuring that your QA system is thoroughly tested.");
+        System.out.println("In addition, Maestro generates high-quality natural language questions with various utterances, making it a top choice for evaluating the performance of QA systems.");
+        System.out.println("We are thrilled to have you join us as we strive to enhance the functionality and effectiveness of Maestro.");
+        System.out.println("Thank you for choosing our software and we look forward to supporting you in your endeavors.");
+        System.out.println("*************************************************************************************************************************************************************************************");
+        try {
+            Thread.sleep(5000); // 5 seconds
+        } catch (InterruptedException e) {
+            // Do something here if you want to handle the exception
         }
     }
 

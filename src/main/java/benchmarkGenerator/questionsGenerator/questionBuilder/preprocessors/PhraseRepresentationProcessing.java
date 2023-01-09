@@ -14,7 +14,7 @@ public class PhraseRepresentationProcessing {
         return NP.replaceAll("(\\bis/are\\b|\\bis\\b|\\bare\\b|\\bwas\\b|\\bwere\\b) ", "").trim();
     }
     
-    public static String NP_only(String NP)
+    public static String NP_of_the_form_NP_only(String NP)
     {
         if(NP==null)
             return NP;
@@ -22,21 +22,21 @@ public class PhraseRepresentationProcessing {
                 .replaceAll("(" + Predicate_Representation_Extractor.getVerbPrepositionsConcatenated("\\b|\\b") + ")", "").trim();
     }
     
-    public static String NP_without_Preposition(String NP)
+    public static String NP_of_the_form_VB_DT_NP(String NP)
     {
         if(NP==null)
             return NP;
         return NP.replaceAll("(" + Predicate_Representation_Extractor.getVerbPrepositionsConcatenated("\\b|\\b") + ")", "").trim();
     }
     
-    public static String NP_without_verb___first(String NP)
+    public static String NP_of_the_form_DT_NP_IN(String NP)
     {
         if(NP==null)
             return NP;
         return NP.replaceFirst("(\\bis/are\\b|\\bis\\b|\\bare\\b|\\bwas\\b|\\bwere\\b) ", "").trim();
     }
     
-    public static String NP_only___first(String NP)
+    public static String NP_of_the_form_DT_NP(String NP)
     {
         if(NP==null)
             return NP;

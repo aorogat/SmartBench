@@ -59,7 +59,7 @@ public class FlowerQuestion extends ShapeQuestion {
         String queryString = starQuestion.starQueryGenerator.selectQuery(CoordinatingConjunction.AND);
         queryString = queryString.substring(0,queryString.length()-1);
         
-        queryString += cycleQuestion.selectQuery(flowerGraph.getCycle(), CoordinatingConjunction.AND).replace("SELECT DISTINCT ?Seed WHERE{", "");
+        queryString += cycleQuestion.cycleQueryGenerator.selectQuery(CoordinatingConjunction.AND, cycleQuestion.direction).replace("SELECT DISTINCT ?Seed WHERE{", "");
         
         String graphString = flowerGraph.toString();
         

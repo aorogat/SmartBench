@@ -29,6 +29,7 @@ public class StarQuestion extends ShapeQuestion {
     StarGraph starGraph;
     ArrayList<GeneratedQuestion> allPossibleQuestions = new ArrayList<>();
     String T;
+    String T_plural;
     String FCs_AND;
     String FCs_OR;
     String FCs_AND_NOT;
@@ -46,6 +47,7 @@ public class StarQuestion extends ShapeQuestion {
     private Map<String, HashSet<String>> starPredicates;
 
 
+
     public StarQuestion(StarGraph starGraph) throws Exception {
         this.starGraph = starGraph;
         starQueryGenerator = new StarQueryGenerator(starGraph);
@@ -54,6 +56,7 @@ public class StarQuestion extends ShapeQuestion {
         somethingElse = Settings.knowledgeGraph.getSimilarEntity(Settings.explorer, starGraph.getStar().get(0).getSubject().getValueWithPrefix(), S_type);
         somethingElseWithoutPrefix = Settings.explorer.removePrefix(somethingElse);
         T = Settings.explorer.removePrefix(starGraph.getSeedType()).toLowerCase();
+        T_plural = BasicNLP_FromPython.nounPlural(T);
         FCs_AND = factConstraints_toString(starGraph, CoordinatingConjunction.AND);
         FCs_AND_tagged = FCs_tagged;
         if (FCs_AND == null) {
@@ -106,7 +109,7 @@ public class StarQuestion extends ShapeQuestion {
         somethingElseWithoutPrefix = Settings.explorer.removePrefix(somethingElse);
 
         T = Settings.explorer.removePrefix(starGraph.getSeedType()).toLowerCase();
-
+        T_plural = BasicNLP_FromPython.nounPlural(T);
         somethingElseWithoutPrefix = EntityProcessing.decide_quotes_only(somethingElseWithoutPrefix, S_type);
 
         FCs_AND = factConstraints_toString(starGraph, CoordinatingConjunction.AND);
@@ -287,11 +290,11 @@ public class StarQuestion extends ShapeQuestion {
             String question = selectWhichQuestions(coordinatingConjunction).replaceFirst("Which", "");
             String question_tagged = selectWhichQuestions_tagged(coordinatingConjunction).replaceFirst("<qt>Which</qt>", "");
             if (subject.contains("\"")) {
-                question = ("Is " + subject + " " + question.replace("whose", "its").replace("their", "its")).replaceFirst(" its ", "'s ").replace(" and's ", " its ").replace(" or's ", " its ").replaceFirst(BasicNLP_FromPython.nounPlural(T), T).replaceFirst(" is", "");
-                question_tagged = ("<qt>Is</qt> <s>" + subject + "</s> " + question_tagged.replace("whose", "its")).replaceFirst(" its ", "'s ").replace(" and's ", " its ").replace(" or's ", " its ").replaceFirst(BasicNLP_FromPython.nounPlural(T), T).replaceFirst(" is", "");
+                question = ("Is " + subject + " " + question.replace("whose", "its").replace("their", "its")).replaceFirst(" its ", "'s ").replace(" and's ", " its ").replace(" or's ", " its ").replaceFirst(T_plural, T).replaceFirst(" is", "");
+                question_tagged = ("<qt>Is</qt> <s>" + subject + "</s> " + question_tagged.replace("whose", "its")).replaceFirst(" its ", "'s ").replace(" and's ", " its ").replace(" or's ", " its ").replaceFirst(T_plural, T).replaceFirst(" is", "");
             } else {
-                question = ("Is " + subject.replace(T, "") + " " + question.replace("whose", "its").replace("their", "its")).replaceFirst(" its ", "'s ").replace(" and's ", " its ").replace(" or's ", " its ").replaceFirst(BasicNLP_FromPython.nounPlural(T), T).replaceFirst(" is", "");
-                question_tagged = ("<qt>Is</qt> <s>" + subject.replace(T, "") + "</s> " + question_tagged.replace("whose", "its")).replaceFirst(" its ", "'s ").replace(" and's ", " its ").replace(" or's ", " its ").replaceFirst(BasicNLP_FromPython.nounPlural(T), T).replaceFirst(" is", "");
+                question = ("Is " + subject.replace(T, "") + " " + question.replace("whose", "its").replace("their", "its")).replaceFirst(" its ", "'s ").replace(" and's ", " its ").replace(" or's ", " its ").replaceFirst(T_plural, T).replaceFirst(" is", "");
+                question_tagged = ("<qt>Is</qt> <s>" + subject.replace(T, "") + "</s> " + question_tagged.replace("whose", "its")).replaceFirst(" its ", "'s ").replace(" and's ", " its ").replace(" or's ", " its ").replaceFirst(T_plural, T).replaceFirst(" is", "");
             }
             String askQuery = starQueryGenerator.askQuery_true_answer(coordinatingConjunction);
             allPossibleQuestions.add(new GeneratedQuestion(starGraph.getStar().get(0).getSubject().getValueWithPrefix(), starGraph.getStar().get(0).getS_type(), question, question_tagged, askQuery, starGraph.toString(), starGraph.getStar().size() + 1, GeneratedQuestion.QT_YES_NO_IS, GeneratedQuestion.SH_STAR));
@@ -323,11 +326,11 @@ public class StarQuestion extends ShapeQuestion {
             String question_tagged = selectWhichQuestions_tagged(coordinatingConjunction).replaceFirst("<qt>Which</qt>", "");
 
             if (somethingElseWithoutPrefix.contains("\"")) {
-                question = ("Is " + somethingElseWithoutPrefix + " " + question.replace("whose", "its").replace("their", "its")).replaceFirst(" its ", "'s ").replace(" and's ", " its ").replace(" or's ", " its ").replaceFirst(BasicNLP_FromPython.nounPlural(T), T).replaceFirst(" is", "");
-                question_tagged = ("<qt>Is</qt> <s>" + somethingElseWithoutPrefix + "</s> " + question_tagged.replace("whose", "its")).replaceFirst(" its ", "'s ").replace(" and's ", " its ").replace(" or's ", " its ").replaceFirst(BasicNLP_FromPython.nounPlural(T), T).replaceFirst(" is", "");
+                question = ("Is " + somethingElseWithoutPrefix + " " + question.replace("whose", "its").replace("their", "its")).replaceFirst(" its ", "'s ").replace(" and's ", " its ").replace(" or's ", " its ").replaceFirst(T_plural, T).replaceFirst(" is", "");
+                question_tagged = ("<qt>Is</qt> <s>" + somethingElseWithoutPrefix + "</s> " + question_tagged.replace("whose", "its")).replaceFirst(" its ", "'s ").replace(" and's ", " its ").replace(" or's ", " its ").replaceFirst(T_plural, T).replaceFirst(" is", "");
             } else {
-                question = ("Is " + somethingElseWithoutPrefix.replace(T, "") + " " + question.replace("whose", "its").replace("their", "its")).replaceFirst(" its ", "'s ").replace(" and's ", " its ").replace(" or's ", " its ").replaceFirst(BasicNLP_FromPython.nounPlural(T), T).replaceFirst(" is", "");
-                question_tagged = ("<qt>Is</qt> <s>" + somethingElseWithoutPrefix.replace(T, "") + "</s> " + question_tagged.replace("whose", "its")).replaceFirst(" its ", "'s ").replace(" and's ", " its ").replace(" or's ", " its ").replaceFirst(BasicNLP_FromPython.nounPlural(T), T).replaceFirst(" is", "");
+                question = ("Is " + somethingElseWithoutPrefix.replace(T, "") + " " + question.replace("whose", "its").replace("their", "its")).replaceFirst(" its ", "'s ").replace(" and's ", " its ").replace(" or's ", " its ").replaceFirst(T_plural, T).replaceFirst(" is", "");
+                question_tagged = ("<qt>Is</qt> <s>" + somethingElseWithoutPrefix.replace(T, "") + "</s> " + question_tagged.replace("whose", "its")).replaceFirst(" its ", "'s ").replace(" and's ", " its ").replace(" or's ", " its ").replaceFirst(T_plural, T).replaceFirst(" is", "");
             }
             String askQuery = starQueryGenerator.askQuery_false_answer(coordinatingConjunction, somethingElse);
             allPossibleQuestions.add(new GeneratedQuestion(starGraph.getStar().get(0).getSubject().getValueWithPrefix(), starGraph.getStar().get(0).getS_type(), question, question_tagged, askQuery, starGraph.toString(), starGraph.getStar().size() + 1, GeneratedQuestion.QT_YES_NO_IS, GeneratedQuestion.SH_STAR));
@@ -366,8 +369,8 @@ public class StarQuestion extends ShapeQuestion {
             allPossibleQuestions.add(new GeneratedQuestion(starGraph.getStar().get(0).getSubject().getValueWithPrefix(), starGraph.getStar().get(0).getS_type(), question, question_tagged, selectQuery, starGraph.toString(), starGraph.getStar().size() + 1, GeneratedQuestion.QT_WHICH, GeneratedQuestion.SH_STAR));
 
             //Generate QT_WHAT
-            question = whichQuestion.replaceFirst("Which " + BasicNLP_FromPython.nounPlural(T).trim(), "What are the " + BasicNLP_FromPython.nounPlural(T) + " ");
-            question_tagged = whichQuestion_tagged.replaceFirst("<qt>Which</qt> <t>" + BasicNLP_FromPython.nounPlural(T).trim() + "</t>", "<qt>What</qt> are the <t>" + BasicNLP_FromPython.nounPlural(T) + "</t> ");
+            question = whichQuestion.replaceFirst("Which " + T_plural.trim(), "What are the " + T_plural + " ");
+            question_tagged = whichQuestion_tagged.replaceFirst("<qt>Which</qt> <t>" + T_plural.trim() + "</t>", "<qt>What</qt> are the <t>" + T_plural + "</t> ");
             allPossibleQuestions.add(new GeneratedQuestion(starGraph.getStar().get(0).getSubject().getValueWithPrefix(), starGraph.getStar().get(0).getS_type(), question, question_tagged, selectQuery, starGraph.toString(), starGraph.getStar().size() + 1, GeneratedQuestion.QT_WHAT, GeneratedQuestion.SH_STAR));
 
             //Generate QT_REQUEST
@@ -405,7 +408,7 @@ public class StarQuestion extends ShapeQuestion {
         }
 
         if (FCs != null) {
-            return "Which " + BasicNLP_FromPython.nounPlural(T) + FCs + "?";
+            return "Which " + T_plural + FCs + "?";
         }
         return null;
     }
@@ -432,7 +435,7 @@ public class StarQuestion extends ShapeQuestion {
         }
 
         if (FCs_tag != null) {
-            return "<qt>Which</qt> <t>" + BasicNLP_FromPython.nounPlural(T) + "</t> " + FCs_tag + "?";
+            return "<qt>Which</qt> <t>" + T_plural + "</t> " + FCs_tag + "?";
         }
         return null;
     }
@@ -501,7 +504,7 @@ public class StarQuestion extends ShapeQuestion {
                     FCs_Representation.add(" " + O + " " + p_OS_VP);
                     FCs_Representation_tagged.add(" " + O_tagged + " <p>" + p_OS_VP + "</p>");
                 } else if (predicateNL.getPredicate_o_s_NP() != null) {
-                    String p_OS_NP = PhraseRepresentationProcessing.NP_only(predicateNL.getPredicate_o_s_NP());
+                    String p_OS_NP = PhraseRepresentationProcessing.NP_of_the_form_NP_only(predicateNL.getPredicate_o_s_NP());
                     if (Settings.knowledgeGraph.isASubtypeOf(Settings.explorer, starGraph.getSeedType(), Settings.Person)) {
                         FCs_Representation.add(" their " + p_OS_NP + " is " + O);
                         FCs_Representation_tagged.add(" their <p>" + p_OS_NP + "</p> is " + O_tagged);
@@ -645,27 +648,27 @@ public class StarQuestion extends ShapeQuestion {
     }
 
     public String getFCs_with_T_COO_is_AND() {
-        return T + " " + FCs_AND;
+        return T_plural + " " + FCs_AND;
     }
 
     public String getFCs_with_T_COO_is_AND_taggString() {
-        return "<t>" + T + "</t> " + FCs_AND_tagged;
+        return "<t>" + T_plural + "</t> " + FCs_AND_tagged;
     }
 
     public String getFCs_with_T_COO_is_OR() {
-        return T + FCs_OR;
+        return T_plural + FCs_OR;
     }
 
     public String getFCs_with_T_COO_is_AND_NOT() {
-        return T + FCs_AND_NOT;
+        return T_plural + FCs_AND_NOT;
     }
 
     public String getFCs_with_T_COO_is_OR_NOT() {
-        return T + FCs_OR_NOT;
+        return T_plural + FCs_OR_NOT;
     }
 
     public String getFCs_with_T_COO_is_NOT_NOT() {
-        return T + FCs_NOT_NOT;
+        return T_plural + FCs_NOT_NOT;
     }
 
     @Override

@@ -64,9 +64,9 @@ public class StarSetQuestion extends ShapeQuestion {
         if (predicateNL == null) {
             return;
         }
-        String so_NP = PhraseRepresentationProcessing.NP_only(predicateNL.getPredicate_s_O_NP());
+        String so_NP = PhraseRepresentationProcessing.NP_of_the_form_NP_only(predicateNL.getPredicate_s_O_NP());
         String so_VP = predicateNL.getPredicate_s_O_VP();
-        String os_NP = PhraseRepresentationProcessing.NP_only(predicateNL.getPredicate_o_s_NP());
+        String os_NP = PhraseRepresentationProcessing.NP_of_the_form_NP_only(predicateNL.getPredicate_o_s_NP());
         String os_VP = predicateNL.getPredicate_o_s_VP();
 
         String lessNL = "";

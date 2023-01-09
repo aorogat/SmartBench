@@ -18,9 +18,15 @@ public class BenchmarkJsonWritter {
         ObjectMapper mapper = new ObjectMapper();
         try {
 
-            // Writing to a file   
+            // Create the "test benchmarks" folder if it does not exist
+            File benchmarkFolder = new File("test benchmarks");
+            if (!benchmarkFolder.exists()) {
+                benchmarkFolder.mkdir();
+            }
+
+            // Create the file for the benchmark
             ObjectWriter writer = mapper.writer(new DefaultPrettyPrinter());                    
-            writer.writeValue(new File(benchmarkName + ".json"), benchmark.generatedBenchmark);
+            writer.writeValue(new File("test benchmarks/" + benchmarkName + ".json"), benchmark.generatedBenchmark);
             
             System.out.println("Saved sucessfuly");
 

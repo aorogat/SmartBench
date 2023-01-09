@@ -247,14 +247,14 @@ public class ChainQuestion extends ShapeQuestion {
             }
         }
         P1_to_n_SO_PN_series = P1_to_n_SO_PN_series.trim();
-        P1_to_n_SO_PN_series_without_verb = PhraseRepresentationProcessing.NP_without_verb___first(P1_to_n_SO_PN_series);
-        P1_to_n_SO_PN_series_without_verb_Tagged = PhraseRepresentationProcessing.NP_without_verb___first(P1_to_n_SO_PN_series_Tagged);
+        P1_to_n_SO_PN_series_without_verb = PhraseRepresentationProcessing.NP_of_the_form_DT_NP_IN(P1_to_n_SO_PN_series);
+        P1_to_n_SO_PN_series_without_verb_Tagged = PhraseRepresentationProcessing.NP_of_the_form_DT_NP_IN(P1_to_n_SO_PN_series_Tagged);
 
         if (P0_SO_NP != null) {
-            P0_SO_NP_without_verb = PhraseRepresentationProcessing.NP_without_verb___first(P0_SO_NP);
+            P0_SO_NP_without_verb = PhraseRepresentationProcessing.NP_of_the_form_DT_NP_IN(P0_SO_NP);
         }
         if (P0_OS_NP != null) {
-            P0_OS_NP_without_verb = PhraseRepresentationProcessing.NP_without_verb___first(P0_OS_NP);
+            P0_OS_NP_without_verb = PhraseRepresentationProcessing.NP_of_the_form_DT_NP_IN(P0_OS_NP);
         }
 
         if (predicateNL_for_P0 == null) {

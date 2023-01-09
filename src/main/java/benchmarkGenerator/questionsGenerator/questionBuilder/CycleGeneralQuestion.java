@@ -428,8 +428,8 @@ public class CycleGeneralQuestion extends ShapeQuestion {
             String p2_SO_NP = predicateNL_Path2.getPredicate_s_O_NP();
 
             if (p1_SO_NP != null && p2_SO_NP != null) {
-                fcs_ = PhraseRepresentationProcessing.NP_without_Preposition(p1_SO_NP) + " " + coorinatingConjunction + " " + PhraseRepresentationProcessing.NP_without_verb___first(p2_SO_NP) + " the same " + cycleGraph.getPath_1().getO_type_without_prefix();
-                fcs_tagged = "<p>" + PhraseRepresentationProcessing.NP_without_Preposition(p1_SO_NP) + "</p> <cc>" + coorinatingConjunction + "</cc> <p>" + PhraseRepresentationProcessing.NP_without_verb___first(p2_SO_NP) + "</p> <op>the same</op> <t>" + cycleGraph.getPath_1().getO_type_without_prefix() + "</t>";
+                fcs_ = PhraseRepresentationProcessing.NP_of_the_form_VB_DT_NP(p1_SO_NP) + " " + coorinatingConjunction + " " + PhraseRepresentationProcessing.NP_of_the_form_DT_NP_IN(p2_SO_NP) + " the same " + cycleGraph.getPath_1().getO_type_without_prefix();
+                fcs_tagged = "<p>" + PhraseRepresentationProcessing.NP_of_the_form_VB_DT_NP(p1_SO_NP) + "</p> <cc>" + coorinatingConjunction + "</cc> <p>" + PhraseRepresentationProcessing.NP_of_the_form_DT_NP_IN(p2_SO_NP) + "</p> <op>the same</op> <t>" + cycleGraph.getPath_1().getO_type_without_prefix() + "</t>";
             }
 
         }
@@ -453,8 +453,8 @@ public class CycleGeneralQuestion extends ShapeQuestion {
             String p2_OS_NP = predicateNL_Path2.getPredicate_o_s_NP();
 
             if (p1_OS_NP != null && p2_OS_NP != null) {
-                fcs_ =  PhraseRepresentationProcessing.NP_without_Preposition(p1_OS_NP) + " " + coorinatingConjunction + " " + PhraseRepresentationProcessing.NP_without_verb___first(p2_OS_NP) + " the same " + cycleGraph.getPath_1().getS_type_without_prefix();
-                fcs_tagged = "<p>" + PhraseRepresentationProcessing.NP_without_Preposition(p1_OS_NP) + "</p> <cc>" + coorinatingConjunction + "</cc> <p>" + PhraseRepresentationProcessing.NP_without_verb___first(p2_OS_NP) + "</p> <op>the same</op> <t>" + cycleGraph.getPath_1().getS_type_without_prefix() + "</t>";
+                fcs_ =  PhraseRepresentationProcessing.NP_of_the_form_VB_DT_NP(p1_OS_NP) + " " + coorinatingConjunction + " " + PhraseRepresentationProcessing.NP_of_the_form_DT_NP_IN(p2_OS_NP) + " the same " + cycleGraph.getPath_1().getS_type_without_prefix();
+                fcs_tagged = "<p>" + PhraseRepresentationProcessing.NP_of_the_form_VB_DT_NP(p1_OS_NP) + "</p> <cc>" + coorinatingConjunction + "</cc> <p>" + PhraseRepresentationProcessing.NP_of_the_form_DT_NP_IN(p2_OS_NP) + "</p> <op>the same</op> <t>" + cycleGraph.getPath_1().getS_type_without_prefix() + "</t>";
             }
         }
         return fcs_;

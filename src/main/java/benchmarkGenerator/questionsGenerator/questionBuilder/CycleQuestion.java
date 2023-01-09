@@ -1,5 +1,6 @@
 package benchmarkGenerator.questionsGenerator.questionBuilder;
 
+import benchmarkGenerator.questionsGenerator.queryBuilder.CycleQueryGenerator;
 import benchmarkGenerator.questionsGenerator.questionBuilder.helpers.GeneratedQuestion;
 import benchmarkGenerator.questionsGenerator.questionBuilder.helpers.CoordinatingConjunction;
 import benchmarkGenerator.questionsGenerator.questionBuilder.preprocessors.PhraseRepresentationProcessing;
@@ -25,8 +26,6 @@ public class CycleQuestion extends ShapeQuestion {
     private static String question_tagged;
     private static String fcs_tagged = null;
 
-    private String somethingElse = "http://AnnyOther";
-
     String GPs_ASK; //for Graph Patterns
     String seed_withPrefix;
     String seed_without_prefix;
@@ -37,23 +36,22 @@ public class CycleQuestion extends ShapeQuestion {
     public static final int BACKWARD = 2;
     int direction = 1;
 
+    public CycleQueryGenerator cycleQueryGenerator;
+
     public CycleQuestion(CycleGraph cycleGraph) {
         this.cycleGraph = cycleGraph;
-
+        cycleQueryGenerator = new CycleQueryGenerator(cycleGraph);
         seed_withPrefix = cycleGraph.getPath_1().getSubject().getValueWithPrefix();
         seed_without_prefix = cycleGraph.getPath_1().getSubject().getValue();
-
         seed_type_withPrefix = cycleGraph.getPath_1().getS_type();
-
-        somethingElse = Settings.knowledgeGraph.getSimilarEntity(Settings.explorer, cycleGraph.getPath_1().getSubject().getValueWithPrefix(), cycleGraph.getPath_1().getS_type());
+        String somethingElse = Settings.knowledgeGraph.getSimilarEntity(Settings.explorer, cycleGraph.getPath_1().getSubject().getValueWithPrefix(), cycleGraph.getPath_1().getS_type());
         String somethingElseWithoutPrefix = Settings.explorer.removePrefix(somethingElse);
-        
         seed_without_prefix = EntityProcessing.decide_quotes_with_type(seed_without_prefix, seed_type_withPrefix);
         somethingElseWithoutPrefix = EntityProcessing.decide_quotes_with_type(somethingElseWithoutPrefix,  seed_type_withPrefix);
     }
 
     public void generateAllPossibleQuestions() throws Exception {
-        //Forward generate nonacceptable-grammatical-questions
+        //Forward generate non acceptable-grammatical-questions
 //        direction = FORWARD;
 //        selectQuestions(CoordinatingConjunction.AND);
 //        selectQuestions(CoordinatingConjunction.OR);
@@ -63,59 +61,13 @@ public class CycleQuestion extends ShapeQuestion {
         selectQuestions(CoordinatingConjunction.OR);
     }
 
-    public String selectQuery(CycleGraph cycleGraph, String coordinatingConjunction) {
-        String query = "";
-        String triples = "";
-        String t1 = cycleGraph.getPath_1().toQueryTriplePattern();
-        String t2 = cycleGraph.getPath_2().toQueryTriplePattern();
 
-        if (coordinatingConjunction.equals(CoordinatingConjunction.AND)) {
-            triples = "\n\t" + t1 + "."
-                    + "\n\t" + t2 + ".";
-            if (direction == FORWARD) {
-                triples = triples.replace("<" + cycleGraph.getPath_1().getSubject().getValueWithPrefix() + ">", "?Seed").replace(" " + cycleGraph.getPath_1().getSubject().getValueWithPrefix() + " ", "?Seed")
-                        .replace("\"" + cycleGraph.getPath_1().getSubject().getValueWithPrefix() + "\"", "?Seed").replace("\"" + cycleGraph.getPath_1().getSubject().getValueWithPrefix() + "\"^^xsd:dateTime ", "?Seed");
-            } else if (direction == BACKWARD) {
-                triples = triples.replace("<" + cycleGraph.getPath_1().getObject().getValueWithPrefix() + ">", "?Seed").replace(" " + cycleGraph.getPath_1().getObject().getValueWithPrefix() + " ", "?Seed")
-                        .replace("\"" + cycleGraph.getPath_1().getObject().getValueWithPrefix() + "\"", "?Seed").replace("\"" + cycleGraph.getPath_1().getObject().getValueWithPrefix() + "\"^^xsd:dateTime ", "?Seed");
-            }
-            query = "SELECT DISTINCT ?Seed WHERE{" + triples + "\n}";
-        } else if (coordinatingConjunction.equals(CoordinatingConjunction.OR)) {
-            triples += "\n\t{" + t1 + "} UNION \n\t {" + t2 + "}";
-            if (direction == FORWARD) {
-                triples = triples.replace("<" + cycleGraph.getPath_1().getSubject().getValueWithPrefix() + ">", "?Seed").replace(" " + cycleGraph.getPath_1().getSubject().getValueWithPrefix() + " ", "?Seed")
-                        .replace("\"" + cycleGraph.getPath_1().getSubject().getValueWithPrefix() + "\"", "?Seed").replace("\"" + cycleGraph.getPath_1().getSubject().getValueWithPrefix() + "\"^^xsd:dateTime ", "?Seed");
-            } else if (direction == BACKWARD) {
-                triples = triples.replace("<" + cycleGraph.getPath_1().getObject().getValueWithPrefix() + ">", "?Seed").replace(" " + cycleGraph.getPath_1().getObject().getValueWithPrefix() + " ", "?Seed")
-                        .replace("\"" + cycleGraph.getPath_1().getObject().getValueWithPrefix() + "\"", "?Seed").replace("\"" + cycleGraph.getPath_1().getObject().getValueWithPrefix() + "\"^^xsd:dateTime ", "?Seed");
-            }
-            query = "SELECT DISTINCT ?Seed WHERE{" + triples + "\n}";
-        }
-        return query;
-    }
-
-    public String askQuery_true_answer(CycleGraph cycleGraph, String coordinatingConjunction) {
-        return selectQuery(cycleGraph, coordinatingConjunction)
-                .replace("SELECT DISTINCT ?Seed WHERE{", "ASK WHERE{")
-                .replace("?Seed", "<" + cycleGraph.getPath_1().getSubject().getValueWithPrefix() + ">");
-    }
-
-    public String askQuery_false_answer(CycleGraph cycleGraph, String coordinatingConjunction) {
-        return selectQuery(cycleGraph, coordinatingConjunction)
-                .replace("SELECT DISTINCT ?Seed WHERE{", "ASK WHERE{")
-                .replace("?Seed", "<" + somethingElse + ">");
-    }
-
-    public String countQuery(CycleGraph cycleGraph, String coordinatingConjunction) {
-        return selectQuery(cycleGraph, coordinatingConjunction).replace("SELECT DISTINCT ?Seed WHERE{", "SELECT (COUNT (?Seed) AS ?count) WHERE{");
-    }
 
     public void selectQuestions(String coordinatingConjunction) throws Exception {
 
-        ArrayList<String> questions = new ArrayList<>();
         question_tagged = "";
         String whQuestion = selectWh_Questions(coordinatingConjunction, "NP");
-        String selectQuery = selectQuery(cycleGraph, coordinatingConjunction);
+        String selectQuery = cycleQueryGenerator.selectQuery(coordinatingConjunction, direction);
 
         String QT = "";
         if (whQuestion.toLowerCase().startsWith("what")) {
@@ -132,112 +84,67 @@ public class CycleQuestion extends ShapeQuestion {
 
         if (whQuestion != null && !whQuestion.contains("null")) {
             allPossibleQuestions.add(new GeneratedQuestion(cycleGraph.getPath_1().getSubject().getValueWithPrefix(), cycleGraph.getPath_1().getS_type(), whQuestion, question_tagged, selectQuery, cycleGraph.toString(), 2, QT, GeneratedQuestion.SH_CYCLE));
-//            GeneratedQuestion generatedQuestion = new GeneratedQuestion(whQuestion, whQuestion, cycleGraph.toString());
         }
 
         whQuestion = selectWh_Questions(coordinatingConjunction, "VP");
         if (whQuestion != null && !whQuestion.contains("null")) {
             allPossibleQuestions.add(new GeneratedQuestion(cycleGraph.getPath_1().getSubject().getValueWithPrefix(), cycleGraph.getPath_1().getS_type(), whQuestion, question_tagged, selectQuery, cycleGraph.toString(), 2, QT, GeneratedQuestion.SH_CYCLE));
-//            GeneratedQuestion generatedQuestion = new GeneratedQuestion(whQuestion, whQuestion, cycleGraph.toString());
         }
     }
 
     public String selectWh_Questions(String coordinatingConjunction, String phrase) {
-        String FCs = "";
+        String FCs;
         if (direction == FORWARD) {
-            if (KGOntology.isSubtypeOf(seed_type_withPrefix, Settings.Person)) {
-                if (phrase.equals("VP")) {
-                    FCs = factConstraints_toString_VP_forward(cycleGraph, coordinatingConjunction);
-                    if (FCs == null || FCs.contains("null")) {
-                        return null;
-                    }
-                    question_tagged = "<qt>Who</qt> " + fcs_tagged + "?";
-                    return "Who " + FCs + "?";
-                } else if (phrase.equals("NP")) {
-                    FCs = factConstraints_toString_NP_forward(cycleGraph, coordinatingConjunction);
-                    if (FCs == null || FCs.contains("null")) {
-                        return null;
-                    }
-                    question_tagged = "<qt>Who</qt> " + fcs_tagged + "?";
-                    return "Who " + FCs + "?";
-                }
-            } else if (KGOntology.isSubtypeOf(seed_type_withPrefix, Settings.Place)) {
-                if (phrase.equals("NP")) {
-                    FCs = factConstraints_toString_NP_forward(cycleGraph, coordinatingConjunction);
-                    if (FCs == null || FCs.contains("null")) {
-                        return null;
-                    }
-                    question_tagged = "<qt>What</qt> " + fcs_tagged + "?";
-                    return "What " + FCs + "?";
-                } else if (phrase.equals("VP")) {
-                    FCs = factConstraints_toString_VP_forward(cycleGraph, coordinatingConjunction);
-
-                    if (FCs == null || FCs.contains("null")) {
-                        return null;
-                    }
-                    question_tagged = "<qt>Where</qt> " + fcs_tagged + "?";
-                    return "Where " + FCs + "?";
-                }
-            } else if (KGOntology.isSubtypeOf(seed_type_withPrefix, Settings.Date)) {
-                if (phrase.equals("NP")) {
-                    FCs = factConstraints_toString_NP_forward(cycleGraph, coordinatingConjunction);
-
-                    if (FCs == null || FCs.contains("null")) {
-                        return null;
-                    }
-                    question_tagged = "<qt>What</qt> " + fcs_tagged + "?";
-                    return "What " + FCs + "?";
-                } else if (phrase.equals("VP")) {
-                    FCs = factConstraints_toString_NP_forward(cycleGraph, coordinatingConjunction);
-
-                    if (FCs == null || FCs.contains("null")) {
-                        return null;
-                    }
-                    question_tagged = "<qt>When</qt> " + fcs_tagged + "?";
-                    return "When " + FCs + "?";
-                }
-            } else if (KGOntology.isSubtypeOf(seed_type_withPrefix, Settings.Number)) {
-                if (phrase.equals("NP")) {
-                    FCs = factConstraints_toString_NP_forward(cycleGraph, coordinatingConjunction);
-
-                    if (FCs == null || FCs.contains("null")) {
-                        return null;
-                    }
-                    question_tagged = "<qt>What</qt> " + fcs_tagged + "?";
-                    return "What " + FCs + "?";
-                }
-            } else {
-                if (phrase.equals("NP")) {
-                    FCs = factConstraints_toString_NP_forward(cycleGraph, coordinatingConjunction);
-
-                    if (FCs == null || FCs.contains("null")) {
-                        return null;
-                    }
-                    question_tagged = "<qt>What</qt> " + fcs_tagged + "?";
-                    return "What " + FCs + "?";
-                } else if (phrase.equals("VP")) {
-                    FCs = factConstraints_toString_VP_forward(cycleGraph, coordinatingConjunction);
-
-                    if (FCs == null || FCs.contains("null")) {
-                        return null;
-                    }
-                    question_tagged = "<qt>What</qt> " + fcs_tagged + "?";
-                    return "What " + FCs + "?";
-                }
-            }
-
+            return selectWh_Questions_forward(coordinatingConjunction, phrase);
         } else if (direction == BACKWARD) {
-            String FCs_tagged;
+            return selectWh_Questions_backward(coordinatingConjunction, phrase);
+        }
+        return null;
+    }
+
+
+    public String selectWh_Questions_forward(String coordinatingConjunction, String phrase) {
+        String FCs = null;
+        String questionType = null;
+
+        if (KGOntology.isSubtypeOf(seed_type_withPrefix, Settings.Person)) {
+            questionType = "Who";
+        } else if (KGOntology.isSubtypeOf(seed_type_withPrefix, Settings.Place)) {
+            questionType = "What";
+        } else if (KGOntology.isSubtypeOf(seed_type_withPrefix, Settings.Date)) {
+            questionType = "Where";
+        } else if (KGOntology.isSubtypeOf(seed_type_withPrefix, Settings.Number)) {
+            questionType = "When";
+        } else {
+            questionType = "What";
+        }
+
+        if (phrase.equals("VP")) {
+            FCs = factConstraints_toString_VP_forward(cycleGraph, coordinatingConjunction);
+        } else if (phrase.equals("NP")) {
+            FCs = factConstraints_toString_NP_forward(cycleGraph, coordinatingConjunction);
+        }
+
+        if (FCs == null || FCs.contains("null")) {
+            return null;
+        }
+
+        question_tagged = "<qt>" + questionType + "</qt> " + fcs_tagged + "?";
+        return questionType + " " + FCs + "?";
+    }
+
+
+
+
+    public String selectWh_Questions_backward(String coordinatingConjunction, String phrase) {
+        String FCs;
             String O_type = Settings.knowledgeGraph.getType(Settings.explorer, cycleGraph.getPath_1().getObject().getValueWithPrefix());
             if (KGOntology.isSubtypeOf(O_type, Settings.Person)) {
                 if (phrase.equals("VP")) {
-
                     FCs = factConstraints_toString_VP_reverse(cycleGraph, coordinatingConjunction);
-
                     if (FCs == null || FCs.contains("null")) {
                         return null;
                     }
-                    
                     if(FCs.trim().endsWith(" with"))
                     {
                         question_tagged = "<qt>With whom</qt> " + fcs_tagged .replace(" with ", " ").replace(" with<", "<").trim() + "?";
@@ -254,9 +161,7 @@ public class CycleQuestion extends ShapeQuestion {
                         return "By whom " + (FCs + " ").replace(" by ", " ").trim() + "?";
                     }
                 } else if (phrase.equals("NP")) {
-
-                    FCs = factConstraints_toString_NP_revers(cycleGraph, coordinatingConjunction);
-
+                    FCs = factConstraints_toString_NP_reverse(cycleGraph, coordinatingConjunction);
                     if (FCs == null || FCs.contains("null")) {
                         return null;
                     }
@@ -265,18 +170,14 @@ public class CycleQuestion extends ShapeQuestion {
                 }
             } else if (KGOntology.isSubtypeOf(O_type, Settings.Place)) {
                 if (phrase.equals("NP")) {
-
-                    FCs = factConstraints_toString_NP_revers(cycleGraph, coordinatingConjunction);
-
+                    FCs = factConstraints_toString_NP_reverse(cycleGraph, coordinatingConjunction);
                     if (FCs == null || FCs.contains("null")) {
                         return null;
                     }
                     question_tagged = "<qt>What</qt> " + fcs_tagged + "?";
                     return "What " + FCs + "?";
                 } else if (phrase.equals("VP")) {
-
                     FCs = factConstraints_toString_VP_reverse(cycleGraph, coordinatingConjunction);
-
                     if (FCs == null || FCs.contains("null")) {
                         return null;
                     }
@@ -285,18 +186,14 @@ public class CycleQuestion extends ShapeQuestion {
                 }
             } else if (KGOntology.isSubtypeOf(O_type, Settings.Date)) {
                 if (phrase.equals("NP")) {
-
-                    FCs = factConstraints_toString_NP_revers(cycleGraph, coordinatingConjunction);
-
+                    FCs = factConstraints_toString_NP_reverse(cycleGraph, coordinatingConjunction);
                     if (FCs == null || FCs.contains("null")) {
                         return null;
                     }
                     question_tagged = "<qt>What</qt> " + fcs_tagged + "?";
                     return "What " + FCs + "?";
                 } else if (phrase.equals("VP")) {
-
-                    FCs = factConstraints_toString_NP_revers(cycleGraph, coordinatingConjunction);
-
+                    FCs = factConstraints_toString_VP_reverse(cycleGraph, coordinatingConjunction);
                     if (FCs == null || FCs.contains("null")) {
                         return null;
                     }
@@ -305,9 +202,7 @@ public class CycleQuestion extends ShapeQuestion {
                 }
             } else if (KGOntology.isSubtypeOf(O_type, Settings.Number)) {
                 if (phrase.equals("NP")) {
-
-                    FCs = factConstraints_toString_NP_revers(cycleGraph, coordinatingConjunction);
-
+                    FCs = factConstraints_toString_NP_reverse(cycleGraph, coordinatingConjunction);
                     if (FCs == null || FCs.contains("null")) {
                         return null;
                     }
@@ -316,28 +211,23 @@ public class CycleQuestion extends ShapeQuestion {
                 }
             } else {
                 if (phrase.equals("NP")) {
-
-                    FCs = factConstraints_toString_NP_revers(cycleGraph, coordinatingConjunction);
-
+                    FCs = factConstraints_toString_NP_reverse(cycleGraph, coordinatingConjunction);
                     if (FCs == null || FCs.contains("null")) {
                         return null;
                     }
                     question_tagged = "<qt>What</qt> " + fcs_tagged + "?";
                     return "What " + FCs + "?";
                 } else if (phrase.equals("VP")) {
-
-                    FCs = factConstraints_toString_NP_revers(cycleGraph, coordinatingConjunction);
-
+                    FCs = factConstraints_toString_VP_reverse(cycleGraph, coordinatingConjunction);
                     if (FCs == null || FCs.contains("null")) {
                         return null;
                     }
                     question_tagged = "<qt>What</qt> " + fcs_tagged + "?";
                     return "What " + FCs + "?";
                 }
-            }
+
 
         }
-
         return null;
     }
 
@@ -349,7 +239,7 @@ public class CycleQuestion extends ShapeQuestion {
         this.allPossibleQuestions = allPossibleQuestions;
     }
 
-    public static String factConstraints_toString_VP_forward(CycleGraph cycleGraph, String coorinatingConjunction) {
+    public static String factConstraints_toString_VP_forward(CycleGraph cycleGraph, String coordinatingConjunction) {
         String fcs_ = null;
         fcs_tagged = null;
         PredicateNLRepresentation predicateNL_Path1 = PredicatesLexicon.getPredicateNL(cycleGraph.getPath_1().getPredicate().getValueWithPrefix(),
@@ -372,18 +262,18 @@ public class CycleQuestion extends ShapeQuestion {
             O = EntityProcessing.decide_quotes_with_type(O, O_type);
             
             if (p1_SO_VP != null && p2_SO_VP != null) {
-                fcs_ = p1_SO_VP + " " + coorinatingConjunction + " " + p2_SO_VP + " " + O;
-                fcs_tagged = "<p>" + p1_SO_VP + "</p> <cc>" + coorinatingConjunction + "</cc> <p>" + p2_SO_VP + "</p> <o>" + O + "</o>";
+                fcs_ = p1_SO_VP + " " + coordinatingConjunction + " " + p2_SO_VP + " " + O;
+                fcs_tagged = "<p>" + p1_SO_VP + "</p> <cc>" + coordinatingConjunction + "</cc> <p>" + p2_SO_VP + "</p> <o>" + O + "</o>";
             } else if (p1_OS_VP != null && p2_OS_VP != null) {
-                fcs_ = O + " " + p1_OS_VP + " " + coorinatingConjunction + " " + p2_OS_VP;
-                fcs_tagged = "<o>" + O + "</o> <p>" + p1_OS_VP + "</p> <cc>" + coorinatingConjunction + "</cc> <p>" + p2_OS_VP + "</p>";
+                fcs_ = O + " " + p1_OS_VP + " " + coordinatingConjunction + " " + p2_OS_VP;
+                fcs_tagged = "<o>" + O + "</o> <p>" + p1_OS_VP + "</p> <cc>" + coordinatingConjunction + "</cc> <p>" + p2_OS_VP + "</p>";
             }
 
         }
         return fcs_;
     }
 
-    public static String factConstraints_toString_VP_reverse(CycleGraph cycleGraph, String coorinatingConjunction) {
+    public static String factConstraints_toString_VP_reverse(CycleGraph cycleGraph, String coordinatingConjunction) {
         String fcs_ = null;
         fcs_tagged = null;
         PredicateNLRepresentation predicateNL_Path1 = PredicatesLexicon.getPredicateNL(cycleGraph.getPath_1().getPredicate().getValueWithPrefix(),
@@ -408,22 +298,18 @@ public class CycleQuestion extends ShapeQuestion {
             
 
             if (p1_OS_VP != null && p2_OS_VP != null) {
-//                if(!(p1_OS_VP.startsWith("was ")||p1_OS_VP.startsWith("were ")))
-//                    p1_OS_VP = "was " + p1_OS_VP;
-//                if(!(p2_OS_VP.startsWith("was ")||p2_OS_VP.startsWith("were ")))
-//                    p2_OS_VP = "was " + p2_OS_VP;
-                fcs_ = p1_OS_VP + " " + coorinatingConjunction + " " + p2_OS_VP + " " + O;
-                fcs_tagged = "<p>" + p1_OS_VP + "</p> <cc>" + coorinatingConjunction + "</cc> <p>" + p2_OS_VP + "</p> <o>" + O + "</o>";
+                fcs_ = p1_OS_VP + " " + coordinatingConjunction + " " + p2_OS_VP + " " + O;
+                fcs_tagged = "<p>" + p1_OS_VP + "</p> <cc>" + coordinatingConjunction + "</cc> <p>" + p2_OS_VP + "</p> <o>" + O + "</o>";
             } else if (p1_SO_VP != null && p2_SO_VP != null) {
-                fcs_ = "was " + O + " " + p1_SO_VP + " " + coorinatingConjunction + " " + p2_SO_VP;
-                fcs_tagged = "was <o>" + O + "</o> <p>" + p1_SO_VP + "</p> <cc>" + coorinatingConjunction + "</cc> <p>" + p2_SO_VP + "</p>";
+                fcs_ = "was " + O + " " + p1_SO_VP + " " + coordinatingConjunction + " " + p2_SO_VP;
+                fcs_tagged = "was <o>" + O + "</o> <p>" + p1_SO_VP + "</p> <cc>" + coordinatingConjunction + "</cc> <p>" + p2_SO_VP + "</p>";
             }
 
         }
         return fcs_;
     }
 
-    public static String factConstraints_toString_NP_forward(CycleGraph cycleGraph, String coorinatingConjunction) {
+    public static String factConstraints_toString_NP_forward(CycleGraph cycleGraph, String coordinatingConjunction) {
         String fcs_ = null;
         fcs_tagged = null;
         PredicateNLRepresentation predicateNL_Path1 = PredicatesLexicon.getPredicateNL(cycleGraph.getPath_1().getPredicate().getValueWithPrefix(),
@@ -447,16 +333,16 @@ public class CycleQuestion extends ShapeQuestion {
             
 
             if (p1_SO_NP != null && p2_SO_NP != null) {
-                fcs_ = PhraseRepresentationProcessing.NP_without_Preposition(p1_SO_NP) + " " + coorinatingConjunction + " " + PhraseRepresentationProcessing.NP_without_verb___first(p2_SO_NP) + " " + O;
-                fcs_tagged = "<p>" + PhraseRepresentationProcessing.NP_without_Preposition(p1_SO_NP) + "</p> <cc>" + coorinatingConjunction + "</cc> <p>" + PhraseRepresentationProcessing.NP_without_verb___first(p2_SO_NP) + "</p> <o>" + O + "</o>";
+                fcs_ = PhraseRepresentationProcessing.NP_of_the_form_VB_DT_NP(p1_SO_NP) + " " + coordinatingConjunction + " " + PhraseRepresentationProcessing.NP_of_the_form_DT_NP_IN(p2_SO_NP) + " " + O;
+                fcs_tagged = "<p>" + PhraseRepresentationProcessing.NP_of_the_form_VB_DT_NP(p1_SO_NP) + "</p> <cc>" + coordinatingConjunction + "</cc> <p>" + PhraseRepresentationProcessing.NP_of_the_form_DT_NP_IN(p2_SO_NP) + "</p> <o>" + O + "</o>";
             } else if (p1_OS_NP != null && p2_OS_NP != null) {
                 String stype = cycleGraph.getPath_1().getS_type();
                 if (KGOntology.isSubtypeOf(stype, Settings.Place)) {
-                    fcs_ = O + " is his/her " + PhraseRepresentationProcessing.NP_only(p1_OS_NP) + " " + coorinatingConjunction + " " + PhraseRepresentationProcessing.NP_only(p2_OS_NP);
-                    fcs_tagged = "<o>" + O + "</o> is his/her <p>" + PhraseRepresentationProcessing.NP_only(p1_OS_NP) + "</p> <cc>" + coorinatingConjunction + "</cc> <p>" + PhraseRepresentationProcessing.NP_only(p2_OS_NP)+"</p>";
+                    fcs_ = O + " is his/her " + PhraseRepresentationProcessing.NP_of_the_form_NP_only(p1_OS_NP) + " " + coordinatingConjunction + " " + PhraseRepresentationProcessing.NP_of_the_form_NP_only(p2_OS_NP);
+                    fcs_tagged = "<o>" + O + "</o> is his/her <p>" + PhraseRepresentationProcessing.NP_of_the_form_NP_only(p1_OS_NP) + "</p> <cc>" + coordinatingConjunction + "</cc> <p>" + PhraseRepresentationProcessing.NP_of_the_form_NP_only(p2_OS_NP)+"</p>";
                 } else {
-                    fcs_ = O + " is its " + PhraseRepresentationProcessing.NP_only(p1_OS_NP) + " " + coorinatingConjunction + " " + PhraseRepresentationProcessing.NP_only(p2_OS_NP);
-                    fcs_tagged = "<o>" +O + "</o> is its <p>" + PhraseRepresentationProcessing.NP_only(p1_OS_NP) + "</p> <cc>" + coorinatingConjunction + "</cc> <p>" + PhraseRepresentationProcessing.NP_only(p2_OS_NP) + "</p>";
+                    fcs_ = O + " is its " + PhraseRepresentationProcessing.NP_of_the_form_NP_only(p1_OS_NP) + " " + coordinatingConjunction + " " + PhraseRepresentationProcessing.NP_of_the_form_NP_only(p2_OS_NP);
+                    fcs_tagged = "<o>" +O + "</o> is its <p>" + PhraseRepresentationProcessing.NP_of_the_form_NP_only(p1_OS_NP) + "</p> <cc>" + coordinatingConjunction + "</cc> <p>" + PhraseRepresentationProcessing.NP_of_the_form_NP_only(p2_OS_NP) + "</p>";
                 }
             }
 
@@ -464,7 +350,7 @@ public class CycleQuestion extends ShapeQuestion {
         return fcs_;
     }
 
-    public static String factConstraints_toString_NP_revers(CycleGraph cycleGraph, String coorinatingConjunction) {
+    public static String factConstraints_toString_NP_reverse(CycleGraph cycleGraph, String coordinatingConjunction) {
         String fcs_ = null;
         fcs_tagged = null;
         PredicateNLRepresentation predicateNL_Path1 = PredicatesLexicon.getPredicateNL(cycleGraph.getPath_1().getPredicate().getValueWithPrefix(),
@@ -476,28 +362,25 @@ public class CycleQuestion extends ShapeQuestion {
                 cycleGraph.getPath_2().getO_type());
 
         if (predicateNL_Path1 != null && predicateNL_Path2 != null) {
-
             String p1_OS_NP = predicateNL_Path1.getPredicate_o_s_NP();
             String p2_OS_NP = predicateNL_Path2.getPredicate_o_s_NP();
-
             String p1_SO_NP = predicateNL_Path1.getPredicate_s_O_NP();
             String p2_SO_NP = predicateNL_Path2.getPredicate_s_O_NP();
-            
             String O = cycleGraph.getPath_1().getSubject().getValue();
             String O_type = cycleGraph.getPath_1().getS_type();
             O = EntityProcessing.decide_quotes_with_type(O, O_type);
 
             if (p1_OS_NP != null && p2_OS_NP != null) {
-                fcs_ = PhraseRepresentationProcessing.NP_without_Preposition(p1_OS_NP) + " " + coorinatingConjunction + " " + PhraseRepresentationProcessing.NP_without_verb___first(p2_OS_NP) + " " + O;
-                fcs_tagged = "<p>" + PhraseRepresentationProcessing.NP_without_Preposition(p1_OS_NP) + "</p> <cc>" + coorinatingConjunction + "</cc> <p>" + PhraseRepresentationProcessing.NP_without_verb___first(p2_OS_NP) + "</p> <o>" + O + "</o>";
+                fcs_ = PhraseRepresentationProcessing.NP_of_the_form_VB_DT_NP(p1_OS_NP) + " " + coordinatingConjunction + " " + PhraseRepresentationProcessing.NP_of_the_form_DT_NP_IN(p2_OS_NP) + " " + O;
+                fcs_tagged = "<p>" + PhraseRepresentationProcessing.NP_of_the_form_VB_DT_NP(p1_OS_NP) + "</p> <cc>" + coordinatingConjunction + "</cc> <p>" + PhraseRepresentationProcessing.NP_of_the_form_DT_NP_IN(p2_OS_NP) + "</p> <o>" + O + "</o>";
             } else if (p1_SO_NP != null && p2_SO_NP != null) {
                 String stype = cycleGraph.getPath_1().getS_type();
                 if (KGOntology.isSubtypeOf(stype, Settings.Place)) {
-                    fcs_ = O + " is his/her " + PhraseRepresentationProcessing.NP_only(p1_SO_NP) + " " + coorinatingConjunction + " " + PhraseRepresentationProcessing.NP_only(p2_SO_NP);
-                    fcs_tagged = "<o>" + O + "</o> is his/her <p>" + PhraseRepresentationProcessing.NP_only(p1_SO_NP) + "</p> <cc>" + coorinatingConjunction + "</cc> <p>" + PhraseRepresentationProcessing.NP_only(p2_SO_NP) + "</p>";
+                    fcs_ = O + " is his/her " + PhraseRepresentationProcessing.NP_of_the_form_NP_only(p1_SO_NP) + " " + coordinatingConjunction + " " + PhraseRepresentationProcessing.NP_of_the_form_NP_only(p2_SO_NP);
+                    fcs_tagged = "<o>" + O + "</o> is his/her <p>" + PhraseRepresentationProcessing.NP_of_the_form_NP_only(p1_SO_NP) + "</p> <cc>" + coordinatingConjunction + "</cc> <p>" + PhraseRepresentationProcessing.NP_of_the_form_NP_only(p2_SO_NP) + "</p>";
                 } else {
-                    fcs_ = O + " is its " + PhraseRepresentationProcessing.NP_only(p1_SO_NP) + " " + coorinatingConjunction + " " + PhraseRepresentationProcessing.NP_only(p2_SO_NP);
-                    fcs_tagged = "<o>" + O + "</o> is its <p>" + PhraseRepresentationProcessing.NP_only(p1_SO_NP) + "</p> <cc>" + coorinatingConjunction + "</cc> <p>" + PhraseRepresentationProcessing.NP_only(p2_SO_NP) + "</p>";
+                    fcs_ = O + " is its " + PhraseRepresentationProcessing.NP_of_the_form_NP_only(p1_SO_NP) + " " + coordinatingConjunction + " " + PhraseRepresentationProcessing.NP_of_the_form_NP_only(p2_SO_NP);
+                    fcs_tagged = "<o>" + O + "</o> is its <p>" + PhraseRepresentationProcessing.NP_of_the_form_NP_only(p1_SO_NP) + "</p> <cc>" + coordinatingConjunction + "</cc> <p>" + PhraseRepresentationProcessing.NP_of_the_form_NP_only(p2_SO_NP) + "</p>";
                 }
 
             }

@@ -1,5 +1,6 @@
 package benchmarkGenerator.questionsGenerator.questionBuilder;
 
+import benchmarkGenerator.questionsGenerator.queryBuilder.SingleEdgeQueryGenerator;
 import benchmarkGenerator.questionsGenerator.questionBuilder.helpers.GeneratedQuestion;
 import benchmarkGenerator.questionsGenerator.questionBuilder.helpers.QuestionTypePrefixGenerator;
 import benchmarkGenerator.questionsGenerator.questionBuilder.helpers.FactConstraint;
@@ -16,37 +17,31 @@ import utils.StringUtils;
 
 public class SingleEdgeQuestion extends ShapeQuestion {
 
+    ArrayList<GeneratedQuestion> allPossibleQuestions = new ArrayList<>();
     private SingleEdgeGraph singleEdgeGraph;
-
     private String S;
     private String P;
     private String O;
-
     private String S_withPrefix;
     private String P_withPrefix;
     private String O_withPrefix;
-
     private String S_type_withPrefix;
     private String O_type_withPrefix;
-
     private String s_o_VP;
     private String s_o_NP;
     private String o_s_VP;
     private String o_s_NP;
     private String s_o_NP_without_verb;
     private String o_s_NP_without_verb;
-
     private String s_o_NP_only;
     private String o_s_NP_only;
-
     private String selectQuery;
     private String countQuery;
     private String askQuery_correct;
     private String askQuery_wrong;
     private String somethingElse = "http://AnnyOther";
     private String somethingElseWithoutPrefix = "AnnyOther";
-
-    ArrayList<GeneratedQuestion> allPossibleQuestions = new ArrayList<>();
+    private SingleEdgeQueryGenerator singleEdgeQueryGenerator;
 
     public SingleEdgeQuestion(SingleEdgeGraph singleEdgeGraph, String S_type_withPrefix, String O_type_withPrefix) throws Exception {
         generate_questions_S_is_Seed(singleEdgeGraph, S_type_withPrefix, O_type_withPrefix);
@@ -76,11 +71,11 @@ public class SingleEdgeQuestion extends ShapeQuestion {
         o_s_NP_only = null;
         if (s_o_NP != null) {
             s_o_NP_without_verb = PhraseRepresentationProcessing.NP_without_verb(s_o_NP);
-            s_o_NP_only = PhraseRepresentationProcessing.NP_only(s_o_NP);
+            s_o_NP_only = PhraseRepresentationProcessing.NP_of_the_form_NP_only(s_o_NP);
         }
         if (o_s_NP != null) {
             o_s_NP_without_verb = PhraseRepresentationProcessing.NP_without_verb(o_s_NP);
-            o_s_NP_only = PhraseRepresentationProcessing.NP_only(o_s_NP);
+            o_s_NP_only = PhraseRepresentationProcessing.NP_of_the_form_NP_only(o_s_NP);
         }
     }
 
@@ -105,12 +100,14 @@ public class SingleEdgeQuestion extends ShapeQuestion {
         somethingElse = Settings.knowledgeGraph.getSimilarEntity(Settings.explorer, S_withPrefix, this.S_type_withPrefix);
         somethingElseWithoutPrefix = Settings.explorer.removePrefix(somethingElse);
 
+        singleEdgeQueryGenerator = new SingleEdgeQueryGenerator(singleEdgeGraph);
+
         fillPredicateRepresentations(true, P_withPrefix, S_type_withPrefix, O_type_withPrefix);
 
-        selectQuery = generateSELECTQuery();
-        countQuery = generateCountQuery();
-        askQuery_correct = generateAskQuery_Correct();
-        askQuery_wrong = generateAskQuery_Wrong();
+        selectQuery = singleEdgeQueryGenerator.generateSELECTQuery(S_withPrefix, S_type_withPrefix);
+        countQuery = singleEdgeQueryGenerator.generateCountQuery(S_withPrefix, S_type_withPrefix);
+        askQuery_correct = singleEdgeQueryGenerator.generateAskQuery_Correct();
+        askQuery_wrong = singleEdgeQueryGenerator.generateAskQuery_Wrong(S_withPrefix, S_type_withPrefix, somethingElse);
 
         S = EntityProcessing.decide_quotes_Simple_question(S, this.S_type_withPrefix);
         O = EntityProcessing.decide_quotes_Simple_question(O, this.O_type_withPrefix);
@@ -145,10 +142,11 @@ public class SingleEdgeQuestion extends ShapeQuestion {
 
         fillPredicateRepresentations(false, P_withPrefix, S_type_withPrefix, O_type_withPrefix);
 
-        selectQuery = generateSELECTQuery();
-        countQuery = generateCountQuery();
-        askQuery_correct = generateAskQuery_Correct();
-        askQuery_wrong = generateAskQuery_Wrong();
+        singleEdgeQueryGenerator = new SingleEdgeQueryGenerator(singleEdgeGraph);
+        selectQuery = singleEdgeQueryGenerator.generateSELECTQuery(S_withPrefix, S_type_withPrefix);
+        countQuery = singleEdgeQueryGenerator.generateCountQuery(S_withPrefix, S_type_withPrefix);
+        askQuery_correct = singleEdgeQueryGenerator.generateAskQuery_Correct();
+        askQuery_wrong = singleEdgeQueryGenerator.generateAskQuery_Wrong(S_withPrefix, S_type_withPrefix, somethingElse);
 
         S = EntityProcessing.decide_quotes_Simple_question(S, this.S_type_withPrefix);
         O = EntityProcessing.decide_quotes_Simple_question(O, this.O_type_withPrefix);
@@ -184,52 +182,7 @@ public class SingleEdgeQuestion extends ShapeQuestion {
         }
     }
 
-    /**
-     * Generates a SPARQL SELECT query to retrieve all values of the seed
-     * subject in the triple pattern.
-     *
-     * @return a SPARQL SELECT query to retrieve all values of the seed subject
-     * in the triple pattern
-     */
-    public String generateSELECTQuery() {
-        String triple = singleEdgeGraph.getTriplePattern().toQueryTriplePattern();
-        return QueryGenerator.generateSELECTQuery(triple, S_withPrefix, S_type_withPrefix, "?Seed");
-    }
 
-    /**
-     *
-     * This method generates a SPARQL query to count the number of entities in
-     * the graph that match the seed entity. The queryreplaces the seed entity
-     * in the triple pattern with a variable, and counts the number of values
-     * that the variable can take on.
-     *
-     * @return a String containing the SPARQL query to count the number of
-     * entities in the graph that match the seed entity
-     */
-    public String generateCountQuery() {
-        String triple = singleEdgeGraph.getTriplePattern().toQueryTriplePattern();
-        return QueryGenerator.generateCountQuery(triple, S_withPrefix, S_type_withPrefix, "?Seed");
-    }
-
-    public String generateAskQuery_Correct() {
-        String triple = singleEdgeGraph.getTriplePattern().toQueryTriplePattern() + " .";
-        return QueryGenerator.generateAskQuery_Correct(triple);
-    }
-
-    /**
-     *
-     * Generates an ASK query with a subject that is different from the original
-     * triple pattern
-     *
-     * @return the generated ASK query, or null if somethingElse is null
-     */
-    public String generateAskQuery_Wrong() {
-        if (somethingElse == null) {
-            return null;
-        }
-        String triple = singleEdgeGraph.getTriplePattern().toQueryTriplePattern();
-        return QueryGenerator.generateAskQuery_Wrong(triple, S_withPrefix, S_type_withPrefix, somethingElse);
-    }
 
     /**
      * Generates select questions of the form "Who X?", "Whose Y?", or "Whom Y?"
