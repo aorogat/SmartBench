@@ -122,9 +122,9 @@ public class Database {
                 predicate.setPredicateURI(result.getString("PredicateURI"));
                 predicate.setPredicateContext(new PredicateContext(result.getString("Context_Subject"), result.getString("Context_Object"), 0));
                 predicate.setWeight(result.getLong("ContextWeight"));
-                if (!predicate.getPredicateURI().contains("#")) {
+//                if (!predicate.getPredicateURI().contains("#")) {
                     predicates.add(predicate);
-                }
+//                }
             }
 //            con.close();
         } catch (SQLException ex) {
