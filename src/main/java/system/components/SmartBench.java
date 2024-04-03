@@ -12,12 +12,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.apache.jena.base.Sys;
-import settings.Configuration;
-import settings.DBpedia_Settings;
-import settings.DBtune_Settings;
-import settings.GEO_Settings;
-import settings.MAKG_Settings;
-import settings.Nobel_Settings;
+import settings.*;
 
 /**
  *
@@ -40,13 +35,16 @@ public class SmartBench {
                 MAKG_Settings.intializeSetttings();
                 break;
             case "NOBEL":
-                GEO_Settings.intializeSetttings();
+                Nobel_Settings.intializeSetttings();
                 break;
             case "GEOData":
-                Nobel_Settings.intializeSetttings();
+                GEO_Settings.intializeSetttings();
                 break;
             case "DBTune":
                 DBtune_Settings.intializeSetttings();
+                break;
+            case "DBLP":
+                Dblp_Settings.intializeSetttings();
                 break;
         }
 
@@ -118,6 +116,7 @@ public class SmartBench {
 
         Configuration.kg_name = prop.getProperty("kg_name");
 
+        Configuration.Database_Intializer = prop.getProperty("Database_Intializer").trim().equals("1");
         Configuration.Predicate_Extractor = prop.getProperty("Predicate_Extractor").trim().equals("1");
         Configuration.NLP_Pattern_Extractor_Text_Corpus = prop.getProperty("NLP_Pattern_Extractor_Text_Corpus").trim().equals("1");
         Configuration.Predicate_Representations_Labels = prop.getProperty("Predicate_Representations_Labels").trim().equals("1");

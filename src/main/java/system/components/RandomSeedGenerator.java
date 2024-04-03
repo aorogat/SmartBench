@@ -46,6 +46,9 @@ public class RandomSeedGenerator {
                 i < (offset + 10);
                 //                i<availablePredicates.size(); 
                 i++) {
+            if (i >= typesSize) {
+                break;
+            }
             Predicate p = availablePredicates.get(i);
 
             if (p.getPredicateURI().toLowerCase().contains("party")) {

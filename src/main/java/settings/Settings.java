@@ -28,7 +28,8 @@ public class Settings {
     public static final int NOBEL_ = 3;
     public static final int GEO_ = 4;
     public static final int DBTUNE_ = 5;
-    
+    public static final int DBLP = 6;
+
     
 
     public static byte LABEL_NP_SO = 1;

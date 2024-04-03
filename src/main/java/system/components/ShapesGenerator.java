@@ -53,7 +53,7 @@ public class ShapesGenerator {
 
         int benchmarkNumber = 37;
 
-        for (int j = 480; j < 10000; j = j + 10) {
+        for (int j = 0; j < 10000; j = j + 10) {
 
             clearGeneratedQuestions = new ArrayList<>();
             generatedQuestions = new ArrayList<>();
